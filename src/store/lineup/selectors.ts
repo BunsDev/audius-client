@@ -44,8 +44,9 @@ export const makeGetTableMetadatas = <T>(lineupSelector: LineupSelector<T>) => {
         })
         .filter(removeNullable)
         .map((entry) => {
-          if (entry.owner_id in users)
+          if (entry.owner_id in users) {
             return { ...entry, user: users[entry.owner_id] }
+          }
           deleted += 1
           return null
         })

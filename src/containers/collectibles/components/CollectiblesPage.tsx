@@ -508,11 +508,12 @@ const CollectiblesPage: React.FC<{
     }
   ]
 
-  if (isUserOnTheirProfile)
+  if (isUserOnTheirProfile) {
     overflowMenuItems.unshift({
       text: 'Edit',
       onClick: handleEditClick
     })
+  }
 
   return (
     <div

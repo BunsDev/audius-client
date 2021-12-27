@@ -468,7 +468,7 @@ class App extends Component {
     const client = getClient()
     const isMobileClient = client === Client.MOBILE
 
-    if (showRequiresUpdate)
+    if (showRequiresUpdate) {
       return (
         <RequiresUpdate
           theme={theme}
@@ -476,8 +476,10 @@ class App extends Component {
           onUpdate={this.acceptUpdateApp}
         />
       )
-    if (didError || getPathname(this.props.location) === ERROR_PAGE)
+    }
+    if (didError || getPathname(this.props.location) === ERROR_PAGE) {
       return <SomethingWrong lastRoute={lastRoute} />
+    }
 
     const showBanner =
       showCTABanner || showUpdateAppBanner || showWeb3ErrorBanner

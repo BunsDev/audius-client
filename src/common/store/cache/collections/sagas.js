@@ -1124,8 +1124,9 @@ function* watchFetchCoverArt() {
         !collection ||
         !user ||
         (!collection.cover_art_sizes && !collection.cover_art)
-      )
+      ) {
         return
+      }
 
       const gateways = getCreatorNodeIPFSGateways(user.creator_node_endpoint)
       const multihash = collection.cover_art_sizes || collection.cover_art

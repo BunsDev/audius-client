@@ -31,8 +31,9 @@ class Input extends Component {
     if (
       this.props.characterLimit &&
       e.target.value.length > this.props.characterLimit
-    )
+    ) {
       return
+    }
 
     if (!this.props.value) {
       this.setState({
@@ -69,12 +70,14 @@ class Input extends Component {
 
     const { focused, warning } = this.state
     let value = this.state.value
-    if (valueOverride !== null && valueOverride !== undefined)
+    if (valueOverride !== null && valueOverride !== undefined) {
       value = valueOverride
+    }
 
     const miniPlaceholder = focused || value !== ''
-    if (isRequired && !miniPlaceholder && placeholder)
+    if (isRequired && !miniPlaceholder && placeholder) {
       placeholder = placeholder + ' *'
+    }
 
     const style = {
       [styles.large]: size === 'large',

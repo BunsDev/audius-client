@@ -246,8 +246,9 @@ function* watchFetchProfilePicture() {
 
     try {
       let user = yield select(getUser, { id: userId })
-      if (!user || (!user.profile_picture_sizes && !user.profile_picture))
+      if (!user || (!user.profile_picture_sizes && !user.profile_picture)) {
         return
+      }
       const gateways = getCreatorNodeIPFSGateways(user.creator_node_endpoint)
       if (user.profile_picture_sizes) {
         const url = yield call(

@@ -140,8 +140,9 @@ const ConnectedMobileOverflowModal = ({
   } => {
     switch (source) {
       case OverflowSource.TRACKS: {
-        if (!id || !ownerId || !handle || !title || isAlbum === undefined)
+        if (!id || !ownerId || !handle || !title || isAlbum === undefined) {
           return {}
+        }
         return {
           onRepost: () => repostTrack(id as ID),
           onUnrepost: () => unrepostTrack(id as ID),

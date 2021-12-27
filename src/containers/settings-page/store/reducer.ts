@@ -109,8 +109,9 @@ const actionsMap: ActionsMap<SettingsPageState> = {
     action: ToggleNotificationSetting
   ) {
     // If the browser push notifications are turned off, don't allow toggle other settings
-    if (!state.browserNotifications[BrowserNotificationSetting.BrowserPush])
+    if (!state.browserNotifications[BrowserNotificationSetting.BrowserPush]) {
       return state
+    }
     return {
       ...state,
       browserNotifications: {

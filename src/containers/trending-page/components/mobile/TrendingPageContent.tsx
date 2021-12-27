@@ -224,13 +224,14 @@ const TrendingPageMobileContent = ({
       // Manually setInView
       makeSetInView(to as TimeRange)(true)
       makeSetInView(from as TimeRange)(false)
-      if (from !== to)
+      if (from !== to) {
         record(
           make(Name.TRENDING_CHANGE_VIEW, {
             timeframe: to as TimeRange,
             genre: trendingGenre || ''
           })
         )
+      }
     },
     [setTrendingTimeRange, makeSetInView, record, trendingGenre]
   )

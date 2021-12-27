@@ -30,6 +30,7 @@ module.exports = {
     '@typescript-eslint/no-use-before-define': 'off',
     'arrow-parens': 'error',
     camelcase: 'off',
+    curly: 'error',
     'import/no-unresolved': 'error',
     'import/order': [
       'error',
@@ -83,7 +84,6 @@ module.exports = {
     'no-unused-vars': 'off'
 
     // Rules we should enable
-    // curly: 'error',
     // 'max-params': ['error', 1],
     // 'sort-keys': 'error',
     // 'import/no-default-export': 'error'

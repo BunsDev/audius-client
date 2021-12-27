@@ -338,7 +338,7 @@ const SearchPageContent = (props: SearchPageContentProps) => {
   const { searchText } = props
   const didChangeTabsFrom = useCallback(
     (from: string, to: string) => {
-      if (from !== to)
+      if (from !== to) {
         record(
           make(Name.SEARCH_TAB_CLICK, {
             term: searchText,
@@ -349,6 +349,7 @@ const SearchPageContent = (props: SearchPageContentProps) => {
               | 'playlists'
           })
         )
+      }
     },
     [record, searchText]
   )

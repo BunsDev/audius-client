@@ -92,8 +92,9 @@ class Toast extends PureComponent<ToastProps, ToastState> {
   }
 
   componentWillUnmount = () => {
-    if (this.hideTimeout && !this.hideTimeout.cleared)
+    if (this.hideTimeout && !this.hideTimeout.cleared) {
       clearTimeout(this.hideTimeout)
+    }
   }
 
   render() {

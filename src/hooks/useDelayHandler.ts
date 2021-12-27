@@ -37,8 +37,9 @@ const useDelayHandler = <T>(
   const [allowOverwrite, setAllowOverwrite] = useState(true)
   const [overwrittenValues, setOverwrittenValues] = useState<T>(injectedProps)
 
-  if (allowOverwrite && !isEqual(overwrittenValues, injectedProps))
+  if (allowOverwrite && !isEqual(overwrittenValues, injectedProps)) {
     setOverwrittenValues(injectedProps)
+  }
 
   return {
     delayedHandler: (newState: Partial<T>, ...args: any) => {

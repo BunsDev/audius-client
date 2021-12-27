@@ -154,11 +154,12 @@ const getStemButtons = ({
 
     const onClick = (() => {
       const { downloadURL, id } = u
-      if (downloadURL !== undefined && id !== undefined)
+      if (downloadURL !== undefined && id !== undefined) {
         return () => {
           if (!isLoggedIn) notLoggedInClick()
           onDownload(id, downloadURL, u.label, parentTrackId)
         }
+      }
     })()
 
     return {

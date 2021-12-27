@@ -282,8 +282,9 @@ export class SignOnProvider extends Component<SignOnProps, SignOnState> {
     this.props.goToRoute(UPLOAD_PAGE)
     this.props.recordGoToUpload()
     this.props.recordFinish('upload', email.value, handle.value)
-    if (!this.props.isMobile && !isElectron())
+    if (!this.props.isMobile && !isElectron()) {
       this.props.showPushNotificationConfirmation()
+    }
   }
 
   onStartListening = () => {
@@ -291,8 +292,9 @@ export class SignOnProvider extends Component<SignOnProps, SignOnState> {
     this.finishSignup()
     this.props.goToRoute(FEED_PAGE)
     this.props.recordFinish('listen', email.value, handle.value)
-    if (!this.props.isMobile && !isElectron())
+    if (!this.props.isMobile && !isElectron()) {
       this.props.showPushNotificationConfirmation()
+    }
   }
 
   onViewSignIn = () => {

@@ -115,8 +115,9 @@ const NavColumn = ({
 
   const onClickToggleNotificationPanel = useCallback(() => {
     toggleNotificationPanel()
-    if (!notificationPanelIsOpen)
+    if (!notificationPanelIsOpen) {
       record(make(Name.NOTIFICATIONS_OPEN, { source: 'button' }))
+    }
   }, [notificationPanelIsOpen, toggleNotificationPanel, record])
 
   const onCreatePlaylist = useCallback(

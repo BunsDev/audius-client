@@ -99,8 +99,9 @@ class SearchBar extends Component {
             ? playlistPage(p.user.handle, p.playlist_name, p.playlist_id)
             : '')
       )
-      if (selectedPlaylist)
+      if (selectedPlaylist) {
         return { kind: 'playlist', id: selectedPlaylist.playlist_id }
+      }
       const selectedAlbum = this.props.search.albums.find(
         (a) =>
           value ===

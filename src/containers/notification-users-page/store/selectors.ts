@@ -17,7 +17,8 @@ export const getPageTitle = (state: AppState) => {
   const notification = getNotificationById(state, notificationId)
   if (!notification || !('userIds' in notification)) return defaultTitle
   const count = notification.userIds.length
-  if (notification.type === NotificationType.Follow)
+  if (notification.type === NotificationType.Follow) {
     return `${formatCount(count)} New Followers`
+  }
   return `${formatCount(count)} ${notification.type.toLowerCase()}s`
 }

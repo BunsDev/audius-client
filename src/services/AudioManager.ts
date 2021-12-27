@@ -149,10 +149,11 @@ class AudioManager {
       getModalVisibility,
       'ConfirmAudioToWAudio'
     )
-    if (isModalOpen)
+    if (isModalOpen) {
       yield put(
         setVisibility({ modal: 'ConfirmAudioToWAudio', visible: false })
       )
+    }
   }
 }
 

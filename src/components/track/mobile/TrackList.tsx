@@ -65,8 +65,9 @@ const TrackList = ({
       if (
         destination.droppableId === source.droppableId &&
         destination.index === source.index
-      )
+      ) {
         return
+      }
       onReorder(source.index, destination.index)
     },
     [onReorder]

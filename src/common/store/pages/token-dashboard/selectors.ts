@@ -14,8 +14,9 @@ export const getSendData = (
         modalState.flowState.stage === 'SENDING' ||
         modalState.flowState.stage === 'AWAITING_CONFIRMATION')
     )
-  )
+  ) {
     return null
+  }
   const { recipientWallet, amount } = modalState.flowState
   return { recipientWallet, amount: stringWeiToBN(amount) }
 }

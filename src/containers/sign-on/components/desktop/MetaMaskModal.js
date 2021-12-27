@@ -55,8 +55,9 @@ class MetaMaskModal extends Component {
   }
 
   clearCheckConfigureWeb3 = () => {
-    if (this.state.checkWeb3ConfigInterval)
+    if (this.state.checkWeb3ConfigInterval) {
       clearInterval(this.state.checkWeb3ConfigInterval)
+    }
   }
 
   onClickContinue = () => {

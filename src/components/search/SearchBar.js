@@ -183,8 +183,9 @@ class SearchBar extends Component {
       case 13 /* enter */:
         this.autoCompleteRef.current.blur()
         this.setState({ tagPopupFocused: false })
-        if (this.props.isTagSearch)
+        if (this.props.isTagSearch) {
           this.setState({ shouldDismissTagPopup: true })
+        }
         if (
           (this.props.isTagSearch && this.state.value.length > 1) ||
           (!this.props.isTagSearch &&

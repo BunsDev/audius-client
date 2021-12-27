@@ -246,11 +246,13 @@ const TrackHeader = ({
 
   const renderTrackLabels = () => {
     return trackLabels.map((infoFact) => {
-      if (infoFact.label === 'Genre' && isUnlisted && !fieldVisibility.genre)
+      if (infoFact.label === 'Genre' && isUnlisted && !fieldVisibility.genre) {
         return null
+      }
       if (infoFact.label === 'Released' && isUnlisted) return null
-      if (infoFact.label === 'Mood' && isUnlisted && !fieldVisibility.mood)
+      if (infoFact.label === 'Mood' && isUnlisted && !fieldVisibility.mood) {
         return null
+      }
       return (
         <div key={infoFact.label} className={styles.infoFact}>
           <h2 className={styles.infoLabel}>{infoFact.label}</h2>

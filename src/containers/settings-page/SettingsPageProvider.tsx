@@ -72,8 +72,9 @@ type SettingsPageState = {
 
 const mapper = (props: SettingsPageProps) => {
   const { name, handle, userId } = props
-  if (handle && name && userId !== null)
+  if (handle && name && userId !== null) {
     return { ...props, name, handle, userId }
+  }
 }
 
 class SettingsPage extends PureComponent<

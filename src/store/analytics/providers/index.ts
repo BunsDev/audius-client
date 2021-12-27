@@ -78,8 +78,9 @@ export const track = async (
       message.send()
     } else {
       await didInit
-      if (useAmplitude)
+      if (useAmplitude) {
         return amplitude.track(event, propertiesWithContext, callback)
+      }
       return segment.track(event, propertiesWithContext, {}, callback)
     }
   } catch (err) {

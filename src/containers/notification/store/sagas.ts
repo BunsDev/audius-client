@@ -281,8 +281,9 @@ export function* parseAndProcessNotifications(
     notif.timeLabel = getTimeAgo(now, notif.timestamp)
     return notif
   })
-  if (remixTrackParents.length > 0)
+  if (remixTrackParents.length > 0) {
     yield call(retrieveTracks, { trackIds: remixTrackParents })
+  }
   return processedNotifications
 }
 

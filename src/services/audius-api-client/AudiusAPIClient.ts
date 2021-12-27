@@ -1327,8 +1327,9 @@ class AudiusAPIClient {
   // Helpers
 
   _assertInitialized() {
-    if (this.initializationState.state !== 'initialized')
+    if (this.initializationState.state !== 'initialized') {
       throw new Error('AudiusAPIClient must be initialized before use')
+    }
   }
 
   async _getResponse<T>(
@@ -1338,8 +1339,9 @@ class AudiusAPIClient {
     pathType: PathType = PathType.VersionFullPath,
     headers?: { [key: string]: string }
   ): Promise<Nullable<T>> {
-    if (this.initializationState.state !== 'initialized')
+    if (this.initializationState.state !== 'initialized') {
       throw new Error('_constructURL called uninitialized')
+    }
 
     // If a param has a null value, remove it
     const sanitizedParams = Object.keys(params).reduce((acc, cur) => {
@@ -1395,8 +1397,9 @@ class AudiusAPIClient {
   }
 
   _constructUrl(path: string, queryParams: QueryParams = {}) {
-    if (this.initializationState.state !== 'initialized')
+    if (this.initializationState.state !== 'initialized') {
       throw new Error('_constructURL called uninitialized')
+    }
     const params = Object.entries(queryParams)
       .filter((p) => p[1] !== undefined && p[1] !== null)
       .map((p) => {

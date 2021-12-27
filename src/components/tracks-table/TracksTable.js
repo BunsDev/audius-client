@@ -535,8 +535,9 @@ class TracksTable extends Component {
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
-    )
+    ) {
       return
+    }
     this.props.onReorderTracks(source.index, destination.index)
   }
 

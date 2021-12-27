@@ -622,8 +622,9 @@ class FormTile extends Component {
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
-    )
+    ) {
       return
+    }
 
     const newOrder = Array.from(this.state.childrenOrder)
     newOrder.splice(source.index, 1)

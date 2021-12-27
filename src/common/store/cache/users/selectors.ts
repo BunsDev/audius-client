@@ -131,7 +131,8 @@ export const getUserFromCollection = (
   props: { id?: ID | null; uid?: UID | null }
 ) => {
   const collection = getCollection(state, props)
-  if (collection && collection.playlist_owner_id)
+  if (collection && collection.playlist_owner_id) {
     return getUser(state, { id: collection.playlist_owner_id })
+  }
   return null
 }

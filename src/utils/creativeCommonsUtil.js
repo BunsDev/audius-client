@@ -62,8 +62,9 @@ export const computeLicense = (
   commercialUse,
   derivativeWorks = null
 ) => {
-  if (allowAttribution && !commercialUse && derivativeWorks === null)
+  if (allowAttribution && !commercialUse && derivativeWorks === null) {
     return BY_NC
+  }
   if (allowAttribution && !commercialUse && !derivativeWorks) return BY_NC_ND
   if (allowAttribution && !commercialUse && derivativeWorks) return BY_NC_SA
 

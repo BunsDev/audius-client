@@ -81,8 +81,9 @@ export const getTracksFromCollection = (
     !collection ||
     !collection.playlist_contents ||
     !collection.playlist_contents.track_ids
-  )
+  ) {
     return emptyList
+  }
 
   const collectionSource = Uid.fromString(props.uid).source
 

@@ -91,8 +91,9 @@ export function createUserListProvider<T>({
     // only prepending the subset users if
     // we haven't already.
     let combinedUserIds = (() => {
-      if (currentPage === 0)
+      if (currentPage === 0) {
         return [...subsetIds, ...existingUserIDs, ...filteredUserIDs]
+      }
       return [...existingUserIDs, ...filteredUserIDs]
     })()
     // Filter duplicates

@@ -13,14 +13,16 @@ import styles from './TrackInfo.module.css'
 class TrackInfo extends PureComponent {
   onClickTrackName = (e) => {
     e.stopPropagation()
-    if (!this.props.disabled && this.props.onClickTrackName)
+    if (!this.props.disabled && this.props.onClickTrackName) {
       this.props.onClickTrackName()
+    }
   }
 
   onClickArtistName = (e) => {
     e.stopPropagation()
-    if (!this.props.disabled && this.props.onClickArtistName)
+    if (!this.props.disabled && this.props.onClickArtistName) {
       this.props.onClickArtistName()
+    }
   }
 
   render() {

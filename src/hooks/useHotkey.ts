@@ -39,8 +39,9 @@ export const useDevModeHotkey = (keyCode: number) => {
       process.env.REACT_APP_ENVIRONMENT === 'production' &&
       (!window.localStorage ||
         !window.localStorage.getItem(ENABLE_DEV_MODE_KEY))
-    )
+    ) {
       return
+    }
     setIsEnabled((e) => !e)
   }, [])
 

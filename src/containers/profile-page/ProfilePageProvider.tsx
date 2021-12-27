@@ -661,8 +661,9 @@ class ProfilePage extends PureComponent<ProfilePageProps, ProfilePageState> {
       !profile ||
       profile.followers.status === Status.LOADING ||
       profile.follower_count === followers.length
-    )
+    ) {
       return
+    }
     fetchFollowUsers(FollowType.FOLLOWERS, 22, followers.length)
   }
 
@@ -676,8 +677,9 @@ class ProfilePage extends PureComponent<ProfilePageProps, ProfilePageState> {
       !profile ||
       profile.followees.status === Status.LOADING ||
       profile.followee_count === followees.length
-    )
+    ) {
       return
+    }
     fetchFollowUsers(FollowType.FOLLOWEES, 22, followees.length)
   }
 

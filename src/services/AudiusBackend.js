@@ -2410,8 +2410,9 @@ class AudiusBackend {
       !remoteConfigInstance.getFeatureEnabled(
         FeatureFlags.PLAYLIST_UPDATES_ENABLED
       )
-    )
+    ) {
       return
+    }
 
     await waitForLibsInit()
     const account = audiusLibs.Account.getCurrentUser()

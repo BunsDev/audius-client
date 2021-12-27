@@ -405,8 +405,9 @@ class LineupProvider extends PureComponent<CombinedProps, LineupProviderState> {
 
     const isLineupPlaying = lineup.entries.some((entry) => {
       if (entry.track_id) return playingUid === entry.uid
-      else if (entry.playlist_id)
+      else if (entry.playlist_id) {
         return entry.tracks.some((track: any) => track.uid === playingUid)
+      }
       return false
     })
     if (playingTrackId && !isLineupPlaying && lineup.prefix === playingSource) {

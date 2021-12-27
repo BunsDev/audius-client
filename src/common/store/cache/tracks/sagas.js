@@ -388,8 +388,9 @@ function* watchFetchCoverArt() {
     try {
       let track = yield call(waitForValue, getTrack, { id: trackId })
       const user = yield call(waitForValue, getUser, { id: track.owner_id })
-      if (!track || !user || (!track.cover_art_sizes && !track.cover_art))
+      if (!track || !user || (!track.cover_art_sizes && !track.cover_art)) {
         return
+      }
       const gateways = getCreatorNodeIPFSGateways(user.creator_node_endpoint)
       const multihash = track.cover_art_sizes || track.cover_art
       const coverArtSize = multihash === track.cover_art_sizes ? size : null

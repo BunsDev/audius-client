@@ -953,8 +953,9 @@ const useTabs = ({
   tabRecalculator,
   initialScrollOffset = 0
 }: UseTabsArguments): UseTabsResult => {
-  if (tabs.length !== elements.length)
+  if (tabs.length !== elements.length) {
     throw new Error('Non-matching number of tabs and elements')
+  }
 
   const isControlled = !!selectedTabLabel
 

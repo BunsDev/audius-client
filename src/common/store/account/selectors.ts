@@ -119,8 +119,9 @@ export const getAccountCollections = createSelector(
   (accountCollections, collections) => {
     return Object.keys(accountCollections).reduce((acc, cur) => {
       const track = accountCollections[(cur as unknown) as number]
-      if (!collections[track.id] || collections[track.id]._marked_deleted)
+      if (!collections[track.id] || collections[track.id]._marked_deleted) {
         return acc
+      }
       return {
         ...acc,
         [track.id]: track

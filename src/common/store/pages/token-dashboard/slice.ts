@@ -71,8 +71,9 @@ const slice = createSlice({
       if (
         state.modalState?.stage !== 'SEND' ||
         state.modalState.flowState.stage !== 'AWAITING_CONFIRMATION'
-      )
+      ) {
         return
+      }
 
       state.modalState.flowState = {
         stage: 'SENDING',

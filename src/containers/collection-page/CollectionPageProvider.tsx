@@ -613,8 +613,9 @@ class CollectionPage extends Component<
   }
 
   onHeroTrackEdit = () => {
-    if (this.state.playlistId)
+    if (this.state.playlistId) {
       this.props.onEditCollection(this.state.playlistId)
+    }
   }
 
   onHeroTrackShare = () => {

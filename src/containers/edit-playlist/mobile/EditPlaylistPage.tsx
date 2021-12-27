@@ -264,8 +264,9 @@ const EditPlaylistPage = g(
      */
     const onRemoveTrack = useCallback(
       (index: number) => {
-        if ((metadata?.playlist_contents?.track_ids.length ?? 0) <= index)
+        if ((metadata?.playlist_contents?.track_ids.length ?? 0) <= index) {
           return
+        }
         const reorderedIndex = reorderedTracks[index]
         const { playlist_contents } = metadata!
         const { track: trackId, time } = playlist_contents.track_ids[
