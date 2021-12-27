@@ -26,7 +26,7 @@ export const makeGetTableMetadatas = <T>(lineupSelector: LineupSelector<T>) => {
     (lineup, trackUids, users) => {
       let deleted = lineup.deleted
       const entries = lineup.entries
-        .map(entry => {
+        .map((entry) => {
           const track = trackUids[entry.uid]
           if (track) {
             return {
@@ -34,8 +34,8 @@ export const makeGetTableMetadatas = <T>(lineupSelector: LineupSelector<T>) => {
               ...track,
               uid: entry.uid,
               followeeReposts: track.followee_reposts
-                .map(repost => ({ ...repost, user: users[repost.user_id] }))
-                .filter(repost => !!repost.user)
+                .map((repost) => ({ ...repost, user: users[repost.user_id] }))
+                .filter((repost) => !!repost.user)
             }
           }
 
@@ -43,7 +43,7 @@ export const makeGetTableMetadatas = <T>(lineupSelector: LineupSelector<T>) => {
           return null
         })
         .filter(removeNullable)
-        .map(entry => {
+        .map((entry) => {
           if (entry.owner_id in users)
             return { ...entry, user: users[entry.owner_id] }
           deleted += 1
@@ -63,12 +63,12 @@ export const makeGetTableMetadatas = <T>(lineupSelector: LineupSelector<T>) => {
 export const makeGetLineupMetadatas = <T>(
   lineupSelector: LineupSelector<T>
 ) => {
-  return createSelector([lineupSelector], lineup => {
+  return createSelector([lineupSelector], (lineup) => {
     return lineup
   })
 }
 
 export const makeGetLineupOrder = <T>(lineupSelector: LineupSelector<T>) =>
-  createSelector([lineupSelector], lineup => {
+  createSelector([lineupSelector], (lineup) => {
     return lineup.order
   })

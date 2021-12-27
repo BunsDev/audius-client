@@ -28,6 +28,7 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/no-this-alias': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
+    'arrow-parens': 'error',
     camelcase: 'off',
     'import/no-unresolved': 'error',
     'import/order': [
@@ -82,7 +83,6 @@ module.exports = {
     'no-unused-vars': 'off'
 
     // Rules we should enable
-    // 'arrow-parens': 'error',
     // curly: 'error',
     // 'max-params': ['error', 1],
     // 'sort-keys': 'error',

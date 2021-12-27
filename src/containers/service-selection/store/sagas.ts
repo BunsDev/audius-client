@@ -36,7 +36,7 @@ export function* watchFetchServices() {
         primary = userEndpoints[0]
         secondaries = userEndpoints.slice(1)
         // Filter out a secondary that is unhealthy.
-        secondaries = secondaries.filter(Boolean).filter(s => services[s])
+        secondaries = secondaries.filter(Boolean).filter((s) => services[s])
       } else {
         const autoselect = yield call(AudiusBackend.autoSelectCreatorNodes)
         primary = autoselect.primary
@@ -60,7 +60,7 @@ export function* watchFetchServices() {
       yield put(fetchServicesSucceeded({ services, primary, secondaries }))
       // Check if secondaries are syncing
       yield all(
-        secondaries.map(s => {
+        secondaries.map((s) => {
           return fork(updateSyncing, s)
         })
       )
@@ -72,7 +72,7 @@ export function* watchFetchServices() {
 }
 
 const checkIsSyncing = async (service: string) => {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const interval = setInterval(async () => {
       const isSyncing = await AudiusBackend.isCreatorNodeSyncing(service)
       if (!isSyncing) {
@@ -124,7 +124,7 @@ function* watchSetSelected() {
       ])
     )
     yield all(
-      secondaries.map(s => {
+      secondaries.map((s) => {
         if (currentSecondaries.includes(s)) return null
         return fork(setSyncing, s)
       })
@@ -150,7 +150,7 @@ function* watchSetSelected() {
 
     // Any new secondaries need to check if they are syncing
     yield all(
-      secondaries.map(s => {
+      secondaries.map((s) => {
         if (currentSecondaries.includes(s)) return null
         return fork(updateSyncing, s)
       })

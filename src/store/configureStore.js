@@ -38,7 +38,7 @@ const onSagaError = (error, extraInfo) => {
   // Send to sentry if not on localhost
   if (!getIsDeployedOnHost()) return
   try {
-    Sentry.withScope(scope => {
+    Sentry.withScope((scope) => {
       scope.setExtras(extra)
       Sentry.captureException(error)
     })
@@ -49,7 +49,7 @@ const onSagaError = (error, extraInfo) => {
 
 // Can't send up the entire Redux state b/c it's too fat
 // for Sentry to handle, and there is sensitive data
-const statePruner = state => {
+const statePruner = (state) => {
   return {
     account: {
       status: state.account.status,
@@ -92,7 +92,9 @@ const statePruner = state => {
       failedTrackIndices: state.upload.failedTrackIndices,
       metadata: state.upload.metadata,
       success: state.upload.success,
-      tracks: (state.upload.tracks || []).map(t => ({ metadata: t.metadata })),
+      tracks: (state.upload.tracks || []).map((t) => ({
+        metadata: t.metadata
+      })),
       uploading: state.upload.uploading,
       uploadProgress: state.upload.uploadProgress,
       uploadType: state.upload.uploadType
@@ -104,7 +106,7 @@ const statePruner = state => {
 // logging sensitive information in the future if additional actions are added.
 // If we discover we want specific action bodies in the future for Sentry
 // debuggability, those should be whitelisted here.
-const actionSanitizer = action => ({ type: action.type })
+const actionSanitizer = (action) => ({ type: action.type })
 const sentryMiddleware = createSentryMiddleware(Sentry, {
   actionTransformer: actionSanitizer,
   stateTransformer: statePruner
@@ -124,7 +126,7 @@ let store = null
 // the client store from web -> mobile
 const clientStoreKeys = Object.keys(clientStoreReducers)
 
-const syncClientStateToNativeMobile = store => {
+const syncClientStateToNativeMobile = (store) => {
   if (NATIVE_MOBILE) {
     let currentState
     const postMessageDebounced = debounce(postMessage, 500, { leading: true })
@@ -135,7 +137,7 @@ const syncClientStateToNativeMobile = store => {
       currentState = state
       if (
         !previousState ||
-        clientStoreKeys.some(k => currentState[k] !== previousState[k])
+        clientStoreKeys.some((k) => currentState[k] !== previousState[k])
       ) {
         // Debounce messages to minimize expensive stringify and parse.
         // Leading and trailing states are sent, state will be out of sync

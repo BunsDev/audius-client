@@ -65,7 +65,7 @@ export async function add(
   id: ID,
   metadata: CacheMetadata,
   replace = false,
-  transform: (metadata: any) => any = metadata => metadata
+  transform: (metadata: any) => any = (metadata) => metadata
 ): Promise<void> {
   if (!isCacheEnabled()) return
 
@@ -121,7 +121,7 @@ export async function update(
   kind: Kind,
   id: ID,
   metadata: CacheMetadata,
-  transform: (metadata: any) => any = metadata => metadata
+  transform: (metadata: any) => any = (metadata) => metadata
 ): Promise<void> {
   if (!isCacheEnabled()) return
 
@@ -178,7 +178,9 @@ export async function getAllItems() {
   const tracks: Array<Cacheable<Track>> = []
   const evict: string[] = []
 
-  const items = (await Promise.all(allKeys.map(k => get(k)))) as CacheMetadata[]
+  const items = (await Promise.all(
+    allKeys.map((k) => get(k))
+  )) as CacheMetadata[]
   for (let i = 0; i < items.length; i++) {
     const [item, key] = [items[i], allKeys[i]]
 
@@ -206,19 +208,19 @@ export async function getAllItems() {
   console.info(`Evicting ${evict.length} items`)
 
   // Fire and forget the evictions
-  evict.forEach(id => del(id))
+  evict.forEach((id) => del(id))
   console.timeEnd('Get all persisted')
 
   return {
-    collections: collections.map(e => ({
+    collections: collections.map((e) => ({
       ...e,
       uid: makeUid(Kind.COLLECTIONS, e.id)
     })),
-    users: users.map(e => ({
+    users: users.map((e) => ({
       ...e,
       uid: makeUid(Kind.USERS, e.id)
     })),
-    tracks: tracks.map(e => ({
+    tracks: tracks.map((e) => ({
       ...e,
       uid: makeUid(Kind.TRACKS, e.id)
     }))

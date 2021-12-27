@@ -20,7 +20,7 @@ const initialFormFields = {
   ...schemas.newCollectionMetadata()
 }
 
-const CreatePlaylistModal = props => {
+const CreatePlaylistModal = (props) => {
   const [formFields, setFormFields] = useState(initialFormFields)
   const [errors, setErrors] = useState({
     playlistName: false,
@@ -32,7 +32,7 @@ const CreatePlaylistModal = props => {
   // On receiving new, defined metadata, set the form fields
   useEffect(() => {
     if (metadata) {
-      setFormFields(_ => ({
+      setFormFields((_) => ({
         artwork: {},
         ...schemas.newCollectionMetadata(metadata)
       }))
@@ -64,27 +64,27 @@ const CreatePlaylistModal = props => {
       let file = selectedFiles[0]
       file = await resizeImage(file)
       const url = URL.createObjectURL(file)
-      setFormFields(formFields => ({
+      setFormFields((formFields) => ({
         ...formFields,
         artwork: { file, url, source }
       }))
     } catch (err) {
-      setFormFields(formFields => ({
+      setFormFields((formFields) => ({
         ...formFields,
         artwork: { ...(formFields.artwork || {}), error: err.message }
       }))
     }
   }
 
-  const onChangePlaylistName = name => {
-    setFormFields(formFields => ({ ...formFields, playlist_name: name }))
+  const onChangePlaylistName = (name) => {
+    setFormFields((formFields) => ({ ...formFields, playlist_name: name }))
     if (name) {
       setErrors({ ...errors, playlistName: false })
     }
   }
 
-  const onChangeDescription = description => {
-    setFormFields(formFields => ({ ...formFields, description }))
+  const onChangeDescription = (description) => {
+    setFormFields((formFields) => ({ ...formFields, description }))
   }
 
   const onSave = () => {

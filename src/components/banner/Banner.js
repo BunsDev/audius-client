@@ -7,7 +7,7 @@ import { ReactComponent as IconRemove } from 'assets/img/iconRemove.svg'
 
 import styles from './Banner.module.css'
 
-const Banner = props => {
+const Banner = (props) => {
   return (
     <div
       className={cn(

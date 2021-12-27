@@ -25,17 +25,17 @@ const messages = {
 export class SignIn extends PureComponent {
   passwordInput = React.createRef()
 
-  onEmailKeyDown = e => {
+  onEmailKeyDown = (e) => {
     if (e.keyCode === 13 /** enter */) {
       this.passwordInput.current.focus()
     }
   }
 
-  onEmailChange = email => {
+  onEmailChange = (email) => {
     this.props.onEmailChange(email, /* validate */ true)
   }
 
-  onPwdKeyDown = e => {
+  onPwdKeyDown = (e) => {
     if (e.keyCode === 13 /** enter */) {
       this.props.onSignIn()
     }
@@ -122,7 +122,7 @@ export class SignIn extends PureComponent {
             to={{ opacity: 1 }}
             config={{ duration: 1000 }}
           >
-            {animProps => (
+            {(animProps) => (
               <StatusMessage
                 status='error'
                 containerStyle={animProps}

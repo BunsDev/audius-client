@@ -403,7 +403,7 @@ class LineupProvider extends PureComponent<CombinedProps, LineupProviderState> {
   getPlayingUid = () => {
     const { lineup, playingTrackId, playingSource, playingUid } = this.props
 
-    const isLineupPlaying = lineup.entries.some(entry => {
+    const isLineupPlaying = lineup.entries.some((entry) => {
       if (entry.track_id) return playingUid === entry.uid
       else if (entry.playlist_id)
         return entry.tracks.some((track: any) => track.uid === playingUid)
@@ -425,7 +425,7 @@ class LineupProvider extends PureComponent<CombinedProps, LineupProviderState> {
 
   hasLoaded = (index: number) => {
     if (!this.state.loadedTiles[index]) {
-      this.setState(state => {
+      this.setState((state) => {
         const newLoadedTiles = [...state.loadedTiles]
         newLoadedTiles[index] = true
         return {
@@ -712,7 +712,7 @@ class LineupProvider extends PureComponent<CombinedProps, LineupProviderState> {
         >
           {(featuredId: ID | null) =>
             featuredId
-              ? props => (
+              ? (props) => (
                   <div
                     className={cn(
                       styles.featuredContainer,

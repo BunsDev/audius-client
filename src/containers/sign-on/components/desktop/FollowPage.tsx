@@ -87,7 +87,7 @@ export const FollowPage = (props: FollowPageProps) => {
   }, [selectedCategory, setIsTransitioning])
 
   const seletablePillProps = {
-    selectedIndex: artistCategories.findIndex(c => c === selectedCategory),
+    selectedIndex: artistCategories.findIndex((c) => c === selectedCategory),
     onClickIndex: onClickPillIndex,
     content: artistCategories,
     disableDelayHandler: true

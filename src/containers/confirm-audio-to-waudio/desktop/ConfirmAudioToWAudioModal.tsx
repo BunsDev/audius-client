@@ -68,7 +68,7 @@ type AudioToWAudioMobileDrawerProps = {
 const ConfirmAudioToWAudioModal = () => {
   const dispatch = useDispatch()
 
-  const isOpen = useSelector(state =>
+  const isOpen = useSelector((state) =>
     getModalVisibility(state, 'ConfirmAudioToWAudio')
   )
   const [isLoading, setIsLoading] = useState(false)

@@ -27,7 +27,7 @@ function* getTracks({
   if (!trackId) return []
 
   const currentUserId = yield select(getUserId)
-  const { tracks, count } = yield call(args => apiClient.getRemixes(args), {
+  const { tracks, count } = yield call((args) => apiClient.getRemixes(args), {
     trackId,
     offset,
     limit,

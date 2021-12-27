@@ -1,7 +1,7 @@
 // Confirmer selectors
 
 // Check whether anything is confirming so UI can block reloads.
-export const getIsConfirming = state =>
+export const getIsConfirming = (state) =>
   Object.keys(state.confirmer.confirm).length > 0
 
 export const getResult = (state, props) =>
@@ -19,12 +19,12 @@ export const getConfirmLength = (state, props) =>
 export const getIsDone = (state, props) =>
   props.uid in state.confirmer.confirm
     ? state.confirmer.confirm[props.uid].calls
-        .map(call => call.result)
-        .every(result => result !== null)
+        .map((call) => call.result)
+        .every((result) => result !== null)
     : true
 export const getCommandChain = (state, props) =>
   props.uid in state.confirmer.complete
     ? state.confirmer.complete[props.uid]
     : []
 
-export const getConfirmCalls = state => state.confirmer.confirm
+export const getConfirmCalls = (state) => state.confirmer.confirm

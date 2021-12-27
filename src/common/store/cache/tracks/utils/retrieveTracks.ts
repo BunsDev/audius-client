@@ -59,7 +59,7 @@ export function* retrieveTrackByHandleAndSlug({
       },
       retrieveFromSource: function* (permalinks: string[]) {
         const userId = yield select(getUserId)
-        const track: UserTrackMetadata = yield call(args => {
+        const track: UserTrackMetadata = yield call((args) => {
           const split = args[0].split('/')
           const handle = split[1]
           const slug = split.slice(2).join('')
@@ -217,7 +217,7 @@ export function* retrieveTracks({
             trackIds as UnlistedTrackRequest[]
           )
         } else {
-          fetched = yield call(args => apiClient.getTrack(args), {
+          fetched = yield call((args) => apiClient.getTrack(args), {
             id: ids[0].id,
             currentUserId,
             unlistedArgs: {
@@ -235,7 +235,7 @@ export function* retrieveTracks({
             idsArray: ids as ID[]
           })
         } else {
-          fetched = yield call(args => apiClient.getTrack(args), {
+          fetched = yield call((args) => apiClient.getTrack(args), {
             id: ids[0],
             currentUserId
           })
@@ -255,5 +255,5 @@ export function* retrieveTracks({
     }
   })
 
-  return ids.map(id => tracks.entries[id]).filter(Boolean)
+  return ids.map((id) => tracks.entries[id]).filter(Boolean)
 }

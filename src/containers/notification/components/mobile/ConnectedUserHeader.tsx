@@ -67,7 +67,7 @@ const UserHeader = ({
 }: UserHeaderProps) => {
   const [userImgCount, setUserImgCount] = useState<number>(0)
   const showUserListModal = userIds.length > userImgCount
-  const measuredRef = useCallback(node => {
+  const measuredRef = useCallback((node) => {
     if (node !== null) {
       const containerWidth = node.getBoundingClientRect().width
       const imgCount = calcUserImgCount(containerWidth)
@@ -102,7 +102,7 @@ function mapStateToProps(state: AppState) {
   const { limit, userIds, status } = getNotificationUserList(state)
   const users = getUsers(state, { ids: userIds })
   return {
-    modalUsers: userIds.slice(0, limit).map(id => users[id]),
+    modalUsers: userIds.slice(0, limit).map((id) => users[id]),
     hasMore: userIds.length > limit,
     status
   }

@@ -292,8 +292,8 @@ class GiantTrackTile extends PureComponent {
         <div className={styles.tagSection}>
           {tags
             .split(',')
-            .filter(t => t)
-            .map(tag => (
+            .filter((t) => t)
+            .map((tag) => (
               <Tag
                 className={styles.tagFormatting}
                 textLabel={tag}

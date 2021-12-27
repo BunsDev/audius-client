@@ -103,7 +103,7 @@ const UserName = ({
   isDeactivated?: boolean
 }) => {
   const onClick = useCallback(
-    e => {
+    (e) => {
       e.preventDefault()
       e.stopPropagation()
       onProfileClick(handle)
@@ -360,7 +360,7 @@ export const formatBody = (
     case NotificationType.RemixCreate: {
       const user = notification.user
       const entity = notification.entities.find(
-        track => track.track_id === notification.childTrackId
+        (track) => track.track_id === notification.childTrackId
       )
       return (
         <span
@@ -384,7 +384,7 @@ export const formatBody = (
     case NotificationType.RemixCosign: {
       const user = notification.user
       const entity = notification.entities.find(
-        track => track.owner_id === notification.parentTrackUserId
+        (track) => track.owner_id === notification.parentTrackUserId
       )
 
       return (
@@ -426,7 +426,9 @@ export const formatBody = (
       )
     }
     case NotificationType.TierChange: {
-      const tierInfo = badgeTiers.find(info => info.tier === notification.tier)
+      const tierInfo = badgeTiers.find(
+        (info) => info.tier === notification.tier
+      )
       if (!tierInfo) return null
       const { tier, humanReadableAmount } = tierInfo
 
@@ -463,7 +465,7 @@ export const formatHeader = (
   switch (notification.type) {
     case NotificationType.RemixCreate: {
       const entity = notification.entities.find(
-        track => track.track_id === notification.parentTrackId
+        (track) => track.track_id === notification.parentTrackId
       )
       return (
         <span

@@ -123,7 +123,7 @@ const useRewardIds = () => {
   const rewardsString = useRemoteVar(StringKeys.CHALLENGE_REWARD_IDS)
   if (rewardsString === null) return []
   const rewards = rewardsString.split(',') as ChallengeRewardID[]
-  const filteredRewards: ChallengeRewardID[] = rewards.filter(reward =>
+  const filteredRewards: ChallengeRewardID[] = rewards.filter((reward) =>
     validRewardIds.has(reward)
   )
   return filteredRewards
@@ -145,8 +145,8 @@ const RewardsTile = ({ className }: RewardsTileProps) => {
   }
 
   const rewardsTiles = rewardIds
-    .map(id => challengeRewardsConfig[id])
-    .map(props => (
+    .map((id) => challengeRewardsConfig[id])
+    .map((props) => (
       <RewardPanel {...props} openModal={openModal} key={props.id} />
     ))
 

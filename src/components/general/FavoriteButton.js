@@ -8,7 +8,7 @@ import { ReactComponent as IconRemove } from 'assets/img/iconRemove.svg'
 
 import styles from './FavoriteButton.module.css'
 
-const FavoriteButton = props => {
+const FavoriteButton = (props) => {
   const [isHovered, setIsHovered] = useState(false)
 
   let icon

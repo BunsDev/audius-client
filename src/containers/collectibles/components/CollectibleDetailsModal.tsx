@@ -193,7 +193,7 @@ const CollectibleDetailsModal = ({
 
   const isCollectibleOptionEnabled =
     isCollectibleOptionEnabledFlag &&
-    tierNumber >= badgeTiers.findIndex(t => t.tier === MIN_COLLECTIBLES_TIER)
+    tierNumber >= badgeTiers.findIndex((t) => t.tier === MIN_COLLECTIBLES_TIER)
 
   const handleClose = useCallback(() => {
     dispatch(setCollectible({ collectible: null }))
@@ -221,7 +221,7 @@ const CollectibleDetailsModal = ({
     const { imageUrl } = collectible
     if (!updateProfilePicture || !onSave || imageUrl === null) return
 
-    const blob = await fetch(imageUrl).then(r => r.blob())
+    const blob = await fetch(imageUrl).then((r) => r.blob())
     await updateProfilePicture([blob], 'url')
     await onSave()
     setIsPicConfirmaModalOpen(false)

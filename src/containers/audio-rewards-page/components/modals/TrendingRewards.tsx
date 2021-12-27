@@ -169,7 +169,7 @@ const TrendingRewardsBody = ({
           <TabSlider
             options={tabOptions}
             selected={modalType}
-            onSelectOption={option =>
+            onSelectOption={(option) =>
               setModalType(option as TrendingRewardsModalType)
             }
             textClassName={cn(styles.slider, styles.compactSlider)}

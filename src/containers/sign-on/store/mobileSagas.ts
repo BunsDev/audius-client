@@ -217,7 +217,7 @@ const handleImage = async (
   fileType: string,
   ...resizeArgs: (number | boolean)[]
 ) => {
-  const imageBlob = await fetch(url).then(r => r.blob())
+  const imageBlob = await fetch(url).then((r) => r.blob())
   const artworkFile = new File([imageBlob], 'Artwork', {
     type: `image/${fileType}`
   })

@@ -420,7 +420,7 @@ const SignOnProvider = ({
       >
         <form
           method='post'
-          onSubmit={e => {
+          onSubmit={(e) => {
             e.preventDefault()
           }}
           autoComplete='off'
@@ -457,7 +457,7 @@ const SignOnProvider = ({
                 : { duration: 220 }
             }
           >
-            {item => pages[item]}
+            {(item) => pages[item]}
           </Transition>
         </form>
       </SignOnModal>

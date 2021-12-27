@@ -173,7 +173,7 @@ const ProfileHeader = ({
   const bioRef = useRef<HTMLElement | null>(null)
   const isEditing = mode === 'editing'
 
-  const bioRefCb = useCallback(node => {
+  const bioRefCb = useCallback((node) => {
     if (node !== null) {
       const ellipsisActive = isEllipsisActive(node)
       if (ellipsisActive) {
@@ -257,7 +257,7 @@ const ProfileHeader = ({
   }, [record, tikTokHandle, handle])
 
   const onExternalLinkClick = useCallback(
-    event => {
+    (event) => {
       record(
         make(Name.LINK_CLICKING, {
           url: event.target.href,
@@ -294,7 +294,7 @@ const ProfileHeader = ({
   }
 
   const onDonationLinkClick = useCallback(
-    event => {
+    (event) => {
       record(
         make(Name.PROFILE_PAGE_CLICK_DONATION, {
           handle,

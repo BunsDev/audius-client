@@ -192,7 +192,7 @@ const EmbedModal = ({ isOpen, kind, id, metadata, close }: EmbedModalProps) => {
               <TabSlider
                 options={tabOptions}
                 selected={size}
-                onSelectOption={size => setSize(size)}
+                onSelectOption={(size) => setSize(size)}
               />
             </div>
           )}

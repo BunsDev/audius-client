@@ -40,7 +40,7 @@ class TrendingWeekSagas extends LineupSagas {
     super(
       TRENDING_WEEK_PREFIX,
       trendingWeekActions,
-      store => store.trending.trendingWeek,
+      (store) => store.trending.trendingWeek,
       getTracks(TimeRange.WEEK)
     )
   }
@@ -51,7 +51,7 @@ class TrendingMonthSagas extends LineupSagas {
     super(
       TRENDING_MONTH_PREFIX,
       trendingMonthActions,
-      store => store.trending.trendingMonth,
+      (store) => store.trending.trendingMonth,
       getTracks(TimeRange.MONTH)
     )
   }
@@ -62,7 +62,7 @@ class TrendingYearSagas extends LineupSagas {
     super(
       TRENDING_YEAR_PREFIX,
       trendingYearActions,
-      store => store.trending.trendingYear,
+      (store) => store.trending.trendingYear,
       getTracks(TimeRange.YEAR)
     )
   }

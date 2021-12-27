@@ -47,7 +47,7 @@ const getNextImage = <
 
   const desiredWidth = getWidth(size)
   const sorted = sortSizes(
-    keys.filter(s => condition(getWidth(s), desiredWidth))
+    keys.filter((s) => condition(getWidth(s), desiredWidth))
   )
   const next = sorted[0]
   return imageSizes[next]

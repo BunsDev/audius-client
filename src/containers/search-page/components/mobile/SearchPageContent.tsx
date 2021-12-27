@@ -226,7 +226,7 @@ const CardSearchPage = ({
     }
   })()
 
-  const cards = entities.map(e => {
+  const cards = entities.map((e) => {
     const {
       id,
       userId,

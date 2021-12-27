@@ -180,7 +180,7 @@ const actionsMap = {
       [FollowType.FOLLOWEES]: {
         ...state[FollowType.FOLLOWEES],
         userIds: state[FollowType.FOLLOWEES].userIds.filter(
-          id => id !== action.userId
+          (id) => id !== action.userId
         )
       }
     }

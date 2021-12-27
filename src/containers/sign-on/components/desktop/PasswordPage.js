@@ -39,13 +39,13 @@ export const checkState = Object.freeze({
   VALID: 'success'
 })
 
-const getNumberRequirement = pwd => {
+const getNumberRequirement = (pwd) => {
   if (pwd.length === 0) return checkState.DEFAULT
   if (!/\d/.test(pwd)) return checkState.ERROR
   return checkState.VALID
 }
 
-const getLenRequirement = pwd => {
+const getLenRequirement = (pwd) => {
   if (pwd.length === 0) return checkState.DEFAULT
   if (pwd.length < MIN_PASSWORD_LEN) return checkState.ERROR
   return checkState.VALID
@@ -57,7 +57,7 @@ const getMatchRequirement = (pwd, confirm) => {
   return checkState.VALID
 }
 
-const getCommonPasswordCheck = pwd => {
+const getCommonPasswordCheck = (pwd) => {
   if (pwd.length < MIN_PASSWORD_LEN) return checkState.DEFAULT
   if (commonPasswordList.test(pwd)) return checkState.ERROR
   return checkState.VALID
@@ -110,7 +110,7 @@ export class PasswordPage extends Component {
     }
   }
 
-  onPasswordChange = password => {
+  onPasswordChange = (password) => {
     const { requirements, passwordConfirm } = this.state
     const number =
       requirements.number === checkState.DEFAULT
@@ -145,7 +145,7 @@ export class PasswordPage extends Component {
     })
   }
 
-  onPasswordConfirmChange = passwordConfirm => {
+  onPasswordConfirmChange = (passwordConfirm) => {
     const { requirements, password } = this.state
     if (requirements.match !== checkState.DEFAULT) {
       this.setState({
@@ -180,7 +180,7 @@ export class PasswordPage extends Component {
     }
   }
 
-  onConfirmKeyDown = e => {
+  onConfirmKeyDown = (e) => {
     if (e.keyCode === 13 /** enter */) {
       this.onClickContinue()
     }
@@ -188,7 +188,7 @@ export class PasswordPage extends Component {
 
   fulfillsRequirements = () =>
     Object.keys(this.state.requirements).every(
-      req => this.state.requirements[req] === checkState.VALID
+      (req) => this.state.requirements[req] === checkState.VALID
     )
 
   onTermsOfServiceClick = () => {
@@ -212,10 +212,10 @@ export class PasswordPage extends Component {
       { status: requirements.match, label: messages.checks[2] }
     ]
     const isValid = Object.keys(requirements).every(
-      req => requirements[req] === checkState.VALID
+      (req) => requirements[req] === checkState.VALID
     )
     const hasError = Object.keys(requirements).some(
-      req => requirements[req] === checkState.ERROR
+      (req) => requirements[req] === checkState.ERROR
     )
 
     return (

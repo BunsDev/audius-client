@@ -170,11 +170,11 @@ const TrackHeader = ({
       label: 'Mood'
     },
     { value: credits, label: 'Credit' }
-  ].filter(info => !!info.value)
+  ].filter((info) => !!info.value)
 
   const record = useRecord()
   const onExternalLinkClick = useCallback(
-    event => {
+    (event) => {
       record(
         make(Name.LINK_CLICKING, {
           url: event.target.href,
@@ -217,7 +217,7 @@ const TrackHeader = ({
       <>
         {filteredTags.length > 0 ? (
           <div className={styles.tags}>
-            {filteredTags.map(tag => (
+            {filteredTags.map((tag) => (
               <h2
                 key={tag}
                 onClick={() => onClickTag(tag)}
@@ -245,7 +245,7 @@ const TrackHeader = ({
   }
 
   const renderTrackLabels = () => {
-    return trackLabels.map(infoFact => {
+    return trackLabels.map((infoFact) => {
       if (infoFact.label === 'Genre' && isUnlisted && !fieldVisibility.genre)
         return null
       if (infoFact.label === 'Released' && isUnlisted) return null

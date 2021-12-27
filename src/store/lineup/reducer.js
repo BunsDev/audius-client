@@ -107,7 +107,7 @@ export const actionsMap = {
     return newState
   },
   [UPDATE_LINEUP_ORDER](state, action) {
-    const reorderedEntries = action.orderedIds.map(uid => ({
+    const reorderedEntries = action.orderedIds.map((uid) => ({
       ...state.entries[state.order[uid]]
     }))
     const newOrder = action.orderedIds.reduce((m, uid, i) => {
@@ -131,10 +131,10 @@ export const actionsMap = {
   },
   [REMOVE](state, action) {
     const newState = { ...state }
-    newState.entries = state.entries.filter(e => e.uid !== action.uid)
+    newState.entries = state.entries.filter((e) => e.uid !== action.uid)
 
     const { [action.uid]: entryOrder, ...newOrder } = state.order
-    Object.keys(newOrder).forEach(uid => {
+    Object.keys(newOrder).forEach((uid) => {
       newOrder[uid] =
         newOrder[uid] > entryOrder ? newOrder[uid] - 1 : newOrder[uid]
     })

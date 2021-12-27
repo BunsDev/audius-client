@@ -395,7 +395,7 @@ const FullscreenDrawer = ({ children, isOpen, onClose }: DrawerProps) => {
               key={key}
               style={{
                 // @ts-ignore
-                transform: props.y.interpolate(y =>
+                transform: props.y.interpolate((y) =>
                   interpY(window.innerHeight * y)
                 ),
                 borderRadius: props.borderRadius?.interpolate(

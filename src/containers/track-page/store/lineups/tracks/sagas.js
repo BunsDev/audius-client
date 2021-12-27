@@ -31,7 +31,7 @@ function* getTracks({ offset, limit, payload }) {
     getTrack,
     { permalink },
     // Wait for the track to have a track_id (e.g. remix children could get fetched first)
-    track => track.track_id
+    (track) => track.track_id
   )
   const lineup = [track]
 
@@ -48,7 +48,7 @@ function* getTracks({ offset, limit, payload }) {
       // Filter out any track that happens to be the hero track
       // or is the remix parent track.
       .filter(
-        t => t.permalink !== permalink && t.track_id !== remixParentTrackId
+        (t) => t.permalink !== permalink && t.track_id !== remixParentTrackId
       )
       // Take only the first 5
       .slice(0, 5)

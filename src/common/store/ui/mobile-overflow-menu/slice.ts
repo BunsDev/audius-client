@@ -27,7 +27,7 @@ const slice = createSlice({
       state.overflowActions = overflowActions
       state.overflowActionCallbacks = overflowActionCallbacks ?? {}
     },
-    close: state => {
+    close: (state) => {
       // We don't clear out the actions because
       // it causes an empty drawer while it is animating out
       state.isOpen = false

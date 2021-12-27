@@ -1234,7 +1234,7 @@ class AudiusAPIClient {
         filter,
         tracks_only,
         followee_user_id: followee_user_ids
-          ? followee_user_ids.map(id => id.toString())
+          ? followee_user_ids.map((id) => id.toString())
           : undefined
       },
       true,
@@ -1398,10 +1398,12 @@ class AudiusAPIClient {
     if (this.initializationState.state !== 'initialized')
       throw new Error('_constructURL called uninitialized')
     const params = Object.entries(queryParams)
-      .filter(p => p[1] !== undefined && p[1] !== null)
-      .map(p => {
+      .filter((p) => p[1] !== undefined && p[1] !== null)
+      .map((p) => {
         if (Array.isArray(p[1])) {
-          return p[1].map(val => `${p[0]}=${encodeURIComponent(val)}`).join('&')
+          return p[1]
+            .map((val) => `${p[0]}=${encodeURIComponent(val)}`)
+            .join('&')
         }
         return `${p[0]}=${encodeURIComponent(p[1]!)}`
       })

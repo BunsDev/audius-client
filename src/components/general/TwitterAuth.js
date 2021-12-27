@@ -36,10 +36,10 @@ class TwitterLogin extends Component {
         credentials: this.props.credentials,
         headers: this.getHeaders()
       })
-      .then(response => {
+      .then((response) => {
         return response.json()
       })
-      .then(data => {
+      .then((data) => {
         let authenticationUrl = `https://api.twitter.com/oauth/authenticate?oauth_token=${data.oauth_token}&force_login=${this.props.forceLogin}`
 
         if (this.props.screenName) {
@@ -49,7 +49,7 @@ class TwitterLogin extends Component {
         popup.location = authenticationUrl
         this.polling(popup)
       })
-      .catch(error => {
+      .catch((error) => {
         popup.close()
         return this.props.onFailure(error)
       })
@@ -119,10 +119,10 @@ class TwitterLogin extends Component {
           headers: this.getHeaders()
         }
       )
-      .then(response => {
+      .then((response) => {
         this.props.onSuccess(response)
       })
-      .catch(error => {
+      .catch((error) => {
         return this.props.onFailure(error)
       })
   }

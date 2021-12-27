@@ -209,7 +209,7 @@ const ConnectedTrackTile = memo(
     }
 
     const onClickArtistName = useCallback(
-      e => {
+      (e) => {
         e.stopPropagation()
         if (goToRoute) goToRoute(profilePage(handle))
       },
@@ -217,7 +217,7 @@ const ConnectedTrackTile = memo(
     )
 
     const onClickTitle = useCallback(
-      e => {
+      (e) => {
         e.stopPropagation()
         if (goToRoute) goToRoute(permalink)
       },

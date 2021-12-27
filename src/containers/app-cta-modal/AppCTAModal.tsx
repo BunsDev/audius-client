@@ -34,7 +34,7 @@ const os = getOS()
 const useCallbacks = () => {
   const dispatch = useDispatch()
 
-  const isOpen = useSelector(state => state.application.ui.appCTAModal.isOpen)
+  const isOpen = useSelector((state) => state.application.ui.appCTAModal.isOpen)
 
   const recordDownloadDesktopApp = useCallback(() => {
     dispatch(make(Name.ACCOUNT_HEALTH_DOWNLOAD_DESKTOP, { source: 'banner' }))

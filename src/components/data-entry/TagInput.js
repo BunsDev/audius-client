@@ -10,11 +10,11 @@ import { trimToAlphaNumeric } from 'common/utils/formatUtil'
 
 import styles from './TagInput.module.css'
 
-const isAlphaNumeric = string => {
+const isAlphaNumeric = (string) => {
   return /^[a-zA-Z0-9]+$/.test(string)
 }
 
-const isAlphaNumericKeyCode = e => {
+const isAlphaNumericKeyCode = (e) => {
   const char = String.fromCharCode(e.keyCode)
   if (e.shiftKey) {
     // Allow hashtags because we clean them up later.
@@ -47,7 +47,7 @@ class TagInput extends Component {
     })
   }
 
-  isValidTag = tag => {
+  isValidTag = (tag) => {
     return (
       tag.length <= this.props.maxCharacters &&
       tag.length > this.props.minCharacters &&
@@ -55,12 +55,12 @@ class TagInput extends Component {
     )
   }
 
-  formatTag = tag => {
+  formatTag = (tag) => {
     // Remove non-alpha numeric and hash tags.
     return trimToAlphaNumeric(tag)
   }
 
-  addTag = input => {
+  addTag = (input) => {
     let tag = this.formatTag(input)
     if (tag.length > this.props.maxCharacters) {
       tag = tag.slice(0, this.props.maxCharacters)
@@ -99,7 +99,7 @@ class TagInput extends Component {
     this.props.onChangeTags(newTags)
   }
 
-  onNewTagInputKeyPress = e => {
+  onNewTagInputKeyPress = (e) => {
     const newTag = this.newTagInputRef.current.value.toLowerCase()
     if (
       e.keyCode === 13 /* enter */ ||
@@ -160,12 +160,12 @@ class TagInput extends Component {
           [styles.last]: i === tags.size - 1 && tags.size === maxTags
         })}
         key={tag}
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         {trimToAlphaNumeric(tag)}
         <div className={styles.tagIconWrapper}>
           <IconRemove
-            onClick={e => this.deleteTag(tag, e)}
+            onClick={(e) => this.deleteTag(tag, e)}
             className={styles.iconRemove}
           />
         </div>
@@ -234,7 +234,7 @@ TagInput.defaultProps = {
   label: '',
   size: 'normal',
   layout: 'vertical',
-  onChangeTags: tag => {}
+  onChangeTags: (tag) => {}
 }
 
 export default TagInput

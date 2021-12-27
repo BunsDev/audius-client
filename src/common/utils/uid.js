@@ -25,7 +25,7 @@ export class Uid {
 
   static getComponent = (uid, componentName) => {
     const components = uid.split('-')
-    const kind = components.find(component =>
+    const kind = components.find((component) =>
       component.startsWith(`${componentName}:`)
     )
     if (!kind) return ''
@@ -56,7 +56,7 @@ export function makeUids(kinds, ids, source) {
       counts[i] = totals[key]
     })
     const uids = ids.map((id, i) => Uid.build(kinds[i], id, source, counts[i]))
-    return uids.map(uid => uid.toString())
+    return uids.map((uid) => uid.toString())
   } else {
     // Single kind.
     const kind = kinds
@@ -69,7 +69,7 @@ export function makeUids(kinds, ids, source) {
       counts[i] = totals[id]
     })
     const uids = ids.map((id, i) => Uid.build(kind, id, source, counts[i]))
-    return uids.map(uid => uid.toString())
+    return uids.map((uid) => uid.toString())
   }
 }
 
@@ -90,13 +90,13 @@ export const makeKindId = (kind, id) => `${kind}-${id}`
  * Gets the id from a kind id
  * @param {String} kindId
  */
-export const getIdFromKindId = kindId => kindId.split('-')[1]
+export const getIdFromKindId = (kindId) => kindId.split('-')[1]
 
 /**
  * Gets the kind from a kind id
  * @param {String} kindId
  */
-export const getKindFromKindId = kindId => kindId.split('-')[0]
+export const getKindFromKindId = (kindId) => kindId.split('-')[0]
 
 export const uuid = () => {
   // https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript/873856#873856

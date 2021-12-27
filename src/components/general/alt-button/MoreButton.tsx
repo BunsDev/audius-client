@@ -37,7 +37,7 @@ const MoreButton = ({
       style={{
         backgroundImage: `url(${icon})`
       }}
-      onClick={e => {
+      onClick={(e) => {
         onClick()
         stopPropagation && e.stopPropagation()
       }}

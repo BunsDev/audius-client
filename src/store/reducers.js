@@ -61,7 +61,7 @@ import playlistLibrary from 'store/playlist-library/slice'
 import queue from 'store/queue/slice'
 import reachability from 'store/reachability/reducer'
 
-const createRootReducer = routeHistory =>
+const createRootReducer = (routeHistory) =>
   combineReducers({
     // Client store
     ...clientStoreReducers,

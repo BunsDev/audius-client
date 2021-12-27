@@ -12,7 +12,7 @@ import { getSelectedServices } from './store/selectors'
 import { openModal, fetchServices } from './store/slice'
 import { trimServiceName } from './utils'
 
-const ServiceName = props => {
+const ServiceName = (props) => {
   const trimmedName = trimServiceName(props.name)
 
   return (
@@ -25,7 +25,7 @@ const ServiceName = props => {
   )
 }
 
-const SelectedServices = props => {
+const SelectedServices = (props) => {
   const [fetchedServices, setFetchedServices] = useState(false)
 
   const { services, fetchServices } = props
@@ -86,11 +86,11 @@ SelectedServices.defaultProps = {
   variant: 'normal'
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   services: getSelectedServices(state)
 })
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   openModal: () => dispatch(openModal()),
   fetchServices: () => dispatch(fetchServices())
 })

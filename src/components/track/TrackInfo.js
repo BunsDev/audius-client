@@ -11,13 +11,13 @@ import UserBadges from 'containers/user-badges/UserBadges'
 import styles from './TrackInfo.module.css'
 
 class TrackInfo extends PureComponent {
-  onClickTrackName = e => {
+  onClickTrackName = (e) => {
     e.stopPropagation()
     if (!this.props.disabled && this.props.onClickTrackName)
       this.props.onClickTrackName()
   }
 
-  onClickArtistName = e => {
+  onClickArtistName = (e) => {
     e.stopPropagation()
     if (!this.props.disabled && this.props.onClickArtistName)
       this.props.onClickArtistName()

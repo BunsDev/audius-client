@@ -9,6 +9,6 @@ export const getLocalSave = (state: AppState, props: { id: ID }) =>
 
 export const getSavedTracksLineup = (state: AppState) => state.saved.tracks
 export const getSavedTracksLineupUid = (state: AppState, props: { id: ID }) => {
-  const track = state.saved.tracks.entries.find(t => t.id === props.id)
+  const track = state.saved.tracks.entries.find((t) => t.id === props.id)
   return track ? track.uid : null
 }

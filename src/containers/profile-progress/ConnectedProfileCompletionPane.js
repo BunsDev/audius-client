@@ -88,7 +88,7 @@ const ConnectedProfileCompletionPanel = ({
   )
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   completionStages: getOrderedCompletionStages(state),
   isAccountLoaded: getIsAccountLoaded(state),
   isLoggedIn: !!getAccountUser(state)

@@ -27,7 +27,7 @@ class Input extends Component {
     if (this.props.onBlur) this.props.onBlur()
   }
 
-  onChange = e => {
+  onChange = (e) => {
     if (
       this.props.characterLimit &&
       e.target.value.length > this.props.characterLimit

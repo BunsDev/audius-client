@@ -15,7 +15,7 @@ const messages = {
   imageName: 'Artwork'
 }
 
-const UploadArtwork = props => {
+const UploadArtwork = (props) => {
   const [processing, setProcessing] = useState(false)
   const [showTip, setShowTip] = useState(false)
 

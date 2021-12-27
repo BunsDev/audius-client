@@ -24,7 +24,7 @@ const BUTTON_COLLAPSE_WIDTHS = {
 
 const SHARE_TIMEOUT = 1500
 
-const StatBanner = props => {
+const StatBanner = (props) => {
   let buttonOne, buttonTwo, subscribeButton
   const followButtonRef = useRef()
 

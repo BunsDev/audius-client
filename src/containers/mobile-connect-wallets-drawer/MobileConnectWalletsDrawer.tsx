@@ -15,7 +15,7 @@ const messages = {
 
 const MobileConnectWalletsDrawer = ({ onClose }: { onClose: () => void }) => {
   const keyboardVisible = useSelector(getKeyboardVisibility)
-  const isOpen = useSelector(state =>
+  const isOpen = useSelector((state) =>
     getModalVisibility(state, 'MobileConnectWalletsDrawer')
   )
 

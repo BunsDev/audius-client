@@ -19,7 +19,7 @@ import { RepostType } from './types'
 const getPlaylistReposts = createUserListProvider<Collection>({
   getExistingEntity: getCollection,
   extractUserIDSubsetFromEntity: (collection: Collection) =>
-    collection.followee_reposts.map(r => r.user_id),
+    collection.followee_reposts.map((r) => r.user_id),
   fetchAllUsersForEntity: ({ limit, offset, entityId, currentUserId }) =>
     apiClient.getPlaylistRepostUsers({
       limit,
@@ -30,13 +30,13 @@ const getPlaylistReposts = createUserListProvider<Collection>({
   selectCurrentUserIDsInList: getUserIds,
   canFetchMoreUsers: (collection: Collection, combinedUserIDs: ID[]) =>
     combinedUserIDs.length < collection.repost_count,
-  includeCurrentUser: p => p.has_current_user_reposted
+  includeCurrentUser: (p) => p.has_current_user_reposted
 })
 
 const getTrackReposts = createUserListProvider<Track>({
   getExistingEntity: getTrack,
   extractUserIDSubsetFromEntity: (track: Track) =>
-    track.followee_reposts.map(r => r.user_id),
+    track.followee_reposts.map((r) => r.user_id),
   fetchAllUsersForEntity: ({
     limit,
     offset,
@@ -57,7 +57,7 @@ const getTrackReposts = createUserListProvider<Track>({
   selectCurrentUserIDsInList: getUserIds,
   canFetchMoreUsers: (track: Track, combinedUserIDs: ID[]) =>
     combinedUserIDs.length < track.repost_count,
-  includeCurrentUser: t => t.has_current_user_reposted
+  includeCurrentUser: (t) => t.has_current_user_reposted
 })
 
 function* errorDispatcher(error: Error) {

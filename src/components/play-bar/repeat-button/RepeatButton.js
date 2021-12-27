@@ -16,7 +16,7 @@ const RepeatStates = Object.freeze({
 })
 
 const REPEAT_STATE_LS_KEY = 'repeatState'
-const getRepeatState = defaultState => {
+const getRepeatState = (defaultState) => {
   const localStorageRepeatState = window.localStorage.getItem(
     REPEAT_STATE_LS_KEY
   )
@@ -47,7 +47,7 @@ class RepeatButton extends Component {
     }
   }
 
-  handleChange = repeatState => {
+  handleChange = (repeatState) => {
     const {
       pbIconRepeatAll,
       pbIconRepeatSingle,

@@ -11,7 +11,7 @@ const messages = {
   size: 'File Too Large (Max 250MB)'
 }
 
-const InvalidFileType = props => {
+const InvalidFileType = (props) => {
   return (
     <Spring
       from={{ opacity: 0.6 }}
@@ -19,7 +19,7 @@ const InvalidFileType = props => {
       key={'invalid-file-type'}
       config={{ duration: 200 }}
     >
-      {animProps => (
+      {(animProps) => (
         <div
           style={animProps}
           className={cn(styles.invalidFileType, {

@@ -355,7 +355,8 @@ const ProfilePage = g(
 
     const { tierNumber } = useSelectTierInfo(userId ?? 0)
     const profileHasCollectiblesTierRequirement =
-      tierNumber >= badgeTiers.findIndex(t => t.tier === MIN_COLLECTIBLES_TIER)
+      tierNumber >=
+      badgeTiers.findIndex((t) => t.tier === MIN_COLLECTIBLES_TIER)
 
     const profileHasCollectibles =
       profile?.collectibleList?.length || profile?.solanaCollectibleList?.length
@@ -397,7 +398,7 @@ const ProfilePage = g(
         />
       )
     } else {
-      const playlistCards = (playlists || []).map(playlist => (
+      const playlistCards = (playlists || []).map((playlist) => (
         <Card
           key={playlist.playlist_id}
           id={playlist.playlist_id}
@@ -421,7 +422,7 @@ const ProfilePage = g(
         />
       ))
       if (isArtist) {
-        const albumCards = (albums || []).map(album => (
+        const albumCards = (albums || []).map((album) => (
           <Card
             key={album.playlist_id}
             id={album.playlist_id}

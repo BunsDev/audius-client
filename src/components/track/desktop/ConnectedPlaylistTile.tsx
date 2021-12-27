@@ -282,7 +282,7 @@ const ConnectedPlaylistTile = memo(
       )
     }
     const onClickArtistName = useCallback(
-      e => {
+      (e) => {
         e.stopPropagation()
         if (goToRoute) goToRoute(profilePage(handle))
       },
@@ -398,7 +398,7 @@ const ConnectedPlaylistTile = memo(
         numLoadingSkeletonRows
       )
       if (showSkeletons) {
-        return range(numLoadingSkeletonRows as number).map(i => (
+        return range(numLoadingSkeletonRows as number).map((i) => (
           <TrackListItem
             index={i}
             key={i}

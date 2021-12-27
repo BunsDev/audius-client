@@ -10,7 +10,7 @@ const messages = {
   dismiss: 'Got it!'
 }
 
-const AddTracksNotification = props => {
+const AddTracksNotification = (props) => {
   return (
     <div
       className={cn(styles.container, {

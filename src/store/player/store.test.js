@@ -21,7 +21,7 @@ const initialUsers = {
   }
 }
 
-const makeInitialPlayer = playing => ({
+const makeInitialPlayer = (playing) => ({
   audio: {
     load: jest.fn(),
     play: jest.fn(),

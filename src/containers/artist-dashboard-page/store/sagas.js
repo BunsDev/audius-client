@@ -32,7 +32,7 @@ function* fetchDashboardAsync(action) {
     call(AudiusBackend.getPlaylists, account.user_id, [])
   ])
 
-  const trackIds = tracks.map(t => t.track_id)
+  const trackIds = tracks.map((t) => t.track_id)
   const now = moment()
 
   yield call(fetchDashboardListenDataAsync, {
@@ -46,7 +46,7 @@ function* fetchDashboardAsync(action) {
   const unlistedTracksIdentifiers = yield call(AudiusBackend.getUnlistedTracks)
 
   // Create routeURLs
-  const identifiersWithRouteURL = unlistedTracksIdentifiers.map(t => ({
+  const identifiersWithRouteURL = unlistedTracksIdentifiers.map((t) => ({
     id: parseInt(t.id),
     handle: account.handle,
     url_title: formatUrlName(t.title)
@@ -79,7 +79,7 @@ function* fetchDashboardAsync(action) {
   }
 }
 
-const formatMonth = date => moment.utc(date).format('MMM').toUpperCase()
+const formatMonth = (date) => moment.utc(date).format('MMM').toUpperCase()
 
 function* fetchDashboardListenDataAsync(action) {
   const listenData = yield call(
@@ -110,7 +110,7 @@ function* fetchDashboardListenDataAsync(action) {
   each(listenData, (data, date) => {
     formattedListenData.all.values[labelIndexMap[formatMonth(date)]] =
       data.totalListens
-    data.listenCounts.forEach(count => {
+    data.listenCounts.forEach((count) => {
       if (!(count.trackId in formattedListenData)) {
         formattedListenData[count.trackId] = {
           labels: [...labels],

@@ -37,7 +37,7 @@ const Pages = Object.freeze({
 
 const SHOW_FIRST_UPLOAD_MODAL_DELAY = 3000
 
-const UploadPage = props => {
+const UploadPage = (props) => {
   const { children, page } = props
 
   return (
@@ -47,7 +47,7 @@ const UploadPage = props => {
       to={{ opacity: 1 }}
       config={{ duration: 200 }}
     >
-      {animProps => (
+      {(animProps) => (
         <div className={styles.upload} style={animProps}>
           <div className={styles.pageContent}>{children}</div>
         </div>
@@ -111,7 +111,7 @@ class Upload extends Component {
     }
   }
 
-  changePage = page => {
+  changePage = (page) => {
     this.setState({
       page: page
     })
@@ -121,7 +121,7 @@ class Upload extends Component {
     this.setState({ uploadTrackerror: { reason } })
   }
 
-  onSelectTracks = async selectedFiles => {
+  onSelectTracks = async (selectedFiles) => {
     const processedFiles = processFiles(
       selectedFiles,
       false,
@@ -153,13 +153,13 @@ class Upload extends Component {
     )
     const stems = (await Promise.all(processedFiles))
       .filter(Boolean)
-      .map(s => ({
+      .map((s) => ({
         ...s,
         category: stemRows[0],
         allowDelete: true,
         allowCategorySwitch: true
       }))
-    this.setState(s => {
+    this.setState((s) => {
       const newState = { ...s }
       newState.stems[trackIndex] = [
         ...(newState.stems[trackIndex] ?? []),
@@ -170,7 +170,7 @@ class Upload extends Component {
   }
 
   onDeleteStem = (trackIndex, stemIndex) => {
-    this.setState(s => {
+    this.setState((s) => {
       const newState = { ...s }
       const newStems = [...newState.stems[trackIndex]]
       newStems.splice(stemIndex, 1)
@@ -180,14 +180,14 @@ class Upload extends Component {
   }
 
   onSelectStemCategory = (category, trackIndex, stemIndex) => {
-    this.setState(s => {
+    this.setState((s) => {
       const newState = { ...s }
       newState.stems[trackIndex][stemIndex].category = category
       return newState
     })
   }
 
-  removeTrack = index => {
+  removeTrack = (index) => {
     this.setState({
       tracks: this.state.tracks.filter((_, i) => i !== index),
       uploadType:
@@ -197,7 +197,7 @@ class Upload extends Component {
     })
   }
 
-  playPreview = index => {
+  playPreview = (index) => {
     // Stop existing music if some is playing.
     if (this.props.playing) {
       this.props.pauseQueue()
@@ -260,7 +260,7 @@ class Upload extends Component {
     this.props.resetUpload()
   }
 
-  setUploadType = uploadType => {
+  setUploadType = (uploadType) => {
     this.setState({ uploadType: uploadType })
   }
 
@@ -318,7 +318,7 @@ class Upload extends Component {
       uploadType = 'tracks'
       route = profilePage(account.handle)
     }
-    const areAnyPublic = upload.tracks.some(t => !t.metadata.is_unlisted)
+    const areAnyPublic = upload.tracks.some((t) => !t.metadata.is_unlisted)
     if (isFirstUpload && areAnyPublic) {
       openFirstUploadModal(SHOW_FIRST_UPLOAD_MODAL_DELAY)
     }
@@ -449,16 +449,16 @@ class Upload extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   account: getAccountUser(state),
   upload: state.upload,
   playing: state.queue.playing
 })
 
-const mapDispatchToProps = dispatch => ({
-  onRecordViewCompletionPage: uploadType =>
+const mapDispatchToProps = (dispatch) => ({
+  onRecordViewCompletionPage: (uploadType) =>
     dispatch(make(Name.TRACK_UPLOAD_VIEW_TRACK_PAGE, { uploadType })),
-  goToRoute: route => dispatch(pushRoute(route)),
+  goToRoute: (route) => dispatch(pushRoute(route)),
   undoResetState: () => dispatch(undoResetState()),
   pauseQueue: () => dispatch(pauseQueue({})),
   onCloseMultiTrackNotification: () =>
@@ -466,7 +466,7 @@ const mapDispatchToProps = dispatch => ({
   resetUpload: () => dispatch(reset()),
   uploadTracks: (tracks, metadata, uploadType, stems) =>
     dispatch(uploadTracks(tracks, metadata, uploadType, stems)),
-  openFirstUploadModal: delay => dispatch(openWithDelay({ delay }))
+  openFirstUploadModal: (delay) => dispatch(openWithDelay({ delay }))
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Upload))

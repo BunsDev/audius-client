@@ -125,7 +125,7 @@ const Footer = (props: FooterProps) => {
           <div className={styles.siteLinksContainer}>
             {siteLinkRows.map((sitelinks, idx) => (
               <div className={styles.siteLinksRowContainer} key={idx}>
-                {sitelinks.map(siteLink => (
+                {sitelinks.map((siteLink) => (
                   <a
                     key={siteLink.text}
                     href={siteLink.link}

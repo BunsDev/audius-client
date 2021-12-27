@@ -31,21 +31,21 @@ export const getAccountToCache = (state: CommonState) => ({
 
 export const getAccountUser = createSelector(
   [internalGetAccountUser],
-  user => user
+  (user) => user
 )
-export const getUserHandle = createSelector([internalGetAccountUser], user =>
+export const getUserHandle = createSelector([internalGetAccountUser], (user) =>
   user ? user.handle : null
 )
-export const getUserName = createSelector([internalGetAccountUser], user =>
+export const getUserName = createSelector([internalGetAccountUser], (user) =>
   user ? user.name : null
 )
 export const getAccountVerified = createSelector(
   [internalGetAccountUser],
-  user => (user ? user.is_verified : false)
+  (user) => (user ? user.is_verified : false)
 )
 export const getAccountIsCreator = createSelector(
   [internalGetAccountUser],
-  user => (user ? user.is_creator : false)
+  (user) => (user ? user.is_creator : false)
 )
 export const getAccountProfilePictureSizes = (state: CommonState) => {
   const user = internalGetAccountUser(state)
@@ -66,7 +66,7 @@ export const getAccountWithCollections = createSelector(
     return {
       ...account,
       collections: [...userPlaylists]
-        .map(collection =>
+        .map((collection) =>
           collections[collection.id] &&
           !collections[collection.id]?._marked_deleted &&
           !collections[collection.id]?.is_delete &&
@@ -109,7 +109,7 @@ export const getUserPlaylists = createSelector(
     // If we haven't cached the collection (e.g. on first load), always return it.
     // If we have cached it and it's marked delete, don't return it bc we know better now.
     return playlists.filter(
-      p => !collections[p.id] || !collections[p.id]._marked_deleted
+      (p) => !collections[p.id] || !collections[p.id]._marked_deleted
     )
   }
 )
@@ -131,23 +131,23 @@ export const getAccountCollections = createSelector(
 
 export const getAccountWithPlaylists = createSelector(
   [getAccountWithCollections],
-  account => {
+  (account) => {
     if (!account) return undefined
     return {
       ...account,
-      playlists: account.collections.filter(c => !c.is_album)
+      playlists: account.collections.filter((c) => !c.is_album)
     }
   }
 )
 
 export const getAccountWithOwnPlaylists = createSelector(
   [getAccountWithCollections],
-  account => {
+  (account) => {
     if (!account) return undefined
     return {
       ...account,
       playlists: account.collections.filter(
-        c => account && !c.is_album && account.user_id === c.playlist_owner_id
+        (c) => account && !c.is_album && account.user_id === c.playlist_owner_id
       )
     }
   }
@@ -155,23 +155,23 @@ export const getAccountWithOwnPlaylists = createSelector(
 
 export const getAccountWithAlbums = createSelector(
   [getAccountWithCollections],
-  account => {
+  (account) => {
     if (!account) return undefined
     return {
       ...account,
-      albums: account.collections.filter(c => c.is_album)
+      albums: account.collections.filter((c) => c.is_album)
     }
   }
 )
 
 export const getAccountWithPlaylistsAndAlbums = createSelector(
   [getAccountWithCollections],
-  account => {
+  (account) => {
     if (!account) return undefined
     return {
       ...account,
-      playlists: account.collections.filter(c => !c.is_album),
-      albums: account.collections.filter(c => c.is_album)
+      playlists: account.collections.filter((c) => !c.is_album),
+      albums: account.collections.filter((c) => c.is_album)
     }
   }
 )
@@ -183,10 +183,10 @@ export const getAccountWithSavedPlaylistsAndAlbums = createSelector(
     return {
       ...account,
       playlists: account.collections.filter(
-        c => !c.is_album && c.ownerHandle !== handle
+        (c) => !c.is_album && c.ownerHandle !== handle
       ),
       albums: account.collections.filter(
-        c => c.is_album && c.ownerHandle !== handle
+        (c) => c.is_album && c.ownerHandle !== handle
       )
     }
   }
@@ -195,19 +195,19 @@ export const getAccountWithSavedPlaylistsAndAlbums = createSelector(
 export const getAccountOwnedPlaylists = createSelector(
   [getUserPlaylists, getUserId],
   (collections, userId) =>
-    collections.filter(c => !c.is_album && c.user.id === userId)
+    collections.filter((c) => !c.is_album && c.user.id === userId)
 )
 
 export const getAccountAlbumIds = createSelector(
   [getUserPlaylists],
-  collections => collections.filter(c => c.is_album).map(({ id }) => id)
+  (collections) => collections.filter((c) => c.is_album).map(({ id }) => id)
 )
 
 export const getAccountSavedPlaylistIds = createSelector(
   [getUserPlaylists, getUserId],
   (collections, userId) =>
     collections
-      .filter(c => !c.is_album && c.user.id !== userId)
+      .filter((c) => !c.is_album && c.user.id !== userId)
       .map(({ id }) => id)
 )
 
@@ -215,6 +215,6 @@ export const getAccountOwnedPlaylistIds = createSelector(
   [getUserPlaylists, getUserId],
   (collections, userId) =>
     collections
-      .filter(c => !c.is_album && c.user.id === userId)
+      .filter((c) => !c.is_album && c.user.id === userId)
       .map(({ id }) => id)
 )

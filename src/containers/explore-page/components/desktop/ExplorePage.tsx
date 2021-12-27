@@ -133,7 +133,7 @@ const ExplorePage = ({
         subtitle={messages.justForYouSubtitle}
         layout={Layout.TWO_COLUMN_DYNAMIC_WITH_DOUBLE_LEADING_ELEMENT}
       >
-        {justForYou.map(i => {
+        {justForYou.map((i) => {
           if (
             i.variant === CollectionVariant.SMART &&
             i.playlist_name === REMIXABLES.playlist_name &&
@@ -167,7 +167,7 @@ const ExplorePage = ({
       </Section>
 
       <Section title={messages.lifestyle} subtitle={messages.lifestyleSubtitle}>
-        {lifestyle.map(i => (
+        {lifestyle.map((i) => (
           <PerspectiveCard
             key={i.title}
             backgroundGradient={i.gradient}

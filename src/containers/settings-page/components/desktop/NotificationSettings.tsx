@@ -148,7 +148,7 @@ const NotificationSettings = (props: NotificationSettingsProps) => {
                   {messages.enablePermissions}
                 </div>
               )}
-              {notificationToggles.map(notification => (
+              {notificationToggles.map((notification) => (
                 <ToggleNotification
                   key={notification.type}
                   onToggle={props.toggleNotificationSetting}

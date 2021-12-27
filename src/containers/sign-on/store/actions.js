@@ -300,7 +300,7 @@ export function removeFollowArtists(userIds) {
 /**
  * Sets a toast appearing over signon
  */
-export const showToast = text => ({
+export const showToast = (text) => ({
   type: SET_TOAST,
   text
 })
@@ -328,21 +328,21 @@ export const openSignOn = (signIn = false, page = null, fields = {}) => {
   return { type: OPEN_SIGN_ON, signIn, page, fields }
 }
 
-export const nextPage = isMobile => ({ type: NEXT_PAGE, isMobile })
+export const nextPage = (isMobile) => ({ type: NEXT_PAGE, isMobile })
 export const previousPage = () => ({ type: PREVIOUS_PAGE })
-export const goToPage = page => ({ type: GO_TO_PAGE, page })
+export const goToPage = (page) => ({ type: GO_TO_PAGE, page })
 
 export const signUpTimeout = () => ({ type: SIGN_UP_TIMEOUT })
-export const updateRouteOnCompletion = route => ({
+export const updateRouteOnCompletion = (route) => ({
   type: UPDATE_ROUTE_ON_COMPLETION,
   route
 })
-export const updateRouteOnExit = route => ({
+export const updateRouteOnExit = (route) => ({
   type: UPDATE_ROUTE_ON_EXIT,
   route
 })
 
-export const sendWelcomeEmail = name => ({
+export const sendWelcomeEmail = (name) => ({
   type: SEND_WELCOME_EMAIL,
   name
 })
@@ -352,7 +352,7 @@ export const sendWelcomeEmail = name => ({
  * @param {string} handle
  *  the handle captured by the ?ref=<handle> search param
  */
-export const fetchReferrer = handle => ({
+export const fetchReferrer = (handle) => ({
   type: FETCH_REFERRER,
   handle
 })
@@ -361,7 +361,7 @@ export const fetchReferrer = handle => ({
  * Sets the user id of the referrer who invited this user signing up
  * @param {ID} userId
  */
-export const setReferrer = userId => ({
+export const setReferrer = (userId) => ({
   type: SET_REFERRER,
   userId
 })

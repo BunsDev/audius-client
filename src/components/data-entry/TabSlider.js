@@ -6,13 +6,13 @@ import { useSpring, animated } from 'react-spring'
 
 import styles from './TabSlider.module.css'
 
-const TabSlider = props => {
-  const optionRefs = useRef(props.options.map(_ => React.createRef()))
+const TabSlider = (props) => {
+  const optionRefs = useRef(props.options.map((_) => React.createRef()))
   const [selected, setSelected] = useState(props.options[0].key)
 
   const selectedOption = props.selected || selected
 
-  const onSetSelected = option => {
+  const onSetSelected = (option) => {
     // Call props function if controlled
     if (props.onSelectOption) props.onSelectOption(option)
     setSelected(option)
@@ -24,7 +24,7 @@ const TabSlider = props => {
 
   useEffect(() => {
     let selectedRefIdx = props.options.findIndex(
-      option => option.key === selectedOption
+      (option) => option.key === selectedOption
     )
     if (selectedRefIdx === -1) {
       selectedRefIdx = 0

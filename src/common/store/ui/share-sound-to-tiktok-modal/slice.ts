@@ -27,7 +27,7 @@ const slice = createSlice({
       state.status = Status.SHARE_UNINITIALIZED
     },
     requestOpen: (state, action: PayloadAction<RequestOpenPayload>) => {},
-    setIsAuthenticated: state => {
+    setIsAuthenticated: (state) => {
       state.isAuthenticated = true
     },
     setStatus: (state, action: PayloadAction<SetStatusPayload>) => {

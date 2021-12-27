@@ -8,7 +8,7 @@ import { PopupMenuIconButton } from 'components/general/PopupMenuIconButton'
 
 import styles from './NavBanner.module.css'
 
-const NavBanner = props => {
+const NavBanner = (props) => {
   const menuItems = [
     {
       text: 'Sort by Recent',

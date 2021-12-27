@@ -194,7 +194,7 @@ class SettingsPage extends Component<SettingsPageProps, SettingsPageState> {
           className={styles.cardSlider}
           options={options}
           selected={theme || Theme.DEFAULT}
-          onSelectOption={option => toggleTheme(option)}
+          onSelectOption={(option) => toggleTheme(option)}
           key={`tab-slider-${options.length}`}
         />
       </SettingsCard>

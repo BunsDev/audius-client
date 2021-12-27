@@ -27,7 +27,7 @@ export function* fetchAndProcessRemixes(trackId: ID) {
     tracks: remixes,
     count
   }: { tracks: UserTrackMetadata[]; count: number } = yield call(
-    args => apiClient.getRemixes(args),
+    (args) => apiClient.getRemixes(args),
     {
       trackId,
       offset: 0,
@@ -48,7 +48,7 @@ export function* fetchAndProcessRemixes(trackId: ID) {
   // that we can recognize ASAP that the track has remixes.
   // The track will still go through it's normal lifecycle of status (loading => success/error)
   // and the availability of these fields give a hint to the skeleton layout.
-  const remixesUpdate = remixes.map(r => ({
+  const remixesUpdate = remixes.map((r) => ({
     track_id: r.track_id
   }))
 
@@ -75,7 +75,7 @@ export function* fetchAndProcessRemixes(trackId: ID) {
 export function* fetchAndProcessRemixParents(trackId: ID) {
   const currentUserId = yield select(getUserId)
   const remixParents: UserTrackMetadata[] = yield call(
-    args => apiClient.getRemixing(args),
+    (args) => apiClient.getRemixing(args),
     {
       trackId,
       limit: 1,
@@ -94,7 +94,7 @@ export function* fetchAndProcessRemixParents(trackId: ID) {
   yield call(waitForValue, getTrack, { id: trackId })
 
   // Create the update
-  const remixParentsUpdate = remixParents.map(s => ({
+  const remixParentsUpdate = remixParents.map((s) => ({
     track_id: s.track_id
   }))
 

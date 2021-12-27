@@ -38,15 +38,15 @@ async function startConfettiAnimation(
   if (!canvasRef) return
   let images = null
   if (!isMatrix) {
-    images = DEFAULT_IMAGES.map(icon => {
+    images = DEFAULT_IMAGES.map((icon) => {
       const img = new Image()
       img.src = icon
       return img
     })
     await Promise.all(
       images.map(
-        img =>
-          new Promise(resolve => {
+        (img) =>
+          new Promise((resolve) => {
             img.onload = () => {
               resolve(true)
             }
@@ -162,7 +162,7 @@ const UnconditionalMusicConfetti = (props: Required<MusicConfettiProps>) => {
   useEffect(() => {
     return () => {
       if (confettiPromiseRef.current) {
-        confettiPromiseRef.current.then(animation =>
+        confettiPromiseRef.current.then((animation) =>
           animation ? animation.stop() : null
         )
       }

@@ -14,7 +14,7 @@ const messages = {
   mobileStream: `HQ Audio at 320kbps for FREE!`
 }
 
-const FanburstBanner = props => {
+const FanburstBanner = (props) => {
   return (
     <Banner
       {...props}

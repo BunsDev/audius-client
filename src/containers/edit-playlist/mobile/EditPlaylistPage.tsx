@@ -187,7 +187,7 @@ const EditPlaylistPage = g(
       trackIds: { track: ID; time: number }[],
       reorder: number[]
     ) => {
-      return reorder.map(i => {
+      return reorder.map((i) => {
         const { track, time } = trackIds[i]
         return {
           id: track,
@@ -224,7 +224,7 @@ const EditPlaylistPage = g(
           // Update the playlist content track_ids so that the editPlaylist
           // optimistically update the cached collection trackIds
           formFields.playlist_contents.track_ids = reorderedTracks.map(
-            idx => playlistTrackIds[idx]
+            (idx) => playlistTrackIds[idx]
           )
         }
         refreshLineup()
@@ -271,7 +271,9 @@ const EditPlaylistPage = g(
         const { track: trackId, time } = playlist_contents.track_ids[
           reorderedIndex
         ]
-        const trackMetadata = tracks?.find(track => track.track_id === trackId)
+        const trackMetadata = tracks?.find(
+          (track) => track.track_id === trackId
+        )
         if (!trackMetadata) return
         setConfirmRemoveTrack({
           title: trackMetadata.title,
@@ -296,19 +298,19 @@ const EditPlaylistPage = g(
     const onConfirmRemove = useCallback(() => {
       if (!confirmRemoveTrack) return
       const removeIdx = metadata?.playlist_contents.track_ids.findIndex(
-        t =>
+        (t) =>
           t.track === confirmRemoveTrack.trackId &&
           t.time === confirmRemoveTrack.timestamp
       )
       if (removeIdx === -1) return
-      setRemovedTracks(removed =>
+      setRemovedTracks((removed) =>
         removed.concat({
           trackId: confirmRemoveTrack.trackId,
           timestamp: confirmRemoveTrack.timestamp
         })
       )
-      setReorderedTracks(tracks =>
-        tracks.filter(trackIndex => trackIndex !== removeIdx)
+      setReorderedTracks((tracks) =>
+        tracks.filter((trackIndex) => trackIndex !== removeIdx)
       )
       onDrawerClose()
     }, [metadata, confirmRemoveTrack, setRemovedTracks, setReorderedTracks])
@@ -338,7 +340,7 @@ const EditPlaylistPage = g(
     // Put together track list if necessary
     let trackList = null
     if (tracks && reorderedTracks.length > 0) {
-      trackList = reorderedTracks.map(i => {
+      trackList = reorderedTracks.map((i) => {
         const t = tracks[i]
         const playlistTrack = metadata?.playlist_contents.track_ids[i]
         const isRemoveActive =

@@ -300,7 +300,7 @@ export const makePlaylist = (
 
   const playlistContents = {
     track_ids: playlist.added_timestamps
-      .map(ts => {
+      .map((ts) => {
         const decoded = decodeHashId(ts.track_id)
         if (decoded) {
           return {
@@ -316,7 +316,7 @@ export const makePlaylist = (
   const tracks =
     'tracks' in playlist
       ? playlist.tracks
-          ?.map(track => makeTrack(track))
+          ?.map((track) => makeTrack(track))
           .filter(removeNullable) ?? []
       : []
 

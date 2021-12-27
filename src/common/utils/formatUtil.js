@@ -10,7 +10,7 @@ import numeral from 'numeral'
  * 443,123 => 443K
  * 4,001,000 => 4M Followers
  */
-export const formatCount = count => {
+export const formatCount = (count) => {
   if (count >= 1000) {
     const countStr = count.toString()
     if (countStr.length % 3 === 0) {
@@ -38,7 +38,7 @@ export const formatCount = count => {
  * 3072 => 3.07 KB
  * @param {number} bytes
  */
-export const formatBytes = bytes => {
+export const formatBytes = (bytes) => {
   return numeral(bytes).format('0.00 b')
 }
 
@@ -49,7 +49,7 @@ export const formatBytes = bytes => {
  *  Lower cases
  * @param {string} name
  */
-export const formatUrlName = name => {
+export const formatUrlName = (name) => {
   if (!name) return ''
   return (
     name
@@ -68,7 +68,7 @@ export const formatUrlName = name => {
  * be used to compare results with the window.location directly.
  * @param {string} name
  */
-export const encodeUrlName = name => {
+export const encodeUrlName = (name) => {
   return encodeURIComponent(formatUrlName(name))
 }
 
@@ -85,12 +85,12 @@ export const formatShareText = (title, creator) => {
  * trims both leading and trailing newlines
  * @param {string} str
  */
-export const squashNewLines = str => {
+export const squashNewLines = (str) => {
   return str ? str.replace(/\n\s*\n\s*\n/g, '\n\n').trim() : str
 }
 
 /** Trims a string to alphanumeric values only */
-export const trimToAlphaNumeric = string => {
+export const trimToAlphaNumeric = (string) => {
   if (!string) return string
   return string.replace(/[#|\W]+/g, '')
 }
@@ -107,7 +107,7 @@ export const pluralize = (
  * @param {BN} amount The wei amount
  * @returns {string} $AUDIO The $AUDIO amount
  */
-export const formatAudio = amount => {
+export const formatAudio = (amount) => {
   if (!BN.isBN(amount)) return ''
   let aud = amount.div(WEI).toString()
   aud = numeral(aud).format('0,0')
@@ -116,7 +116,7 @@ export const formatAudio = amount => {
 
 // Wei -> Audio
 
-export const formatWeiToAudioString = wei => {
+export const formatWeiToAudioString = (wei) => {
   const aud = wei.div(WEI)
   return aud.toString()
 }
@@ -125,7 +125,7 @@ export const formatWeiToAudioString = wei => {
  * Format a number to have commas
  * @param {number|string} num
  */
-export const formatNumberCommas = num => {
+export const formatNumberCommas = (num) => {
   const parts = num.toString().split('.')
   return (
     parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',') +
@@ -133,18 +133,18 @@ export const formatNumberCommas = num => {
   )
 }
 
-export const trimRightZeros = number => {
+export const trimRightZeros = (number) => {
   return number.replace(/(\d)0+$/gm, '$1')
 }
 
 export const WEI = new BN('1000000000000000000')
 
-export const checkOnlyNumeric = number => {
+export const checkOnlyNumeric = (number) => {
   const reg = /^\d+$/
   return reg.test(number)
 }
 
-export const checkOnlyWeiFloat = number => {
+export const checkOnlyWeiFloat = (number) => {
   const reg = /^[+-]?\d+(\.\d+)?$/
   const isFloat = reg.test(number)
   if (!isFloat) return false
@@ -155,7 +155,7 @@ export const checkOnlyWeiFloat = number => {
   return true
 }
 
-export const convertFloatToWei = number => {
+export const convertFloatToWei = (number) => {
   const nums = number.split('.')
   if (nums.length !== 2) return null
   if (!checkOnlyNumeric(nums[0]) || !checkOnlyNumeric(nums[1])) return null
@@ -165,12 +165,12 @@ export const convertFloatToWei = number => {
   return aud.add(wei)
 }
 
-export const checkWeiNumber = number => {
+export const checkWeiNumber = (number) => {
   return checkOnlyNumeric(number) || checkOnlyWeiFloat(number)
 }
 
 // Audio -> Wei
-export const parseWeiNumber = number => {
+export const parseWeiNumber = (number) => {
   if (checkOnlyNumeric(number)) {
     return new BN(number).mul(WEI)
   } else if (checkOnlyWeiFloat(number)) {

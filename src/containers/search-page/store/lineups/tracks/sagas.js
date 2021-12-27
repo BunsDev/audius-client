@@ -57,7 +57,7 @@ function* getSearchPageResultsTracks({ offset, limit, payload }) {
         select(getTracks, { ids: trackIds }),
         select(getSearchResultsPageTracks)
       ])
-      const sortedTracks = sortedIds.map(id => tracks[id])
+      const sortedTracks = sortedIds.map((id) => tracks[id])
 
       return sortedTracks
     } catch (e) {
@@ -72,7 +72,7 @@ class SearchPageResultsSagas extends LineupSagas {
     super(
       PREFIX,
       tracksActions,
-      state => state.search.tracks,
+      (state) => state.search.tracks,
       getSearchPageResultsTracks
     )
   }

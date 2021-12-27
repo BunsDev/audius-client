@@ -76,7 +76,7 @@ if (IS_PRODUCTION) {
 }
 
 export const fetchSuggestedFollowUserIds = async () => {
-  return fetch(SUGGESTED_FOLLOW_USER_HANDLE_URL).then(d => d.json())
+  return fetch(SUGGESTED_FOLLOW_USER_HANDLE_URL).then((d) => d.json())
 }
 
 const followArtistCategoryGenreMappings = {
@@ -119,7 +119,7 @@ function* fetchFollowArtistGenre(followArtistCategory) {
       offset: 0
     })
     const userOptions = users
-      .filter(user => !defaultFollowUserIds.has(user.user_id))
+      .filter((user) => !defaultFollowUserIds.has(user.user_id))
       .slice(0, 30)
 
     yield call(processAndCacheUsers, userOptions)
@@ -155,8 +155,9 @@ function* fetchReferrer(action) {
   }
 }
 
-const isRestrictedHandle = handle => restrictedHandles.has(handle.toLowerCase())
-const isHandleCharacterCompliant = handle => /^[a-zA-Z0-9_]*$/.test(handle)
+const isRestrictedHandle = (handle) =>
+  restrictedHandles.has(handle.toLowerCase())
+const isHandleCharacterCompliant = (handle) => /^[a-zA-Z0-9_]*$/.test(handle)
 
 async function getInstagramUser(handle) {
   try {
@@ -514,7 +515,7 @@ function* followArtists() {
         failed: take(socialActions.FOLLOW_USER_FAILED)
       })
       const { userId } = success || failed
-      const userIndex = userIdsToFollow.findIndex(fId => fId === userId)
+      const userIndex = userIdsToFollow.findIndex((fId) => fId === userId)
       if (userIndex > -1) hasFollowConfirmed[userIndex] = true
     }
 

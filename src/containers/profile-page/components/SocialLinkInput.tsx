@@ -74,7 +74,7 @@ const SocialLinkInput = ({
       clearTimeout(timeoutRef.current)
       timeoutRef.current = setTimeout(() => {
         if (text.startsWith('@')) {
-          setValue(value => value.slice(1))
+          setValue((value) => value.slice(1))
           onChange(value.slice(1))
         }
       }, 600)

@@ -8,7 +8,7 @@ import styles from './Tabs.module.css'
 
 const TabPane = AntTabs.TabPane
 
-const Tabs = props => {
+const Tabs = (props) => {
   return (
     <AntTabs
       className={cn(styles.tabs, { [styles.noBorder]: !props.border })}

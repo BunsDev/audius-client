@@ -27,7 +27,7 @@ const TrackContent = ({
   )
 
   const onClickName = useCallback(
-    e => {
+    (e) => {
       if (e) e.stopPropagation()
       goToEntityPage(track)
     },

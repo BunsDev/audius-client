@@ -257,7 +257,7 @@ const CollectiblesPage: React.FC<{
             (acc, curr) => ({ ...acc, [curr.id]: {} }),
             {}
           ),
-          order: collectibleList.map(c => c.id)
+          order: collectibleList.map((c) => c.id)
         }
         setCollectiblesMetadata(newMetadata)
         if (ethCollectibleList) {
@@ -277,10 +277,10 @@ const CollectiblesPage: React.FC<{
         /**
          * Update id of collectibles to use correct format
          */
-        Object.keys(profile.collectibles).forEach(key => {
+        Object.keys(profile.collectibles).forEach((key) => {
           if (key !== 'order' && key.indexOf(':::') === -1) {
             const savedCollectible = collectibleList.find(
-              c => c.tokenId === key
+              (c) => c.tokenId === key
             )
             if (savedCollectible) {
               metadata[savedCollectible.id] = { ...metadata[key] }
@@ -296,8 +296,8 @@ const CollectiblesPage: React.FC<{
 
         const collectiblesMetadataKeySet = new Set(Object.keys(metadata))
         const newCollectiblesMap = collectibleList
-          .map(c => c.id)
-          .filter(id => !collectiblesMetadataKeySet.has(id))
+          .map((c) => c.id)
+          .filter((id) => !collectiblesMetadataKeySet.has(id))
           .reduce((acc, curr) => ({ ...acc, [curr]: {} }), {})
 
         const newMetadata = {
@@ -361,7 +361,7 @@ const CollectiblesPage: React.FC<{
         ...collectiblesMetadata,
         [id]: collectiblesMetadata?.id ?? {},
         order: (collectiblesMetadata?.order ?? []).filter(
-          tokenId => tokenId !== id
+          (tokenId) => tokenId !== id
         )
       })
     },
@@ -418,8 +418,8 @@ const CollectiblesPage: React.FC<{
     setCollectiblesMetadata({
       ...collectiblesMetadata,
       order: newCollectibleList
-        .map(c => c.id)
-        .filter(id => (collectiblesMetadata?.order || []).includes(id))
+        .map((c) => c.id)
+        .filter((id) => (collectiblesMetadata?.order || []).includes(id))
     })
   }
 
@@ -438,8 +438,8 @@ const CollectiblesPage: React.FC<{
       const collectibleKeySet = new Set(Object.keys(collectibleMap))
 
       const visible = collectiblesMetadata?.order
-        .filter(id => collectibleKeySet.has(id))
-        .map(id => collectibleMap[id])
+        .filter((id) => collectibleKeySet.has(id))
+        .map((id) => collectibleMap[id])
       return visible || []
     }
     return []
@@ -448,9 +448,9 @@ const CollectiblesPage: React.FC<{
   const getHiddenCollectibles = useCallback(() => {
     if (collectibleList) {
       const visibleCollectibleKeySet = new Set(
-        getVisibleCollectibles().map(c => c.id)
+        getVisibleCollectibles().map((c) => c.id)
       )
-      return collectibleList.filter(c => !visibleCollectibleKeySet.has(c.id))
+      return collectibleList.filter((c) => !visibleCollectibleKeySet.has(c.id))
     }
     return []
   }, [getVisibleCollectibles, collectibleList])
@@ -476,8 +476,9 @@ const CollectiblesPage: React.FC<{
       // store yet, open up the modal
       if (collectibleId && !collectible && !hasSetDeepLinkedCollectible) {
         const collectibleFromUrl =
-          getVisibleCollectibles().find(c => getHash(c.id) === collectibleId) ??
-          null
+          getVisibleCollectibles().find(
+            (c) => getHash(c.id) === collectibleId
+          ) ?? null
         if (collectibleFromUrl) {
           dispatch(setCollectible({ collectible: collectibleFromUrl }))
           setIsDetailsModalOpen(true)
@@ -588,7 +589,7 @@ const CollectiblesPage: React.FC<{
             </div>
           ) : (
             <div className={styles.container}>
-              {getVisibleCollectibles().map(collectible => (
+              {getVisibleCollectibles().map((collectible) => (
                 <CollectibleDetails
                   key={collectible.id}
                   collectible={collectible}
@@ -646,7 +647,7 @@ const CollectiblesPage: React.FC<{
                   ref={visibleTableRef}
                 >
                   <Droppable droppableId={VISIBLE_COLLECTIBLES_DROPPABLE_ID}>
-                    {provided => (
+                    {(provided) => (
                       <div ref={provided.innerRef} {...provided.droppableProps}>
                         {getVisibleCollectibles().map((c, index) => (
                           <Draggable
@@ -691,7 +692,7 @@ const CollectiblesPage: React.FC<{
                 })}
                 ref={hiddenTableRef}
               >
-                {getHiddenCollectibles().map(c => (
+                {getHiddenCollectibles().map((c) => (
                   <HiddenCollectibleRow
                     key={c.id}
                     collectible={c}

@@ -7,7 +7,7 @@ import { ReactComponent as IconCreatePlaylist } from 'assets/img/iconCreatePlayl
 
 import styles from './CreatePlaylistButton.module.css'
 
-const CreatePlaylistButton = props => {
+const CreatePlaylistButton = (props) => {
   return (
     <button
       className={cn(props.className, styles.createPlaylistButton)}

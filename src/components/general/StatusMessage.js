@@ -10,21 +10,21 @@ import { ReactComponent as IconValidationX } from 'assets/img/iconValidationX.sv
 
 import styles from './StatusMessage.module.css'
 
-export const StatusDefault = props => (
+export const StatusDefault = (props) => (
   <div
     className={cn(styles.defaultStatusIcon, {
       [props.containerStyles]: !!props.containerStyles
     })}
   />
 )
-export const StatusEmpty = props => (
+export const StatusEmpty = (props) => (
   <div
     className={cn(styles.statusIcon, styles.emptyStatusIcon, {
       [props.containerStyles]: !!props.containerStyles
     })}
   />
 )
-export const StatusError = props => (
+export const StatusError = (props) => (
   <animated.div
     style={props.iconStyles}
     className={cn(styles.statusIcon, styles.removeIcon, {
@@ -35,7 +35,7 @@ export const StatusError = props => (
     <IconValidationX />{' '}
   </animated.div>
 )
-export const StatusSuccess = props => (
+export const StatusSuccess = (props) => (
   <animated.div
     style={props.iconStyles}
     className={cn(styles.statusIcon, styles.checkIcon, {
@@ -53,7 +53,7 @@ export const status = {
   default: StatusEmpty
 }
 
-export const StatusMessage = props => {
+export const StatusMessage = (props) => {
   const transitions = useTransition(status[props.status], props.status, {
     from: { x: 0 },
     enter: { x: 1 },
@@ -82,7 +82,7 @@ export const StatusMessage = props => {
                     range: [0, 0.75, 1],
                     output: [0, 1.2, 1]
                   })
-                  .interpolate(x => `scale3d(${x}, ${x}, ${x})`)
+                  .interpolate((x) => `scale3d(${x}, ${x}, ${x})`)
               }}
               containerStyles={cn(props.statusWrapperStyles)}
             />

@@ -17,7 +17,7 @@ const messages = {
   imageName: 'Cover Photo'
 }
 
-const CoverPhoto = props => {
+const CoverPhoto = (props) => {
   const [processing, setProcessing] = useState(false)
   const gradient = props.darken
     ? 'linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.75) 100%)'

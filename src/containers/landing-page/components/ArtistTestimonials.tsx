@@ -180,14 +180,14 @@ const ArtistTestimonials = (props: ArtistTestimonialsProps) => {
   const [quoteContainerWidth, setQuoteContainerWidth] = useState(0)
   const [quoteBlockWidth, setQuoteBlockWidth] = useState(0)
 
-  const setQuoteContainer = useCallback(node => {
+  const setQuoteContainer = useCallback((node) => {
     if (node !== null) {
       const quoteContainerWidth = node.getBoundingClientRect().width
       setQuoteContainerWidth(quoteContainerWidth)
     }
   }, [])
 
-  const setQuoteBlock = useCallback(node => {
+  const setQuoteBlock = useCallback((node) => {
     if (node !== null) {
       const quoteBlocNodekWidth = node.getBoundingClientRect().width
       setQuoteBlockWidth(quoteBlocNodekWidth)
@@ -286,7 +286,7 @@ const ArtistTestimonials = (props: ArtistTestimonialsProps) => {
         <h3 className={styles.title}>{messages.title}</h3>
         <h3 className={styles.subTitle}>{messages.subtitle}</h3>
         <div className={styles.artistsContainer}>
-          {artists.reverse().map(artist => (
+          {artists.reverse().map((artist) => (
             <MobileArtist key={artist.name} {...artist} />
           ))}
         </div>
@@ -311,7 +311,7 @@ const ArtistTestimonials = (props: ArtistTestimonialsProps) => {
                 opacity: titleStyles.opacity,
                 // @ts-ignore
                 transform: titleStyles.x.interpolate(
-                  x => `translate3d(0,${x}px,0)`
+                  (x) => `translate3d(0,${x}px,0)`
                 ),
                 width: '100%'
               }}

@@ -23,7 +23,7 @@ function* getHistoryTracks() {
 
     const processedTracks = yield call(
       processAndCacheTracks,
-      activity.map(a => a.track)
+      activity.map((a) => a.track)
     )
     const processedTracksMap = keyBy(processedTracks, 'track_id')
 
@@ -45,7 +45,7 @@ function* getHistoryTracks() {
   }
 }
 
-const keepTrackIdAndDateListened = entry => ({
+const keepTrackIdAndDateListened = (entry) => ({
   uid: entry.uid,
   kind: entry.track_id ? Kind.TRACKS : Kind.COLLECTIONS,
   id: entry.track_id || entry.playlist_id,
@@ -59,7 +59,7 @@ class TracksSagas extends LineupSagas {
     super(
       PREFIX,
       tracksActions,
-      store => store.history.tracks,
+      (store) => store.history.tracks,
       getHistoryTracks,
       keepTrackIdAndDateListened,
       /* removeDeleted */ false,

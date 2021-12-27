@@ -93,8 +93,8 @@ export const UserListModal = forwardRef<HTMLDivElement, UserListModalProps>(
             getScrollParent={getScrollParent}
           >
             {users
-              .filter(user => !user.is_deactivated)
-              .map(user => (
+              .filter((user) => !user.is_deactivated)
+              .map((user) => (
                 <div key={user.user_id} className={styles.user}>
                   <ArtistChip
                     name={user.name}

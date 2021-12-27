@@ -66,7 +66,7 @@ const messages = {
   filter: 'Filter Tracks'
 }
 
-const PlayButton = props => {
+const PlayButton = (props) => {
   return props.playing ? (
     <Button
       className={cn(
@@ -96,12 +96,12 @@ const PlayButton = props => {
   )
 }
 
-const repostButtonText = isReposted =>
+const repostButtonText = (isReposted) =>
   isReposted ? messages.repostButtonReposted : messages.repostButton
-const favoriteButtonText = isFavorited =>
+const favoriteButtonText = (isFavorited) =>
   isFavorited ? messages.favoriteButtonFavorited : messages.favoriteButton
 
-const ViewerHasTracksButtons = props => {
+const ViewerHasTracksButtons = (props) => {
   return (
     <>
       <PlayButton playing={props.playing} onPlay={props.onPlay} />
@@ -180,7 +180,7 @@ const ViewerHasTracksButtons = props => {
   )
 }
 
-const ViewerNoTracksButtons = props => {
+const ViewerNoTracksButtons = (props) => {
   return (
     <>
       <Button
@@ -231,7 +231,7 @@ const ViewerNoTracksButtons = props => {
   )
 }
 
-const SmartCollectionButtons = props => {
+const SmartCollectionButtons = (props) => {
   return (
     <>
       <PlayButton playing={props.playing} onPlay={props.onPlay} />
@@ -255,7 +255,7 @@ const SmartCollectionButtons = props => {
   )
 }
 
-const OwnerNoTracksButtons = props => {
+const OwnerNoTracksButtons = (props) => {
   return (
     <>
       <Button
@@ -271,7 +271,7 @@ const OwnerNoTracksButtons = props => {
   )
 }
 
-const OwnerNotPublishedButtons = props => {
+const OwnerNotPublishedButtons = (props) => {
   return (
     <>
       <PlayButton playing={props.playing} onPlay={props.onPlay} />
@@ -309,7 +309,7 @@ const OwnerNotPublishedButtons = props => {
   )
 }
 
-const OwnerPublishedButtons = props => {
+const OwnerPublishedButtons = (props) => {
   const [showShareableToast, setShowShareableToast] = useState(false)
 
   const {
@@ -383,7 +383,7 @@ const OwnerPublishedButtons = props => {
   )
 }
 
-const Buttons = props => {
+const Buttons = (props) => {
   const overflowMenuExtraItems = []
   if (!props.isOwner) {
     overflowMenuExtraItems.push({
@@ -481,7 +481,7 @@ class CollectionHeader extends PureComponent {
     this.setState({ previouslyUnpublished: false })
   }
 
-  onFilterChange = e => {
+  onFilterChange = (e) => {
     const newFilterText = e.target.value
     this.setState({
       filterText: newFilterText
@@ -498,7 +498,7 @@ class CollectionHeader extends PureComponent {
     this.setState({ artworkLoading: false })
   }
 
-  renderStatsRow = isLoading => {
+  renderStatsRow = (isLoading) => {
     if (isLoading) return null
     const { reposts, saves, onClickReposts, onClickFavorites } = this.props
     return (

@@ -132,7 +132,7 @@ function* fetchEthWalletInfo(wallets: string[]) {
   )
 
   const collectibleCounts = wallets.map(
-    wallet => collectiblesMap[wallet]?.length ?? 0
+    (wallet) => collectiblesMap[wallet]?.length ?? 0
   )
 
   return wallets.map((_, idx) => ({
@@ -153,7 +153,7 @@ function* fetchSplWalletInfo(wallets: string[]) {
   )
 
   const collectibleCounts = wallets.map(
-    wallet => collectiblesMap[wallet]?.length ?? 0
+    (wallet) => collectiblesMap[wallet]?.length ?? 0
   )
 
   return wallets.map((_, idx) => ({
@@ -328,7 +328,7 @@ function* connectSPLWallet(
 
     if (
       (currentAssociatedWallets?.connectedSolWallets ?? []).some(
-        wallet => wallet.address === connectingWallet
+        (wallet) => wallet.address === connectingWallet
       ) ||
       associatedUserId !== null
     ) {
@@ -513,7 +513,7 @@ function* connectEthWallet(web3Instance: any) {
 
     if (
       (currentAssociatedWallets?.connectedEthWallets ?? []).some(
-        wallet => wallet.address === connectingWallet
+        (wallet) => wallet.address === connectingWallet
       ) ||
       associatedUserId !== null
     ) {

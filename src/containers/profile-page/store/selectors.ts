@@ -71,7 +71,7 @@ export const makeGetProfile = () => {
 
       // Get playlists & albums.
       const c = (users[userId]._collectionIds || [])
-        .map(id =>
+        .map((id) =>
           id in collections ? collections[(id as unknown) as number] : null
         )
         .filter(removeNullable)
@@ -79,10 +79,10 @@ export const makeGetProfile = () => {
       // Filter out anything marked deleted on backend (is_delete) or locally (_marked_deleted)
       // Or locally moved playlists (_moved)
       let playlists = c.filter(
-        c => (!c.is_album && !(c.is_delete || c._marked_deleted)) || c._moved
+        (c) => (!c.is_album && !(c.is_delete || c._marked_deleted)) || c._moved
       )
       let albums = c.filter(
-        c => (c.is_album && !(c.is_delete || c._marked_deleted)) || c._moved
+        (c) => (c.is_album && !(c.is_delete || c._marked_deleted)) || c._moved
       )
 
       if (sortMode === CollectionSortMode.SAVE_COUNT) {

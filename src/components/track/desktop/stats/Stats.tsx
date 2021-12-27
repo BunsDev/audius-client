@@ -23,7 +23,7 @@ const makeFolloweeActionsUsers = () =>
     [getUsers, (_state: CommonState, userIds: ID[]) => userIds],
     (users, userIds) =>
       userIds
-        ? userIds.map(id => users[id]).filter(u => !!u && !u.is_deactivated)
+        ? userIds.map((id) => users[id]).filter((u) => !!u && !u.is_deactivated)
         : []
   )
 
@@ -73,7 +73,7 @@ const Stats = memo(
     const slice = followeeActionUsers.slice(0, MAX_REPOST_IMAGES)
 
     // @ts-ignore
-    const items = slice.map(item => (
+    const items = slice.map((item) => (
       <ProfileImage key={item.user_id} userId={item.user_id} />
     ))
 

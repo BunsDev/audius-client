@@ -162,7 +162,7 @@ export function* parseAndProcessNotifications(
   const collectionIdsToFetch: ID[] = []
   const userIdsToFetch: ID[] = []
 
-  notifications.forEach(notification => {
+  notifications.forEach((notification) => {
     if (notification.type === NotificationType.UserSubscription) {
       if (notification.entityType === Entity.Track) {
         // @ts-ignore
@@ -253,7 +253,7 @@ export function* parseAndProcessNotifications(
   const now = moment()
   const userId = yield select(getUserId)
   const remixTrackParents: Array<ID> = []
-  const processedNotifications = notifications.map(notif => {
+  const processedNotifications = notifications.map((notif) => {
     if (
       notif.type === NotificationType.Milestone &&
       notif.achievement === Achievement.Followers
@@ -272,7 +272,7 @@ export function* parseAndProcessNotifications(
       )
       if (childTrack && childTrack.remix_of) {
         const parentTrackIds = childTrack.remix_of.tracks.map(
-          t => t.parent_track_id
+          (t) => t.parent_track_id
         )
         remixTrackParents.push(...parentTrackIds)
         notif.entityIds.push(...parentTrackIds)
@@ -537,7 +537,7 @@ function* notificationPollingDaemon() {
 
   // Set up daemon that will watch for browser into focus and refetch notifications
   // as soon as it goes into focus
-  const visibilityChannel = eventChannel(emitter => {
+  const visibilityChannel = eventChannel((emitter) => {
     if (NATIVE_MOBILE) {
       // The focus and visibitychange events are wonky on native mobile webviews,
       // so poll for visiblity change instead

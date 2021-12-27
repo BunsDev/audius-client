@@ -35,7 +35,7 @@ export const averageRgb = async (imageUrl, chunkSize = 100) => {
   return averageRgbWorker.getResult(imageUrl)
 }
 
-export const gifPreview = async imageUrl => {
+export const gifPreview = async (imageUrl) => {
   gifPreviewWorker.call({ imageUrl }, imageUrl)
   return gifPreviewWorker.getResult(imageUrl)
 }

@@ -36,15 +36,15 @@ function* watchTrackBadge() {
           limit: TRENDING_BADGE_LIMIT
         })
         if (TF.size > 0) {
-          trendingRanks.week = trendingRanks.week.filter(i => {
+          trendingRanks.week = trendingRanks.week.filter((i) => {
             const shaId = window.Web3.utils.sha3(i.toString())
             return !TF.has(shaId)
           })
-          trendingRanks.month = trendingRanks.month.filter(i => {
+          trendingRanks.month = trendingRanks.month.filter((i) => {
             const shaId = window.Web3.utils.sha3(i.toString())
             return !TF.has(shaId)
           })
-          trendingRanks.year = trendingRanks.year.filter(i => {
+          trendingRanks.year = trendingRanks.year.filter((i) => {
             const shaId = window.Web3.utils.sha3(i.toString())
             return !TF.has(shaId)
           })
@@ -55,13 +55,13 @@ function* watchTrackBadge() {
       }
 
       const weeklyTrackIndex = trendingTrackRanks.week.findIndex(
-        trackId => trackId === action.trackId
+        (trackId) => trackId === action.trackId
       )
       const monthlyTrackIndex = trendingTrackRanks.month.findIndex(
-        trackId => trackId === action.trackId
+        (trackId) => trackId === action.trackId
       )
       const yearlyTrackIndex = trendingTrackRanks.year.findIndex(
-        trackId => trackId === action.trackId
+        (trackId) => trackId === action.trackId
       )
 
       yield put(

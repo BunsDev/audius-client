@@ -58,7 +58,7 @@ function* resolveTempPlaylists(
         index: 0
       },
       // The playlist has been created
-      res => Object.keys(res).length > 0
+      (res) => Object.keys(res).length > 0
     )
     return {
       type: 'playlist',
@@ -128,7 +128,7 @@ function* watchUpdatePlaylistLibraryWithTempPlaylist() {
       | PlaylistLibraryIdentifier
       | PlaylistLibraryFolder
     )[] = yield all(
-      playlistLibrary.contents.map(playlist =>
+      playlistLibrary.contents.map((playlist) =>
         call(resolveTempPlaylists, playlist)
       )
     )
@@ -161,7 +161,7 @@ export function* addPlaylistsNotInLibrary() {
   )
   if (Object.keys(notInLibrary).length > 0) {
     const newEntries = Object.values(notInLibrary).map(
-      playlist =>
+      (playlist) =>
         ({
           playlist_id: playlist.id,
           type: 'playlist'

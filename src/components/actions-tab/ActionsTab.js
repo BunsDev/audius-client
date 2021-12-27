@@ -30,7 +30,7 @@ import {
 
 import styles from './ActionsTab.module.css'
 
-const MinimizedActionsTab = props => {
+const MinimizedActionsTab = (props) => {
   const { isHidden, isDisabled, overflowMenu } = props
 
   overflowMenu.menu.includeShare = true
@@ -59,7 +59,7 @@ const MinimizedActionsTab = props => {
   )
 }
 
-const ExpandedActionsTab = props => {
+const ExpandedActionsTab = (props) => {
   const {
     isHidden,
     isDisabled,
@@ -284,20 +284,20 @@ ActionsTab.defaultProps = {
   handle: 'handle'
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   userHandle: getUserHandle(state)
 })
 
-const mapDispatchToProps = dispatch => ({
-  shareTrack: trackId => dispatch(shareTrack(trackId, ShareSource.TILE)),
-  shareCollection: collectionId =>
+const mapDispatchToProps = (dispatch) => ({
+  shareTrack: (trackId) => dispatch(shareTrack(trackId, ShareSource.TILE)),
+  shareCollection: (collectionId) =>
     dispatch(shareCollection(collectionId, ShareSource.TILE)),
-  repostTrack: trackId => dispatch(repostTrack(trackId, RepostSource.TILE)),
-  undoRepostTrack: trackId =>
+  repostTrack: (trackId) => dispatch(repostTrack(trackId, RepostSource.TILE)),
+  undoRepostTrack: (trackId) =>
     dispatch(undoRepostTrack(trackId, RepostSource.TILE)),
-  repostCollection: playlistId =>
+  repostCollection: (playlistId) =>
     dispatch(repostCollection(playlistId, RepostSource.TILE)),
-  undoRepostCollection: playlistId =>
+  undoRepostCollection: (playlistId) =>
     dispatch(undoRepostCollection(playlistId, RepostSource.TILE))
 })
 

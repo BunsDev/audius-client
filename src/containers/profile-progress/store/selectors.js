@@ -1,42 +1,42 @@
 import Status from 'common/models/Status'
 import { getAccountUser } from 'common/store/account/selectors'
 
-export const getProfileDescriptionExists = state => {
+export const getProfileDescriptionExists = (state) => {
   const curUser = getAccountUser(state)
   if (!curUser) return false
   return !!curUser.bio
 }
 
-export const getHasFavoritedItem = state => {
+export const getHasFavoritedItem = (state) => {
   return state.account.hasFavoritedItem
 }
 
-export const getHasReposted = state => {
+export const getHasReposted = (state) => {
   const curUser = getAccountUser(state)
   if (!curUser) return false
   // If the user has any reposts or they have reposted this session
   return curUser.repost_count > 0 || curUser._has_reposted
 }
 
-export const getNumFollowedAccounts = state => {
+export const getNumFollowedAccounts = (state) => {
   const curUser = getAccountUser(state)
   if (!curUser) return 0
   return curUser.followee_count
 }
 
-export const getNameExists = state => {
+export const getNameExists = (state) => {
   const curUser = getAccountUser(state)
   if (!curUser) return false
   return !!curUser.name
 }
 
-export const getHandleExists = state => {
+export const getHandleExists = (state) => {
   const curUser = getAccountUser(state)
   if (!curUser) return false
   return !!curUser.handle
 }
 
-export const getProfilePictureExists = state => {
+export const getProfilePictureExists = (state) => {
   const curUser = getAccountUser(state)
   if (!curUser) return false
   // If the user sets the profile picture this session,
@@ -51,7 +51,7 @@ export const getProfilePictureExists = state => {
   )
 }
 
-export const getCoverPhotoExists = state => {
+export const getCoverPhotoExists = (state) => {
   const curUser = getAccountUser(state)
   if (!curUser) return false
 
@@ -63,7 +63,7 @@ export const getCoverPhotoExists = state => {
   )
 }
 
-export const getCompletionStages = state => ({
+export const getCompletionStages = (state) => ({
   hasProfileDescription: getProfileDescriptionExists(state),
   hasFavoritedItem: getHasFavoritedItem(state),
   hasReposted: getHasReposted(state),
@@ -73,7 +73,7 @@ export const getCompletionStages = state => ({
   hasCoverPhoto: getCoverPhotoExists(state)
 })
 
-export const getOrderedCompletionStages = state => {
+export const getOrderedCompletionStages = (state) => {
   const strings = {
     profileDescription: 'Profile Description',
     favorited: 'Favorite A Track/Playlist',
@@ -117,8 +117,8 @@ export const getOrderedCompletionStages = state => {
   ]
 }
 
-export const getProfilePageMeterDismissed = state =>
+export const getProfilePageMeterDismissed = (state) =>
   state.profile.profileMeterDismissed
 
-export const getIsAccountLoaded = state =>
+export const getIsAccountLoaded = (state) =>
   state.account.status === Status.SUCCESS

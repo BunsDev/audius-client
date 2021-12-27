@@ -95,7 +95,7 @@ const NavColumn = ({
 }) => {
   const record = useRecord()
   const goToSignUp = useCallback(
-    source => {
+    (source) => {
       routeToSignup()
       record(make(Name.CREATE_ACCOUNT_OPEN, { source }))
     },
@@ -120,7 +120,7 @@ const NavColumn = ({
   }, [notificationPanelIsOpen, toggleNotificationPanel, record])
 
   const onCreatePlaylist = useCallback(
-    metadata => {
+    (metadata) => {
       const tempId = `${Date.now()}`
       createPlaylist(tempId, metadata)
       closeCreatePlaylistModal()
@@ -402,7 +402,7 @@ const NavColumn = ({
 
 const makeMapStateToProps = () => {
   const getCurrentQueueItem = makeGetCurrent()
-  const mapStateToProps = state => {
+  const mapStateToProps = (state) => {
     const currentQueueItem = getCurrentQueueItem(state)
     return {
       currentQueueItem,
@@ -421,13 +421,13 @@ const makeMapStateToProps = () => {
   return mapStateToProps
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   resetUploadState: () => dispatch(resetUploadState()),
   createPlaylist: (tempId, metadata) =>
     dispatch(createPlaylist(tempId, metadata, CreatePlaylistSource.NAV)),
-  goToRoute: route => dispatch(pushRoute(route)),
-  saveTrack: trackId => dispatch(saveTrack(trackId)),
-  saveCollection: collectionId => dispatch(saveCollection(collectionId)),
+  goToRoute: (route) => dispatch(pushRoute(route)),
+  saveTrack: (trackId) => dispatch(saveTrack(trackId)),
+  saveCollection: (collectionId) => dispatch(saveCollection(collectionId)),
   addTrackToPlaylist: (trackId, playlistId) =>
     dispatch(addTrackToPlaylist(trackId, playlistId)),
   showActionRequiresAccount: () =>
@@ -435,7 +435,7 @@ const mapDispatchToProps = dispatch => ({
   toggleNotificationPanel: () => dispatch(toggleNotificationPanel()),
   openCreatePlaylistModal: () => dispatch(createPlaylistModalActions.open()),
   closeCreatePlaylistModal: () => dispatch(createPlaylistModalActions.close()),
-  updatePlaylistLastViewedAt: playlistId =>
+  updatePlaylistLastViewedAt: (playlistId) =>
     dispatch(updatePlaylistLastViewedAt(playlistId)),
   goToUpload: () => dispatch(pushRoute(UPLOAD_PAGE)),
   goToDashboard: () => dispatch(pushRoute(DASHBOARD_PAGE)),

@@ -141,7 +141,9 @@ class AudioManager {
 
   *closeTimeoutConfirmAudioToWAudioModal() {
     const WAITING_TIMEOUT = 2 /* sec */ * 1000 /* ms */
-    const timeout = new Promise(resolve => setTimeout(resolve, WAITING_TIMEOUT))
+    const timeout = new Promise((resolve) =>
+      setTimeout(resolve, WAITING_TIMEOUT)
+    )
     yield timeout
     const isModalOpen: ReturnType<typeof getModalVisibility> = yield select(
       getModalVisibility,

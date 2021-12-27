@@ -111,6 +111,6 @@ export const GENRES = [
   Genre.AUDIOBOOKS,
   Genre.LATIN,
   ...Object.keys(ELECTRONIC_SUBGENRES).map(
-    subgenre => `${ELECTRONIC_PREFIX}${subgenre}`
+    (subgenre) => `${ELECTRONIC_PREFIX}${subgenre}`
   )
 ]

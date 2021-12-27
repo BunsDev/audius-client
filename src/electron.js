@@ -57,7 +57,7 @@ protocol.registerSchemesAsPrivileged([
   }
 ])
 
-const getPath = async p => {
+const getPath = async (p) => {
   try {
     const result = await stat(p)
 
@@ -73,7 +73,7 @@ const getPath = async p => {
  * Transforms a url audius://route to audius://-/route so that it is
  * properly loaded from the filesystem.
  */
-const reformatURL = url => {
+const reformatURL = (url) => {
   if (!url) return `${SCHEME}://-`
   let path = url.replace(`${SCHEME}://`, '').replace(`${SCHEME}:`, '')
   if (path === '--updated') {
@@ -158,7 +158,7 @@ const createWindow = () => {
     session.defaultSession.protocol.registerFileProtocol(
       SCHEME,
       handler,
-      err => {
+      (err) => {
         // The scheme has probably already been registered. Most likely safe to ignore.
         if (err) {
           console.log(err)
@@ -179,7 +179,7 @@ const createWindow = () => {
     }
   }
 
-  mainWindow.on('close', e => {
+  mainWindow.on('close', (e) => {
     mainWindow.webContents.send('close')
   })
 
@@ -330,7 +330,7 @@ ipcMain.on('update', async (event, arg) => {
   // eslint-disable-next-line
   while (!canUpdate) {
     console.log('cannot update')
-    await new Promise(resolve => setTimeout(resolve, 100))
+    await new Promise((resolve) => setTimeout(resolve, 100))
   }
   autoUpdater.quitAndInstall()
 })
@@ -339,24 +339,24 @@ ipcMain.on('quit', (event, arg) => {
   app.exit(0)
 })
 
-autoUpdater.on('update-downloaded', info => {
+autoUpdater.on('update-downloaded', (info) => {
   console.log('update-downloaded', info)
   canUpdate = true
   info.currentVersion = autoUpdater.currentVersion.version
   if (mainWindow) mainWindow.webContents.send('updateDownloaded', info)
 })
 
-autoUpdater.on('update-available', info => {
+autoUpdater.on('update-available', (info) => {
   console.log('update-available', info)
   info.currentVersion = autoUpdater.currentVersion.version
   if (mainWindow) mainWindow.webContents.send('updateAvailable', info)
 })
 
-autoUpdater.on('download-progress', info => {
+autoUpdater.on('download-progress', (info) => {
   if (mainWindow) mainWindow.webContents.send('updateDownloadProgress', info)
 })
 
-autoUpdater.on('error', info => {
+autoUpdater.on('error', (info) => {
   console.log('update-error', info)
   if (mainWindow) mainWindow.webContents.send('updateError', info)
 })

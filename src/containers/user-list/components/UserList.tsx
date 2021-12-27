@@ -39,7 +39,7 @@ const UserList = (props: UserListProps) => {
         threshold={SCROLL_THRESHOLD}
         getScrollParent={props.getScrollParent}
       >
-        {props.users.map(user => (
+        {props.users.map((user) => (
           <div key={user.user_id} className={styles.user}>
             <ArtistChip
               name={user.name}

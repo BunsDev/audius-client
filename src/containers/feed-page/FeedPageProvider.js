@@ -46,7 +46,7 @@ class FeedPageProvider extends PureComponent {
     this.props.openSignOn(false)
   }
 
-  matchesRoute = route => {
+  matchesRoute = (route) => {
     return matchPath(getPathname(), {
       path: route
     })
@@ -61,7 +61,7 @@ class FeedPageProvider extends PureComponent {
     }
   }
 
-  getLineupProps = lineup => {
+  getLineupProps = (lineup) => {
     const { currentQueueItem, playing, buffering } = this.props
     const { uid: playingUid, track, source } = currentQueueItem
     return {
@@ -115,7 +115,7 @@ const makeMapStateToProps = () => {
   const getSuggestedFollows = makeGetSuggestedFollows()
   const getFeedLineup = makeGetLineupMetadatas(getDiscoverFeedLineup)
 
-  const mapStateToProps = state => ({
+  const mapStateToProps = (state) => ({
     hasAccount: getHasAccount(state),
     feed: getFeedLineup(state),
     suggestedFollows: getSuggestedFollows(state),
@@ -128,19 +128,19 @@ const makeMapStateToProps = () => {
   return mapStateToProps
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   dispatch,
-  openSignOn: signIn => dispatch(openSignOn(signIn)),
+  openSignOn: (signIn) => dispatch(openSignOn(signIn)),
   resetFeedLineup: () => dispatch(feedActions.reset()),
   fetchSuggestedFollowUsers: () =>
     dispatch(discoverPageAction.fetchSuggestedFollowUsers()),
-  goToRoute: route => dispatch(pushRoute(route)),
-  replaceRoute: route => dispatch(replaceRoute(route)),
-  followUsers: userIds => dispatch(discoverPageAction.followUsers(userIds)),
-  setFeedFilter: filter => dispatch(discoverPageAction.setFeedFilter(filter)),
+  goToRoute: (route) => dispatch(pushRoute(route)),
+  replaceRoute: (route) => dispatch(replaceRoute(route)),
+  followUsers: (userIds) => dispatch(discoverPageAction.followUsers(userIds)),
+  setFeedFilter: (filter) => dispatch(discoverPageAction.setFeedFilter(filter)),
 
   // Feed Lineup Actions
-  setFeedInView: inView => dispatch(feedActions.setInView(inView)),
+  setFeedInView: (inView) => dispatch(feedActions.setInView(inView)),
   loadMoreFeed: (offset, limit, overwrite) => {
     dispatch(feedActions.fetchLineupMetadatas(offset, limit, overwrite))
     const trackEvent = make(Name.FEED_PAGINATE, { offset, limit })
@@ -148,7 +148,7 @@ const mapDispatchToProps = dispatch => ({
   },
   refreshFeedInView: (overwrite, limit) =>
     dispatch(feedActions.refreshInView(overwrite, null, limit)),
-  playFeedTrack: uid => dispatch(feedActions.play(uid)),
+  playFeedTrack: (uid) => dispatch(feedActions.play(uid)),
   pauseFeedTrack: () => dispatch(feedActions.pause())
 })
 

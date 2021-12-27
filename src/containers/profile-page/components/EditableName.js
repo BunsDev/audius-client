@@ -7,7 +7,7 @@ import UserBadges from 'containers/user-badges/UserBadges'
 
 import styles from './EditableName.module.css'
 
-const EditableName = props => {
+const EditableName = (props) => {
   const [editing, setEditing] = useState(false)
   const inputRef = useRef(null)
   useEffect(() => {

@@ -19,7 +19,7 @@ const messages = {
   unfollow: 'UNFOLLOW'
 }
 
-const FollowButton = props => {
+const FollowButton = (props) => {
   const [isHovering, setIsHovering] = useState(false)
   const [isHoveringClicked, setIsHoveringClicked] = useState(false)
 

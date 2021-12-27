@@ -289,12 +289,12 @@ function* fetchMostUsedTags(userId, trackCount) {
     userId: userId,
     filterDeleted: true
   })
-  const tracks = trackResponse.filter(metadata => !metadata.is_delete)
+  const tracks = trackResponse.filter((metadata) => !metadata.is_delete)
   // tagUsage: { [tag: string]: number }
   const tagUsage = {}
-  tracks.forEach(track => {
+  tracks.forEach((track) => {
     if (track.tags) {
-      track.tags.split(',').forEach(tag => {
+      track.tags.split(',').forEach((tag) => {
         tag in tagUsage ? (tagUsage[tag] += 1) : (tagUsage[tag] = 1)
       })
     }
@@ -374,9 +374,9 @@ function* cacheUsers(users) {
   const currentUserId = yield select(getUserId)
   // Filter out the current user from the list to cache
   yield processAndCacheUsers(
-    users.filter(user => user.user_id !== currentUserId)
+    users.filter((user) => user.user_id !== currentUserId)
   )
-  return users.map(f => ({ id: f.user_id }))
+  return users.map((f) => ({ id: f.user_id }))
 }
 
 function* watchUpdateProfile() {
@@ -517,7 +517,7 @@ function* updateCurrentUserFollows(action) {
       updatedUserIds = userIds.concat({ id: userId, uid })
     }
   } else {
-    updatedUserIds = userIds.filter(f => f.id !== userId)
+    updatedUserIds = userIds.filter((f) => f.id !== userId)
   }
   yield put(
     profileActions.setProfileField(FollowType.FOLLOWERS, {

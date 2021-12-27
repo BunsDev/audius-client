@@ -13,7 +13,7 @@ const EXPLORE_CONTENT_URL =
   'https://download.audius.co/static-resources/explore-content.json'
 
 const fetchExploreContent = async () => {
-  return fetch(EXPLORE_CONTENT_URL).then(resp => resp.json())
+  return fetch(EXPLORE_CONTENT_URL).then((resp) => resp.json())
 }
 
 function* watchFetchExplore() {

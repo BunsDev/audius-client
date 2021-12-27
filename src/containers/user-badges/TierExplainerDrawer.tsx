@@ -19,7 +19,7 @@ import { useProfileTier } from './hooks'
 
 const TierExplainerDrawer = () => {
   // use the modal visibility state
-  const isOpen = useSelector(state =>
+  const isOpen = useSelector((state) =>
     getModalVisibility(state, 'TiersExplainer')
   )
   const keyboardVisible = useSelector(getKeyboardVisibility)

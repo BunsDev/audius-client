@@ -21,7 +21,7 @@ const uploadDescriptions = {
     'Every track you upload will be a separate post.'
 }
 
-const TracksPreview = props => {
+const TracksPreview = (props) => {
   return (
     <div className={styles.container}>
       <div className={styles.headerContainer}>

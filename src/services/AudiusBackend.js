@@ -95,7 +95,7 @@ export const AuthHeaders = Object.freeze({
 
 export const waitForWeb3 = async () => {
   if (!window.web3Loaded) {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       const onLoad = () => {
         window.removeEventListener('WEB3_LOADED', onLoad)
         resolve()
@@ -127,13 +127,13 @@ const combineLists = (
     0,
     Math.min(maxSaved, savedList.length)
   )
-  const saveListsSet = new Set(truncatedSavedList.map(s => s[uniqueKey]))
-  const filteredList = normalList.filter(n => !saveListsSet.has(n[uniqueKey]))
+  const saveListsSet = new Set(truncatedSavedList.map((s) => s[uniqueKey]))
+  const filteredList = normalList.filter((n) => !saveListsSet.has(n[uniqueKey]))
   const combinedLists = savedList.concat(filteredList)
   return combinedLists.slice(0, Math.min(maxTotal, combinedLists.length))
 }
 
-const notDeleted = e => !e.is_delete
+const notDeleted = (e) => !e.is_delete
 
 export const fetchCID = async (
   cid,
@@ -168,7 +168,7 @@ export const fetchCID = async (
 let preloadImageTimer
 const avoidGC = []
 
-const preloadImage = async url => {
+const preloadImage = async (url) => {
   if (!preloadImageTimer) {
     const batchSize = getRemoteVar(
       IntKeys.IMAGE_QUICK_FETCH_PERFORMANCE_BATCH_SIZE
@@ -181,7 +181,7 @@ const preloadImage = async url => {
     })
   }
 
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const start = preloadImageTimer.start()
 
     const timeoutMs = getRemoteVar(IntKeys.IMAGE_QUICK_FETCH_TIMEOUT_MS)
@@ -348,9 +348,9 @@ class AudiusBackend {
   static discoveryProviderSelectionCallback(endpoint, decisionTree) {
     track(Name.DISCOVERY_PROVIDER_SELECTION, {
       endpoint,
-      reason: decisionTree.map(reason => reason.stage).join(' -> ')
+      reason: decisionTree.map((reason) => reason.stage).join(' -> ')
     })
-    AudiusBackend.didSelectDiscoveryProviderListeners.forEach(listener =>
+    AudiusBackend.didSelectDiscoveryProviderListeners.forEach((listener) =>
       listener(endpoint)
     )
   }
@@ -361,7 +361,7 @@ class AudiusBackend {
       selectedAs: 'primary',
       reason
     })
-    secondaries.forEach(secondary => {
+    secondaries.forEach((secondary) => {
       track(Name.CREATOR_NODE_SELECTION, {
         endpoint: secondary,
         selectedAs: 'secondary',
@@ -390,7 +390,7 @@ class AudiusBackend {
 
     const { libs, libsUtils, libsSanityChecks } = await import(
       './audius-backend/AudiusLibsLazyLoader'
-    ).then(libs => {
+    ).then((libs) => {
       return {
         libs: libs.default,
         libsUtils: libs.Utils,
@@ -686,7 +686,7 @@ class AudiusBackend {
     try {
       const tracks = await withEagerOption(
         {
-          normal: libs => libs.Track.getTracks,
+          normal: (libs) => libs.Track.getTracks,
           eager: DiscoveryAPI.getTracks
         },
         limit,
@@ -722,7 +722,7 @@ class AudiusBackend {
     try {
       const tracks = await withEagerOption(
         {
-          normal: libs => libs.Track.getTracksIncludingUnlisted,
+          normal: (libs) => libs.Track.getTracksIncludingUnlisted,
           eager: DiscoveryAPI.getTracksIncludingUnlisted
         },
         identifiers,
@@ -755,7 +755,10 @@ class AudiusBackend {
   }) {
     try {
       const tracks = await withEagerOption(
-        { normal: libs => libs.Track.getTracks, eager: DiscoveryAPI.getTracks },
+        {
+          normal: (libs) => libs.Track.getTracks,
+          eager: DiscoveryAPI.getTracks
+        },
         limit,
         offset,
         null,
@@ -789,7 +792,7 @@ class AudiusBackend {
     try {
       feedItems = await withEagerOption(
         {
-          normal: libs => libs.User.getSocialFeed,
+          normal: (libs) => libs.User.getSocialFeed,
           eager: DiscoveryAPI.getSocialFeed,
           requiresUser: true
         },
@@ -805,7 +808,7 @@ class AudiusBackend {
     } catch (err) {
       console.error(err)
     }
-    return feedItems.map(item => {
+    return feedItems.map((item) => {
       if (item.playlist_id) return AudiusBackend.getCollectionImages(item)
       return item
     })
@@ -815,7 +818,7 @@ class AudiusBackend {
     try {
       const tracks = await withEagerOption(
         {
-          normal: libs => libs.User.getUserRepostFeed,
+          normal: (libs) => libs.User.getUserRepostFeed,
           eager: DiscoveryAPI.getUserRepostFeed
         },
         userId,
@@ -840,7 +843,7 @@ class AudiusBackend {
     try {
       const searchTags = await withEagerOption(
         {
-          normal: libs => libs.Account.searchTags,
+          normal: (libs) => libs.Account.searchTags,
           eager: DiscoveryAPI.searchTags
         },
         searchText,
@@ -862,11 +865,11 @@ class AudiusBackend {
           savedTracks.filter(notDeleted),
           tracks.filter(notDeleted),
           'track_id'
-        ).map(async track => AudiusBackend.getTrackImages(track))
+        ).map(async (track) => AudiusBackend.getTrackImages(track))
       )
 
       const combinedUsers = await Promise.all(
-        combineLists(followedUsers, users, 'user_id').map(async user =>
+        combineLists(followedUsers, users, 'user_id').map(async (user) =>
           AudiusBackend.getUserImages(user)
         )
       )
@@ -889,7 +892,7 @@ class AudiusBackend {
     try {
       return withEagerOption(
         {
-          normal: libs => libs.Track.getTrackListens,
+          normal: (libs) => libs.Track.getTrackListens,
           eager: IdentityAPI.getTrackListens,
           endpoint: IDENTITY_SERVICE
         },
@@ -1019,7 +1022,7 @@ class AudiusBackend {
       if (ids.length === 0) return []
       const creators = await withEagerOption(
         {
-          normal: libs => libs.User.getUsers,
+          normal: (libs) => libs.User.getUsers,
           eager: DiscoveryAPI.getUsers
         },
         ids.length,
@@ -1031,7 +1034,7 @@ class AudiusBackend {
       }
 
       return Promise.all(
-        creators.map(async creator => AudiusBackend.getUserImages(creator))
+        creators.map(async (creator) => AudiusBackend.getUserImages(creator))
       )
     } catch (err) {
       console.error(err.message)
@@ -1043,7 +1046,7 @@ class AudiusBackend {
     try {
       const res = await fetch(
         `${IDENTITY_SERVICE}/social_handles?handle=${handle}`
-      ).then(res => res.json())
+      ).then((res) => res.json())
       return res
     } catch (e) {
       console.error(e)
@@ -1275,7 +1278,7 @@ class AudiusBackend {
 
       if (followers.length) {
         return Promise.all(
-          followers.map(follower => AudiusBackend.getUserImages(follower))
+          followers.map((follower) => AudiusBackend.getUserImages(follower))
         )
       }
     } catch (err) {
@@ -1289,7 +1292,7 @@ class AudiusBackend {
     try {
       const playlists = await withEagerOption(
         {
-          normal: libs => libs.Playlist.getPlaylists,
+          normal: (libs) => libs.Playlist.getPlaylists,
           eager: DiscoveryAPI.getPlaylists
         },
         100,
@@ -1522,10 +1525,10 @@ class AudiusBackend {
     try {
       console.debug(
         `Deleting Album ${playlistId}, tracks: ${JSON.stringify(
-          trackIds.map(t => t.track)
+          trackIds.map((t) => t.track)
         )}`
       )
-      const trackDeletionPromises = trackIds.map(t =>
+      const trackDeletionPromises = trackIds.map((t) =>
         audiusLibs.Track.deleteTrack(t.track)
       )
       const playlistDeletionPromise = audiusLibs.Playlist.deletePlaylist(
@@ -1534,7 +1537,7 @@ class AudiusBackend {
       const results = await Promise.all(
         trackDeletionPromises.concat(playlistDeletionPromise)
       )
-      const deleteTrackReceipts = results.slice(0, -1).map(r => r.txReceipt)
+      const deleteTrackReceipts = results.slice(0, -1).map((r) => r.txReceipt)
       const deletePlaylistReceipt = results.slice(-1)[0].txReceipt
 
       const { blockHash, blockNumber } = AudiusBackend.getLatestTxReceipt(
@@ -1551,13 +1554,13 @@ class AudiusBackend {
     try {
       const saves = await withEagerOption(
         {
-          normal: libs => libs.Playlist.getSavedPlaylists,
+          normal: (libs) => libs.Playlist.getSavedPlaylists,
           eager: DiscoveryAPI.getSavedPlaylists
         },
         limit,
         offset
       )
-      return saves.map(save => save.save_item_id)
+      return saves.map((save) => save.save_item_id)
     } catch (err) {
       console.error(err.message)
       return []
@@ -1568,13 +1571,13 @@ class AudiusBackend {
     try {
       const saves = await withEagerOption(
         {
-          normal: libs => libs.Playlist.getSavedAlbums,
+          normal: (libs) => libs.Playlist.getSavedAlbums,
           eager: DiscoveryAPI.getSavedAlbums
         },
         limit,
         offset
       )
-      return saves.map(save => save.save_item_id)
+      return saves.map((save) => save.save_item_id)
     } catch (err) {
       console.error(err.message)
       return []
@@ -1585,7 +1588,7 @@ class AudiusBackend {
     try {
       return withEagerOption(
         {
-          normal: libs => libs.Track.getSavedTracks,
+          normal: (libs) => libs.Track.getSavedTracks,
           eager: DiscoveryAPI.getSavedTracks
         },
         limit,
@@ -1860,7 +1863,7 @@ class AudiusBackend {
             [AuthHeaders.Signature]: signature
           }
         }
-      ).then(res => {
+      ).then((res) => {
         if (res.status !== 200) {
           return {
             success: false,
@@ -1895,7 +1898,7 @@ class AudiusBackend {
           notificationType,
           isRead: true
         })
-      }).then(res => res.json())
+      }).then((res) => res.json())
     } catch (e) {
       console.error(e)
     }
@@ -1915,7 +1918,7 @@ class AudiusBackend {
           [AuthHeaders.Signature]: signature
         },
         body: JSON.stringify({ isRead: true })
-      }).then(res => res.json())
+      }).then((res) => res.json())
     } catch (e) {
       console.error(e)
     }
@@ -1935,7 +1938,7 @@ class AudiusBackend {
           [AuthHeaders.Signature]: signature
         },
         body: JSON.stringify({ isViewed: true, clearBadges: !!NATIVE_MOBILE })
-      }).then(res => res.json())
+      }).then((res) => res.json())
     } catch (e) {
       console.error(e)
     }
@@ -1954,7 +1957,7 @@ class AudiusBackend {
           [AuthHeaders.Message]: data,
           [AuthHeaders.Signature]: signature
         }
-      }).then(res => res.json())
+      }).then((res) => res.json())
     } catch (e) {
       console.error(e)
     }
@@ -1973,7 +1976,7 @@ class AudiusBackend {
           [AuthHeaders.Message]: data,
           [AuthHeaders.Signature]: signature
         }
-      }).then(res => res.json())
+      }).then((res) => res.json())
       return res
     } catch (e) {
       console.error(e)
@@ -1994,7 +1997,7 @@ class AudiusBackend {
           [AuthHeaders.Signature]: signature
         },
         body: JSON.stringify({ settings: { emailFrequency } })
-      }).then(res => res.json())
+      }).then((res) => res.json())
       return res
     } catch (e) {
       console.error(e)
@@ -2019,7 +2022,7 @@ class AudiusBackend {
           notificationType,
           isHidden: true
         })
-      }).then(res => res.json())
+      }).then((res) => res.json())
     } catch (e) {
       console.error(e)
     }
@@ -2039,7 +2042,7 @@ class AudiusBackend {
           [AuthHeaders.Signature]: signature
         },
         body: JSON.stringify({ settings })
-      }).then(res => res.json())
+      }).then((res) => res.json())
     } catch (e) {
       console.error(e)
     }
@@ -2059,7 +2062,7 @@ class AudiusBackend {
           [AuthHeaders.Signature]: signature
         },
         body: JSON.stringify({ settings })
-      }).then(res => res.json())
+      }).then((res) => res.json())
     } catch (e) {
       console.error(e)
     }
@@ -2077,7 +2080,7 @@ class AudiusBackend {
           [AuthHeaders.Message]: data,
           [AuthHeaders.Signature]: signature
         }
-      }).then(res => res.json())
+      }).then((res) => res.json())
       return response
     } catch (e) {
       console.error(e)
@@ -2112,8 +2115,8 @@ class AudiusBackend {
           [AuthHeaders.Signature]: signature
         }
       })
-        .then(res => res.json())
-        .then(res => res.settings)
+        .then((res) => res.json())
+        .then((res) => res.settings)
     } catch (e) {
       console.error(e)
       return null
@@ -2136,8 +2139,8 @@ class AudiusBackend {
           }
         }
       )
-        .then(res => res.json())
-        .then(res => res.enabled)
+        .then((res) => res.json())
+        .then((res) => res.enabled)
     } catch (e) {
       console.error(e)
       return null
@@ -2159,8 +2162,8 @@ class AudiusBackend {
           }
         }
       )
-        .then(res => res.json())
-        .then(res => res.enabled)
+        .then((res) => res.json())
+        .then((res) => res.enabled)
     } catch (e) {
       console.error(e)
       return null
@@ -2178,7 +2181,7 @@ class AudiusBackend {
         [AuthHeaders.Signature]: signature
       },
       body: JSON.stringify({ enabled, subscription })
-    }).then(res => res.json())
+    }).then((res) => res.json())
   }
 
   static async disableBrowserNotifications({ subscription }) {
@@ -2192,7 +2195,7 @@ class AudiusBackend {
         [AuthHeaders.Signature]: signature
       },
       body: JSON.stringify({ subscription })
-    }).then(res => res.json())
+    }).then((res) => res.json())
   }
 
   static async getPushNotificationSettings() {
@@ -2207,8 +2210,8 @@ class AudiusBackend {
           [AuthHeaders.Signature]: signature
         }
       })
-        .then(res => res.json())
-        .then(res => res.settings)
+        .then((res) => res.json())
+        .then((res) => res.settings)
     } catch (e) {
       console.error(e)
     }
@@ -2231,7 +2234,7 @@ class AudiusBackend {
           deviceToken,
           deviceType
         })
-      }).then(res => res.json())
+      }).then((res) => res.json())
     } catch (e) {
       console.error(e)
     }
@@ -2256,7 +2259,7 @@ class AudiusBackend {
             deviceToken
           })
         }
-      ).then(res => res.json())
+      ).then((res) => res.json())
     } catch (e) {
       console.error(e)
     }
@@ -2277,8 +2280,8 @@ class AudiusBackend {
           }
         }
       )
-        .then(res => res.json())
-        .then(res =>
+        .then((res) => res.json())
+        .then((res) =>
           res.users && res.users[userId.toString()]
             ? res.users[userId.toString()].isSubscribed
             : false
@@ -2296,7 +2299,7 @@ class AudiusBackend {
       const { data, signature } = await AudiusBackend.signData()
       return fetch(
         `${IDENTITY_SERVICE}/notifications/subscription?${userIds
-          .map(id => `userId=${id}`)
+          .map((id) => `userId=${id}`)
           .join('&')}`,
         {
           headers: {
@@ -2305,8 +2308,8 @@ class AudiusBackend {
           }
         }
       )
-        .then(res => res.json())
-        .then(res => res.users)
+        .then((res) => res.json())
+        .then((res) => res.users)
     } catch (e) {
       console.error(e)
     }
@@ -2329,7 +2332,7 @@ class AudiusBackend {
           userId,
           isSubscribed
         })
-      }).then(res => res.json())
+      }).then((res) => res.json())
     } catch (e) {
       console.error(e)
     }
@@ -2350,7 +2353,7 @@ class AudiusBackend {
           [AuthHeaders.Signature]: signature
         },
         body: JSON.stringify({ timezone })
-      }).then(res => res.json())
+      }).then((res) => res.json())
       return res
     } catch (e) {
       console.error(e)
@@ -2371,7 +2374,7 @@ class AudiusBackend {
           [AuthHeaders.Signature]: signature
         },
         body: JSON.stringify({ name, isNativeMobile: !!NATIVE_MOBILE })
-      }).then(res => res.json())
+      }).then((res) => res.json())
     } catch (e) {
       console.error(e)
     }
@@ -2391,7 +2394,7 @@ class AudiusBackend {
           [AuthHeaders.Signature]: signature
         },
         body: JSON.stringify({ hasSignedInNativeMobile })
-      }).then(res => res.json())
+      }).then((res) => res.json())
       return res
     } catch (e) {
       console.error(e)
@@ -2448,7 +2451,7 @@ class AudiusBackend {
           [AuthHeaders.Signature]: signature
         },
         body: JSON.stringify({ token })
-      }).then(res => res.json())
+      }).then((res) => res.json())
     } catch (err) {
       console.error(err.message)
       return { error: true }

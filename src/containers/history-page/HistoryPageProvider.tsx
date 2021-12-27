@@ -48,7 +48,7 @@ const g = withNullGuard(
   ({ userId, ...p }: HistoryPageProps) => userId !== null && { ...p, userId }
 )
 
-const HistoryPage = g(props => {
+const HistoryPage = g((props) => {
   const {
     pause,
     play,
@@ -145,7 +145,7 @@ const HistoryPage = g(props => {
   )
 
   const onClickSave = useCallback(
-    record => {
+    (record) => {
       if (!record.has_current_user_saved) {
         saveTrack(record.track_id)
       } else {
@@ -190,21 +190,21 @@ const HistoryPage = g(props => {
   )
 
   const onClickTrackName = useCallback(
-    record => {
+    (record) => {
       goToRoute(record.permalink)
     },
     [goToRoute]
   )
 
   const onClickArtistName = useCallback(
-    record => {
+    (record) => {
       goToRoute(profilePage(record.handle))
     },
     [goToRoute]
   )
 
   const onClickRepost = useCallback(
-    record => {
+    (record) => {
       if (!record.has_current_user_reposted) {
         repostTrack(record.track_id)
       } else {

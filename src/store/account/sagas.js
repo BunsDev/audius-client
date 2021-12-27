@@ -228,7 +228,7 @@ function* cacheAccount(account) {
     ])
   )
   const hasFavoritedItem =
-    collections.some(playlist => playlist.user.id !== account.user_id) ||
+    collections.some((playlist) => playlist.user.id !== account.user_id) ||
     account.track_save_count > 0
 
   const formattedAccount = {
@@ -408,12 +408,12 @@ function* associateInstagramAccount(action) {
 
 function* fetchSavedAlbumsAsync() {
   yield call(waitForBackendSetup)
-  const isAccountSet = store => store.account.status
+  const isAccountSet = (store) => store.account.status
   yield call(
     waitForValue,
     isAccountSet,
     null,
-    status => status === Status.SUCCESS
+    (status) => status === Status.SUCCESS
   )
   const cachedSavedAlbums = yield select(getAccountAlbumIds)
   if (cachedSavedAlbums.length > 0) {
@@ -423,12 +423,12 @@ function* fetchSavedAlbumsAsync() {
 
 function* fetchSavedPlaylistsAsync() {
   yield call(waitForBackendSetup)
-  const isAccountSet = store => store.account.status
+  const isAccountSet = (store) => store.account.status
   yield call(
     waitForValue,
     isAccountSet,
     null,
-    status => status === Status.SUCCESS
+    (status) => status === Status.SUCCESS
   )
 
   // Fetch other people's playlists you've saved

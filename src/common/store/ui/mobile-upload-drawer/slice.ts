@@ -12,10 +12,10 @@ const slice = createSlice({
   name: 'ui/mobile-upload-drawer',
   initialState,
   reducers: {
-    show: state => {
+    show: (state) => {
       state.isOpen = true
     },
-    hide: state => {
+    hide: (state) => {
       state.isOpen = false
     }
   }

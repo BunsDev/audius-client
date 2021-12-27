@@ -166,7 +166,7 @@ const NotificationItem = (props: NotificationItemProps) => {
   }
 
   const onOptionsClick = useCallback(
-    e => {
+    (e) => {
       e.stopPropagation()
       onClickOverflow(id)
       markNotificationAsRead()

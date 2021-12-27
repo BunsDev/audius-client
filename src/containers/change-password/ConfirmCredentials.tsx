@@ -108,7 +108,7 @@ export const ConfirmCredentials = (props: ConfirmCredentialsProps) => {
           to={{ opacity: 1 }}
           config={{ duration: 1000 }}
         >
-          {animProps => (
+          {(animProps) => (
             <StatusMessage
               status='error'
               containerStyle={animProps}

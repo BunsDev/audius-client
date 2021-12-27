@@ -20,7 +20,7 @@ function* handleError(action: errorActions.HandleErrorAction) {
   console.debug(`Handling error: ${action.message}`)
   if (action.shouldReport) {
     try {
-      Sentry.withScope(scope => {
+      Sentry.withScope((scope) => {
         if (action.level) {
           const sentryLevel = Levels[action.level]
           scope.setLevel(sentryLevel)

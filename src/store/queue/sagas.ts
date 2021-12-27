@@ -359,7 +359,7 @@ export function* watchAdd() {
   yield takeEvery(add.type, function* (action: ReturnType<typeof add>) {
     const { entries } = action.payload
 
-    const subscribers = entries.map(entry => ({
+    const subscribers = entries.map((entry) => ({
       uid: QUEUE_SUBSCRIBER_NAME,
       id: entry.id
     }))

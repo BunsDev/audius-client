@@ -174,7 +174,7 @@ const NotificationBlock = (props: NotificationBlockProps) => {
   )
 
   const onMenuClick = useCallback(
-    triggerPopup => (e: React.MouseEvent) => {
+    (triggerPopup) => (e: React.MouseEvent) => {
       e.stopPropagation()
       markNotificationAsRead()
       triggerPopup()

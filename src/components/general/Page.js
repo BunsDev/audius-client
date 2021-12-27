@@ -86,10 +86,10 @@ const HeaderContainer = ({ header, containerRef }) => {
   )
 }
 
-export const Page = props => {
+export const Page = (props) => {
   const [headerHeight, setHeaderHeight] = useState(0)
 
-  const calculateHeaderHeight = element => {
+  const calculateHeaderHeight = (element) => {
     if (element) {
       setHeaderHeight(element.offsetHeight)
     }
@@ -101,7 +101,7 @@ export const Page = props => {
       to={{ opacity: 1 }}
       config={{ duration: props.fadeDuration }}
     >
-      {animProps => (
+      {(animProps) => (
         <div
           ref={props.containerRef}
           style={animProps}

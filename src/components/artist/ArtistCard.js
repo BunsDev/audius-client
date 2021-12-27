@@ -14,7 +14,7 @@ import styles from './ArtistCard.module.css'
 
 const gradient = `linear-gradient(180deg, rgba(0, 0, 0, 0.001) 0%, rgba(0, 0, 0, 0.005) 67.71%, rgba(0, 0, 0, 0.15) 79.17%, rgba(0, 0, 0, 0.25) 100%)`
 
-const ArtistCover = props => {
+const ArtistCover = (props) => {
   const coverPhoto = useUserCoverPhoto(
     props.userId,
     props.coverPhotoSizes,
@@ -65,7 +65,7 @@ const ArtistCover = props => {
 }
 
 class ArtistCard extends Component {
-  handleClick = e => {
+  handleClick = (e) => {
     // NOTE: Prevents parent div's onClick
     e.stopPropagation()
   }

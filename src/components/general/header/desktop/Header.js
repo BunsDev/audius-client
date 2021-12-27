@@ -10,7 +10,7 @@ import styles from './Header.module.css'
 const BACKGROUND_ELEMENT_HEIGHT_PX = 161
 export const BACKGROUND_ELEMENT_ID = 'headerPadding'
 
-const Header = props => {
+const Header = (props) => {
   const {
     primary,
     secondary = null,

@@ -264,10 +264,10 @@ export const trimServiceName = (name, maxLength = null) => {
   return trimmedName
 }
 
-export const getCountry = isoAlpha2 => ISO_ALPHA_2[isoAlpha2]
+export const getCountry = (isoAlpha2) => ISO_ALPHA_2[isoAlpha2]
 
-export const countryCodeToFlag = code => {
+export const countryCodeToFlag = (code) => {
   if (!code || !CC_REGEX.test(code)) return `🏳`
-  const chars = [...code.toUpperCase()].map(c => c.charCodeAt() + OFFSET)
+  const chars = [...code.toUpperCase()].map((c) => c.charCodeAt() + OFFSET)
   return String.fromCodePoint(...chars)
 }

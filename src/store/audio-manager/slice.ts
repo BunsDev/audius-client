@@ -23,7 +23,7 @@ const slice = createSlice({
     ) => {
       state.state = audioManagerState
     },
-    confirmTransferAudioToWAudio: state => {}
+    confirmTransferAudioToWAudio: (state) => {}
   }
 })
 

@@ -52,7 +52,7 @@ const slice = createSlice({
   name: 'rewards-page',
   initialState,
   reducers: {
-    fetchUserChallenges: state => {
+    fetchUserChallenges: (state) => {
       state.userChallenges = {}
       state.loading = true
     },
@@ -71,7 +71,7 @@ const slice = createSlice({
       }
       state.loading = false
     },
-    fetchUserChallengesFailed: state => {
+    fetchUserChallengesFailed: (state) => {
       state.loading = false
     },
     setTrendingRewardsModalType: (
@@ -92,7 +92,7 @@ const slice = createSlice({
       const { status } = action.payload
       state.claimStatus = status
     },
-    resetClaimStatus: state => {
+    resetClaimStatus: (state) => {
       state.claimStatus = ClaimStatus.NONE
     },
     setHCaptchaStatus: (
@@ -102,7 +102,7 @@ const slice = createSlice({
       const { status } = action.payload
       state.hCaptchaStatus = status
     },
-    resetHCaptchaStatus: state => {
+    resetHCaptchaStatus: (state) => {
       state.hCaptchaStatus = HCaptchaStatus.NONE
     },
     updateHCaptchaScore: (

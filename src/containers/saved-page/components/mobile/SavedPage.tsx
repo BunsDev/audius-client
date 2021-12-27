@@ -72,7 +72,7 @@ const SCROLL_HEIGHT = 88
  */
 const useOffsetScroll = () => {
   // Set the child's height base on it's content vs window height
-  const contentRefCallback = useCallback(node => {
+  const contentRefCallback = useCallback((node) => {
     if (node !== null) {
       const contentHeight = (window as any).innerHeight - OFFSET_HEIGHT
       const useContentHeight = contentHeight > node.scrollHeight
@@ -108,7 +108,7 @@ const TracksLineup = ({
   onTogglePlay: (uid: UID, trackId: ID) => void
 }) => {
   const [trackEntries] = getFilteredData(tracks.entries)
-  const trackList = trackEntries.map(entry => ({
+  const trackList = trackEntries.map((entry) => ({
     isLoading: false,
     isSaved: entry.has_current_user_saved,
     isReposted: entry.has_current_user_reposted,
@@ -184,7 +184,7 @@ const AlbumCardLineup = ({
   goToRoute: (route: string) => void
 }) => {
   const filteredAlbums = getFilteredAlbums(albums || [])
-  const albumCards = filteredAlbums.map(album => {
+  const albumCards = filteredAlbums.map((album) => {
     return (
       <Card
         key={album.playlist_id}
@@ -274,7 +274,7 @@ const PlaylistCardLineup = ({
   const record = useRecord()
 
   const filteredPlaylists = getFilteredPlaylists(playlists || [])
-  const playlistCards = filteredPlaylists.map(playlist => {
+  const playlistCards = filteredPlaylists.map((playlist) => {
     const hasUpdate = playlistUpdates.includes(playlist.playlist_id)
     return (
       <Card

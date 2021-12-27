@@ -58,7 +58,7 @@ class fLoader extends Hls.DefaultConfig.loader {
           /* cache */ false,
           /* asUrl */ true,
           decodeHashId(this.getTrackId())
-        ).then(resolved => {
+        ).then((resolved) => {
           const updatedContext = { ...context, url: resolved }
           load(updatedContext, config, callbacks)
         })
@@ -112,7 +112,7 @@ class AudioStream {
     this.bufferingTimeout = null
     this.buffering = false
     // Callback fired when buffering status changes
-    this.onBufferingChange = isBuffering => {}
+    this.onBufferingChange = (isBuffering) => {}
 
     this.concatBufferInterval = null
     this.nextBufferIndex = 0
@@ -160,7 +160,7 @@ class AudioStream {
       this.onBufferingChange(this.buffering)
     })
 
-    this.audio.onerror = e => {
+    this.audio.onerror = (e) => {
       this.onError(AudioError.AUDIO, e)
 
       // Handle audio errors by trying to nudge the playhead and re attach media.
@@ -343,7 +343,7 @@ class AudioStream {
 
     const promise = this.audio.play()
     if (promise) {
-      promise.catch(_ => {
+      promise.catch((_) => {
         // Let pauses interrupt plays (as the user could be rapidly skipping through tracks).
       })
     }

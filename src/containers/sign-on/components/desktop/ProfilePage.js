@@ -60,7 +60,7 @@ export class ProfilePage extends Component {
     this.setState({ isLoading: false })
   }
 
-  onTwitterLogin = async twitterProfileRes => {
+  onTwitterLogin = async (twitterProfileRes) => {
     const { uuid, profile: twitterProfile } = await twitterProfileRes.json()
     try {
       const {
@@ -73,7 +73,7 @@ export class ProfilePage extends Component {
       this.props.validateHandle(
         profile.screen_name,
         profile.verified,
-        error => {
+        (error) => {
           this.props.setTwitterProfile(
             uuid,
             profile,
@@ -108,7 +108,7 @@ export class ProfilePage extends Component {
       this.props.validateHandle(
         profile.username,
         profile.is_verified,
-        error => {
+        (error) => {
           this.props.setInstagramProfile(
             uuid,
             profile,
@@ -131,7 +131,7 @@ export class ProfilePage extends Component {
     }
   }
 
-  onHandleKeyDown = e => {
+  onHandleKeyDown = (e) => {
     if (e.keyCode === 13 /** enter */) {
       this.onContinue()
     }

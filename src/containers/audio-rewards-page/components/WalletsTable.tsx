@@ -220,7 +220,7 @@ const WalletsTable = ({
         </h6>
       </div>
       {ethWallets &&
-        ethWallets.map(wallet => (
+        ethWallets.map((wallet) => (
           <Wallet
             chain={Chain.Eth}
             key={wallet.address}
@@ -235,7 +235,7 @@ const WalletsTable = ({
           />
         ))}
       {solWallets &&
-        solWallets.map(wallet => (
+        solWallets.map((wallet) => (
           <Wallet
             chain={Chain.Sol}
             key={wallet.address}

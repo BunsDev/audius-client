@@ -64,7 +64,7 @@ const GenreSelectionList = ({
     didSelectGenre,
     { selectedGenre }
   )
-  const filteredGenreList = genres.filter(g =>
+  const filteredGenreList = genres.filter((g) =>
     g.toLowerCase().includes(searchValue.toLowerCase())
   )
   const selectedIndex =

@@ -56,7 +56,7 @@ const AnimatedButton = ({
         setIsPaused(false)
       }
     } else {
-      setKeySuffix(keySuffix => keySuffix + 1)
+      setKeySuffix((keySuffix) => keySuffix + 1)
       setIsPaused(true)
     }
   }, [isActive, disableAnimationOnMount, getDidMount])

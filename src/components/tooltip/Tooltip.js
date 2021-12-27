@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 
 import styles from './Tooltip.module.css'
 
-export const Tooltip = props => {
+export const Tooltip = (props) => {
   const [hideTooltip, setHideTooltip] = useState(false)
   useEffect(() => {
     if (hideTooltip) {
@@ -33,7 +33,7 @@ export const Tooltip = props => {
   let popupContainer = null
   switch (mount) {
     case 'parent':
-      popupContainer = triggerNode => triggerNode.parentNode
+      popupContainer = (triggerNode) => triggerNode.parentNode
       break
     case 'page': {
       const page = document.getElementById('page')

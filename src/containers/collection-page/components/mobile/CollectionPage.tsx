@@ -171,7 +171,7 @@ const CollectionPage = ({
 
   const playingUid = getPlayingUid()
 
-  const trackList = tracks.entries.map(entry => ({
+  const trackList = tracks.entries.map((entry) => ({
     isLoading: false,
     isSaved: entry.has_current_user_saved,
     isReposted: entry.has_current_user_reposted,

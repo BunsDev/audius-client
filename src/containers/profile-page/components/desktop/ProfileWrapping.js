@@ -23,11 +23,11 @@ import { profilePage, searchResultsPage, UPLOAD_PAGE } from 'utils/route'
 
 import styles from './ProfilePage.module.css'
 
-const Tags = props => {
+const Tags = (props) => {
   const { tags, goToRoute } = props
   const record = useRecord()
   const onClickTag = useCallback(
-    tag => {
+    (tag) => {
       goToRoute(searchResultsPage(`#${tag}`))
       record(make(Name.TAG_CLICKING, { tag, source: 'profile page' }))
     },
@@ -38,7 +38,7 @@ const Tags = props => {
     <div className={styles.tags}>
       <div className={styles.infoHeader}>MOST USED TAGS</div>
       <div className={styles.tagsContent}>
-        {tags.map(tag => (
+        {tags.map((tag) => (
           <Tag
             onClick={() => onClickTag(tag)}
             key={tag}
@@ -51,7 +51,7 @@ const Tags = props => {
   ) : null
 }
 
-const Followers = props => {
+const Followers = (props) => {
   return (
     <div className={styles.followers}>
       <div className={styles.infoHeader}>
@@ -63,7 +63,7 @@ const Followers = props => {
       <div className={styles.followersContent}>
         {props.followers
           .slice(0, Math.min(3, props.followers.length))
-          .map(follower => (
+          .map((follower) => (
             <ArtistChip
               key={follower.handle}
               userId={follower.user_id}
@@ -79,7 +79,7 @@ const Followers = props => {
   )
 }
 
-const ProfileWrapping = props => {
+const ProfileWrapping = (props) => {
   const [showMutualConnectionsModal, setShowMutualConnectionsModal] = useState(
     false
   )
@@ -125,7 +125,7 @@ const ProfileWrapping = props => {
     )
   }, [record, handle, website])
   const onClickDonation = useCallback(
-    event => {
+    (event) => {
       record(
         make(Name.PROFILE_PAGE_CLICK_DONATION, {
           handle: handle.replace('@', ''),
@@ -137,7 +137,7 @@ const ProfileWrapping = props => {
   )
 
   const onExternalLinkClick = useCallback(
-    event => {
+    (event) => {
       record(
         make(Name.LINK_CLICKING, {
           url: event.target.href,
@@ -285,7 +285,9 @@ const ProfileWrapping = props => {
             <Followers
               followers={props.followeeFollows}
               followerCount={props.followeeFollowsCount}
-              onClickArtistName={handle => props.goToRoute(profilePage(handle))}
+              onClickArtistName={(handle) =>
+                props.goToRoute(profilePage(handle))
+              }
             />
             <More
               text='View All'
@@ -303,7 +305,9 @@ const ProfileWrapping = props => {
                 props.followeeFollows.length < props.followeeFollowsCount
               }
               loadMore={props.loadMoreFolloweeFollows}
-              onClickArtistName={handle => props.goToRoute(profilePage(handle))}
+              onClickArtistName={(handle) =>
+                props.goToRoute(profilePage(handle))
+              }
             />
           </>
         )}

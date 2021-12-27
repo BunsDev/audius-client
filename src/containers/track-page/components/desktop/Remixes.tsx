@@ -32,7 +32,7 @@ const Remixes = ({ trackIds, goToAllRemixes, count }: RemixesProps) => {
         <span>{messages.title}</span>
       </div>
       <div className={styles.tracks}>
-        {trackIds.map(id => {
+        {trackIds.map((id) => {
           return <ConnectedRemixCard key={id} trackId={id} />
         })}
       </div>

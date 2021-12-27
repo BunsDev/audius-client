@@ -19,7 +19,7 @@ import { moodMap } from 'utils/moods'
 
 import styles from './InlineFormTile.module.css'
 
-const MOODS = Object.keys(moodMap).map(k => ({ text: k, el: moodMap[k] }))
+const MOODS = Object.keys(moodMap).map((k) => ({ text: k, el: moodMap[k] }))
 
 class InlineFormTile extends Component {
   state = {
@@ -53,7 +53,7 @@ class InlineFormTile extends Component {
               size='small'
               layout='horizontal'
               defaultValue={defaultFields.title}
-              onChange={value => onChangeField('title', value)}
+              onChange={(value) => onChangeField('title', value)}
             />
           </div>
           <div>
@@ -87,7 +87,7 @@ class InlineFormTile extends Component {
               labelStyle={styles.label}
               layout='horizontal'
               size='medium'
-              onSelect={value =>
+              onSelect={(value) =>
                 onChangeField('genre', value.replace(ELECTRONIC_PREFIX, ''))
               }
             />
@@ -99,7 +99,7 @@ class InlineFormTile extends Component {
               labelStyle={styles.label}
               layout='horizontal'
               size='medium'
-              onSelect={value => onChangeField('mood', value)}
+              onSelect={(value) => onChangeField('mood', value)}
             />
           </div>
           <div className={styles.row}>
@@ -109,7 +109,7 @@ class InlineFormTile extends Component {
               size='small'
               labelStyle={styles.label}
               layout='horizontal'
-              onChange={value => onChangeField('isrc', value)}
+              onChange={(value) => onChangeField('isrc', value)}
             />
             <LabeledInput
               placeholder='e.g. T-345246800-1'
@@ -117,7 +117,7 @@ class InlineFormTile extends Component {
               size='small'
               labelStyle={styles.label}
               layout='horizontal'
-              onChange={value => onChangeField('iswc', value)}
+              onChange={(value) => onChangeField('iswc', value)}
             />
           </div>
           <div className={styles.row}>
@@ -126,7 +126,7 @@ class InlineFormTile extends Component {
               label='Tags'
               labelStyle={styles.label}
               layout='horizontal'
-              onChangeTags={value =>
+              onChangeTags={(value) =>
                 onChangeField('tags', [...value].join(','))
               }
             />

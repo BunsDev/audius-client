@@ -133,7 +133,7 @@ const getTwitterHandleByUserHandle = async (userHandle: string) => {
 
 const getRemixCreateText = async (notification: RemixCreate) => {
   const track = notification.entities.find(
-    t => t.track_id === notification.parentTrackId
+    (t) => t.track_id === notification.parentTrackId
   )
   if (!track) return null
   const link = getEntityLink(track, true)
@@ -267,7 +267,7 @@ export const TwitterShare = ({
 
   const record = useRecord()
   const onClick = useCallback(
-    async e => {
+    async (e) => {
       e.stopPropagation()
       markNotificationAsRead()
 

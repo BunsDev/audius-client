@@ -95,7 +95,7 @@ class SearchPageProvider extends Component {
     }
   }
 
-  handleViewMoreResults = category => {
+  handleViewMoreResults = (category) => {
     return () => {
       const { history } = this.props
       const query = helpers.getQuery()
@@ -138,7 +138,7 @@ const makeMapStateToProps = (initialState, ownProps) => {
   const getAlbums = makeGetSearchAlbums()
   const getSearchArtists = makeGetSearchArtists()
   const getCurrentQueueItem = makeGetCurrent()
-  const getTracksLineup = makeGetLineupMetadatas(state => state.search.tracks)
+  const getTracksLineup = makeGetLineupMetadatas((state) => state.search.tracks)
   const mapStateToProps = (state, props) => ({
     search: state.search,
     tracks: getTracksLineup(state),
@@ -153,13 +153,13 @@ const makeMapStateToProps = (initialState, ownProps) => {
   return mapStateToProps
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   dispatch,
-  goToRoute: route => dispatch(pushRoute(route)),
-  recordTagSearch: query => {
+  goToRoute: (route) => dispatch(pushRoute(route)),
+  recordTagSearch: (query) => {
     dispatch(make(Name.SEARCH_TAG_SEARCH, { tag: query }))
   },
-  recordSearch: query => {
+  recordSearch: (query) => {
     dispatch(make(Name.SEARCH_SEARCH, { term: query }))
   },
   recordMoreResults: (term, source) => {

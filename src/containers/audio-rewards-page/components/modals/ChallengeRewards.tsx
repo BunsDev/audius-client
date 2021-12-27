@@ -125,7 +125,7 @@ const ProfileChecks = () => {
 
   return (
     <div className={wm(styles.profileTaskContainer)}>
-      {Object.keys(config).map(key => (
+      {Object.keys(config).map((key) => (
         <div className={wm(styles.profileTask)} key={key}>
           {config[key] ? (
             <IconValidationCheck />

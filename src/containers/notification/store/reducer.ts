@@ -199,7 +199,7 @@ const actionsMap: any = {
     return {
       ...state,
       playlistUpdates: state.playlistUpdates.filter(
-        id => id !== action.playlistId
+        (id) => id !== action.playlistId
       )
     }
   }

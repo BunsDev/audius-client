@@ -26,7 +26,7 @@ const ALL_RESULTS_OPTION = 'ALL_RESULTS_OPTION'
 const NO_RESULTS_OPTION = 'NO_RESULTS_OPTION'
 
 const messages = {
-  searchTagsTitle: tag => `Search Tags for ${tag}`,
+  searchTagsTitle: (tag) => `Search Tags for ${tag}`,
   searchTagsDisabled: () => 'Search Tags'
 }
 
@@ -103,7 +103,7 @@ class SearchBar extends Component {
     })
   }
 
-  onChange = value => {
+  onChange = (value) => {
     clearTimeout(this.state.debounce)
   }
 
@@ -164,7 +164,7 @@ class SearchBar extends Component {
     }
   }
 
-  onKeyDown = e => {
+  onKeyDown = (e) => {
     // Stop up arrow and down arrow from moving the cursor in the text input.
     switch (e.keyCode) {
       case 38 /* up */:
@@ -262,13 +262,13 @@ class SearchBar extends Component {
       isTagSearch
     } = this.props
     const searchResults = dataSource.sections
-      .filter(group => {
+      .filter((group) => {
         if (group.children.length < 1) {
           return false
         }
         const vals = group.children
           .slice(0, Math.min(3, group.children.length))
-          .filter(opt => {
+          .filter((opt) => {
             return opt.key || opt.primary
           })
         if (vals < 1) {
@@ -276,11 +276,11 @@ class SearchBar extends Component {
         }
         return true
       })
-      .map(group => (
+      .map((group) => (
         <OptGroup key={group.title} label={this.renderTitle(group.title)}>
           {group.children
             .slice(0, Math.min(3, group.children.length))
-            .map(opt => (
+            .map((opt) => (
               <Option
                 className={styles.option}
                 key={opt.key || opt.primary}
@@ -391,7 +391,7 @@ class SearchBar extends Component {
           size='small'
           value={this.state.value}
           // Mount the dropdown inside the searchbar div (otherwise it just gets dumped at root).
-          getPopupContainer={trigger => trigger.parentNode}
+          getPopupContainer={(trigger) => trigger.parentNode}
         >
           <Input
             placeholder='Search'
@@ -414,9 +414,9 @@ class SearchBar extends Component {
             friction: 26
           }}
         >
-          {item =>
+          {(item) =>
             item &&
-            (props => (
+            ((props) => (
               <TagSearchPopup
                 style={props}
                 tag={this.state.value}

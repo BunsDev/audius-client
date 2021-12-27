@@ -14,7 +14,7 @@ import { makeGetTierAndVerifiedForUser } from './utils'
  */
 export const useSelectTierInfo = (userId: ID) => {
   const tierAndVerifiedSelector = useMemo(makeGetTierAndVerifiedForUser, [])
-  const res = useSelector(state => {
+  const res = useSelector((state) => {
     return tierAndVerifiedSelector(state, { userId })
   })
   return res

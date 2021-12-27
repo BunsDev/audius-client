@@ -83,10 +83,10 @@ const getOauthToken = (
         headers
       }
     )
-    .then(response => {
+    .then((response) => {
       onSuccess(response)
     })
-    .catch(error => {
+    .catch((error) => {
       return onFailure(error.message)
     })
 }

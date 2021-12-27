@@ -12,7 +12,7 @@ const icons = {
   save: <IconSave />
 }
 
-const Pill = props => {
+const Pill = (props) => {
   const onClick = () => {
     if (props.clickable) {
       props.onClick()

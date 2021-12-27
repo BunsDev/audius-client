@@ -30,7 +30,7 @@ const messages = {
   pause: 'PAUSE'
 }
 
-const Loading = props => {
+const Loading = (props) => {
   const style = {
     [styles.loadingArtwork]: props.variant === 'artwork',
     [styles.loadingTitle]: props.variant === 'title',
@@ -48,7 +48,7 @@ const Loading = props => {
   )
 }
 
-const PlayButton = props => {
+const PlayButton = (props) => {
   return props.playing ? (
     <Button
       className={cn(styles.playAllButton, styles.buttonFormatting)}
@@ -139,7 +139,7 @@ const CollectionHeader = ({
 
   const record = useRecord()
   const onDescriptionExternalLink = useCallback(
-    event => {
+    (event) => {
       record(
         make(Name.LINK_CLICKING, {
           url: event.target.href,

@@ -60,7 +60,7 @@ describe('requestConfirmation', () => {
           confirm2,
           success2,
           fail2,
-          result => result // pass previous result to this confirmation call
+          (result) => result // pass previous result to this confirmation call
         )
       )
       .put(actions.addConfirmationCall('111', confirm1))
@@ -102,7 +102,7 @@ describe('requestConfirmation', () => {
           confirm2,
           success2,
           fail2,
-          result => result.id // pass the previous result id to this confirmation call
+          (result) => result.id // pass the previous result id to this confirmation call
         )
       )
       .put(actions.addConfirmationCall('111', confirm1))
@@ -121,7 +121,7 @@ describe('requestConfirmation', () => {
   })
 
   it('makes fail call', async () => {
-    const confirm = jest.fn(_ => {
+    const confirm = jest.fn((_) => {
       throw new Error('Error Message')
     })
     const success = jest.fn()
@@ -220,7 +220,7 @@ describe('requestConfirmation', () => {
 })
 
 describe('requestConfirmation timeouts', () => {
-  const timeout = ms => new Promise(resolve => setTimeout(resolve, ms))
+  const timeout = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
   it('fails on timeout', async () => {
     const confirm1 = async () => {
@@ -252,7 +252,7 @@ describe('requestConfirmation timeouts', () => {
           confirm1,
           success1,
           fail1,
-          result => result, // pass previous result to this confirmation call,
+          (result) => result, // pass previous result to this confirmation call,
           100 // ms
         )
       )
@@ -262,7 +262,7 @@ describe('requestConfirmation timeouts', () => {
           confirm2,
           success2,
           fail2,
-          result => result, // pass previous result to this confirmation call
+          (result) => result, // pass previous result to this confirmation call
           100 // ms
         )
       )

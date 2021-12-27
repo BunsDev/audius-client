@@ -48,9 +48,9 @@ export const ToastContextProvider = memo((props: { children: JSX.Element }) => {
   const toast = useCallback(
     (content: string | JSX.Element, timeout: number = DEFAULT_TIMEOUT) => {
       const key = uuid()
-      setToasts(toasts => [...toasts, { content, key }])
+      setToasts((toasts) => [...toasts, { content, key }])
       setTimeout(() => {
-        setToasts(toasts => toasts.slice(1))
+        setToasts((toasts) => toasts.slice(1))
       }, timeout)
     },
     [setToasts]
@@ -58,7 +58,7 @@ export const ToastContextProvider = memo((props: { children: JSX.Element }) => {
 
   const clear = useCallback(() => setToasts([]), [setToasts])
 
-  const transitions = useTransition(toasts, toast => toast.key, {
+  const transitions = useTransition(toasts, (toast) => toast.key, {
     from: (toast: Toast) => ({ y: FROM_POSITION, opacity: 0 }),
     enter: (toast: Toast) => ({
       y: ENTER_POSITION + getSafeArea(SafeAreaDirection.TOP),

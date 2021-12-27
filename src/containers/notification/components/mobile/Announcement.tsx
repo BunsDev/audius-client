@@ -49,7 +49,7 @@ const Announcement = ({
   }, [goToAnnouncementPage, longDescription])
 
   const onContainerClick = useCallback(
-    e => {
+    (e) => {
       e.stopPropagation()
       markAsRead(id)
       onOpenNotification()

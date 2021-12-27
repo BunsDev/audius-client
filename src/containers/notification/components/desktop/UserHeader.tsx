@@ -62,7 +62,7 @@ export const UserImage = ({
   }, [loadImage])
 
   const onClick = useCallback(
-    e => {
+    (e) => {
       e.stopPropagation()
       onProfileClick(user.handle)
     },
@@ -124,7 +124,7 @@ const UserHeader = ({
     if (userListModalVisible) loadMore()
   }, [userListModalVisible, loadMore])
 
-  const onClickContainer = useCallback(e => e.stopPropagation(), [])
+  const onClickContainer = useCallback((e) => e.stopPropagation(), [])
   const goToProfileRoute = useCallback(
     (handle: string) => {
       goToRoute(profilePage(handle))
@@ -136,9 +136,9 @@ const UserHeader = ({
   return (
     <div className={cn(styles.userHeader, { [styles.notRead]: !isRead })}>
       {users!
-        .filter(u => !u.is_deactivated)
+        .filter((u) => !u.is_deactivated)
         .slice(0, showUserListModal ? USER_LENGTH_LIMIT - 1 : USER_LENGTH_LIMIT)
-        .map(user => (
+        .map((user) => (
           <UserImage
             className={cn(styles.userImage, styles.userHeaderImage)}
             key={user.user_id}
@@ -182,7 +182,7 @@ function mapStateToProps(state: AppState) {
   const { limit, userIds, status } = getNotificationUserList(state)
   const users = getUsers(state, { ids: userIds })
   return {
-    modalUsers: userIds.slice(0, limit).map(id => users[id]),
+    modalUsers: userIds.slice(0, limit).map((id) => users[id]),
     hasMore: userIds.length > limit,
     status
   }

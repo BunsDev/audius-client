@@ -37,7 +37,7 @@ import { retrieveCollections } from './utils/retrieveCollections'
 /** Counts instances of trackId in a playlist. */
 const countTrackIds = (playlistContents, trackId) => {
   return playlistContents.track_ids
-    .map(t => t.track)
+    .map((t) => t.track)
     .reduce((acc, t) => {
       if (t === trackId) acc += 1
       return acc
@@ -121,7 +121,7 @@ function* createPlaylistAsync(action) {
   yield put(collectionActions.createPlaylistSucceeded())
 
   const collectionIds = (user._collectionIds || [])
-    .filter(c => c.uid !== uid)
+    .filter((c) => c.uid !== uid)
     .concat(uid)
   yield put(
     cacheActions.update(Kind.USERS, [
@@ -199,7 +199,7 @@ function* confirmCreatePlaylist(uid, userId, formFields, source) {
               id: userId,
               metadata: {
                 _collectionIds: (user._collectionIds || [])
-                  .filter(cId => cId !== uid && confirmedPlaylist.playlist_id)
+                  .filter((cId) => cId !== uid && confirmedPlaylist.playlist_id)
                   .concat(confirmedPlaylist.playlist_id)
               }
             }
@@ -344,7 +344,7 @@ function* confirmEditPlaylist(playlistId, userId, formFields) {
           )
         )
       },
-      result => (result.playlist_id ? result.playlist_id : playlistId)
+      (result) => (result.playlist_id ? result.playlist_id : playlistId)
     )
   )
 }
@@ -461,7 +461,7 @@ function* confirmAddTrackToPlaylist(userId, playlistId, trackId, count) {
           )
         )
       },
-      result => (result.playlist_id ? result.playlist_id : playlistId)
+      (result) => (result.playlist_id ? result.playlist_id : playlistId)
     )
   )
 }
@@ -487,7 +487,7 @@ function* removeTrackFromPlaylistAsync(action) {
 
   // Find the index of the track based on the track's id and timestamp
   const index = playlist.playlist_contents.track_ids.findIndex(
-    t => t.time === action.timestamp && t.track === action.trackId
+    (t) => t.time === action.timestamp && t.track === action.trackId
   )
   if (index === -1) {
     console.error('Could not find the index of to-be-deleted track')
@@ -527,7 +527,7 @@ function* fixInvalidTracksInPlaylist(playlistId, userId, invalidTrackIds) {
 
   const trackIds = playlist.playlist_contents.track_ids
     .map(({ track }) => track)
-    .filter(id => !removedTrackIds.has(id))
+    .filter((id) => !removedTrackIds.has(id))
   const { error } = yield call(
     AudiusBackend.dangerouslySetPlaylistOrder,
     playlistId,
@@ -627,7 +627,7 @@ function* confirmRemoveTrackFromPlaylist(
           )
         )
       },
-      result => (result.playlist_id ? result.playlist_id : playlistId)
+      (result) => (result.playlist_id ? result.playlist_id : playlistId)
     )
   )
 }
@@ -698,7 +698,7 @@ function* confirmOrderPlaylist(userId, playlistId, trackIds) {
               invalidTrackIds
             )
             const invalidIds = new Set(invalidTrackIds)
-            trackIds = trackIds.filter(id => !invalidIds.has(id))
+            trackIds = trackIds.filter((id) => !invalidIds.has(id))
           }
           const response = yield call(
             AudiusBackend.orderPlaylist,
@@ -742,7 +742,7 @@ function* confirmOrderPlaylist(userId, playlistId, trackIds) {
           )
         )
       },
-      result => (result.playlist_id ? result.playlist_id : playlistId)
+      (result) => (result.playlist_id ? result.playlist_id : playlistId)
     )
   )
 }
@@ -821,7 +821,7 @@ function* confirmPublishPlaylist(userId, playlistId) {
           )
         )
       },
-      result => (result.playlist_id ? result.playlist_id : playlistId)
+      (result) => (result.playlist_id ? result.playlist_id : playlistId)
     )
   )
 }
@@ -880,7 +880,7 @@ function* deletePlaylistAsync(action) {
         id: userId,
         metadata: {
           _collectionIds: (user._collectionIds || []).filter(
-            cId => cId !== action.playlistId
+            (cId) => cId !== action.playlistId
           )
         }
       }
@@ -911,7 +911,7 @@ function* confirmDeleteAlbum(playlistId, trackIds, userId) {
           put(
             cacheActions.update(
               Kind.TRACKS,
-              trackIds.map(t => ({
+              trackIds.map((t) => ({
                 id: t.track,
                 metadata: { _marked_deleted: true }
               }))
@@ -958,7 +958,7 @@ function* confirmDeleteAlbum(playlistId, trackIds, userId) {
           put(
             cacheActions.update(
               Kind.TRACKS,
-              trackIds.map(t => ({
+              trackIds.map((t) => ({
                 id: t.track,
                 metadata: { _marked_deleted: false }
               }))
@@ -1055,16 +1055,16 @@ function* confirmDeletePlaylist(userId, playlistId) {
           )
         )
       },
-      result => (result.playlist_id ? result.playlist_id : playlistId)
+      (result) => (result.playlist_id ? result.playlist_id : playlistId)
     )
   )
 }
 
 function* fetchRepostInfo(entries) {
   const userIds = []
-  entries.forEach(entry => {
+  entries.forEach((entry) => {
     if (entry.metadata.followee_reposts) {
-      entry.metadata.followee_reposts.forEach(repost =>
+      entry.metadata.followee_reposts.forEach((repost) =>
         userIds.push(repost.user_id)
       )
     }
@@ -1074,10 +1074,10 @@ function* fetchRepostInfo(entries) {
 
     const updates = []
     const subscriptions = []
-    entries.forEach(entry => {
+    entries.forEach((entry) => {
       const followeeRepostUsers = { id: entry.id, metadata: { _followees: [] } }
       const subscriptionUids = []
-      entry.metadata.followee_reposts.forEach(repost => {
+      entry.metadata.followee_reposts.forEach((repost) => {
         followeeRepostUsers.metadata._followees.push({
           ...repost,
           ...users[repost.user_id]

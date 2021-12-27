@@ -96,7 +96,7 @@ const PlatformFeatures = (props: PlatformFeatures) => {
             style={{
               opacity: textStyles.opacity,
               transform: textStyles.x.interpolate(
-                x => `translate3d(0,${x}px,0)`
+                (x) => `translate3d(0,${x}px,0)`
               )
             }}
           >
@@ -114,7 +114,7 @@ const PlatformFeatures = (props: PlatformFeatures) => {
             alt='Woman playing guitar'
           />
           <div className={styles.features}>
-            {features.map(feature => (
+            {features.map((feature) => (
               <Feature key={feature.title} {...feature} />
             ))}
           </div>

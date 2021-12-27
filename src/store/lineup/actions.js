@@ -218,7 +218,7 @@ export class LineupActions {
     }
   }
 
-  setPage = page => {
+  setPage = (page) => {
     return {
       type: addPrefix(this.prefix, SET_PAGE),
       page

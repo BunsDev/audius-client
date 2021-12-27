@@ -212,7 +212,7 @@ class FinishPage extends Component {
       if (uploadType === UploadType.PLAYLIST) {
         header = 'PLAYLIST'
       }
-      const t = tracks.map(track => {
+      const t = tracks.map((track) => {
         const { duration } = track.preview
         return {
           ...track.metadata,
@@ -227,8 +227,8 @@ class FinishPage extends Component {
         // Don't show complete until inProgress = false, to allow
         // the saga to perform final processing steps (e.g. create a playlist after uploading tracks)
         uploadProgress
-          .map(u => u.status)
-          .every(s => s === ProgressStatus.COMPLETE) && !inProgress
+          .map((u) => u.status)
+          .every((s) => s === ProgressStatus.COMPLETE) && !inProgress
           ? ProgressStatus.COMPLETE
           : ProgressStatus.UPLOADING
 

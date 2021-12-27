@@ -273,7 +273,7 @@ export class ArtistDashboardPage extends Component<
         reposts: metadata.repost_count,
         plays: metadata.play_count
       }))
-      .filter(meta => !meta.is_invalid)
+      .filter((meta) => !meta.is_invalid)
   }
 
   onClickRow = (record: any) => {
@@ -298,7 +298,7 @@ export class ArtistDashboardPage extends Component<
       end = start.clone().add(1, 'year')
     }
     this.props.fetchDashboardListenData(
-      this.props.tracks.map(t => t.track_id),
+      this.props.tracks.map((t) => t.track_id),
       start.toISOString(),
       end.toISOString()
     )

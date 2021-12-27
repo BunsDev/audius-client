@@ -50,7 +50,7 @@ export function* upgradeToCreator() {
         waitForValue,
         getSelectedServices,
         {},
-        val => val.length > 0
+        (val) => val.length > 0
       ),
       failure: take(fetchServicesFailed.type)
     })
@@ -153,11 +153,13 @@ export function* fetchUserByHandle(
 export function* fetchUserCollections(userId) {
   // Get playlists.
   const playlists = yield call(AudiusBackend.getPlaylists, userId)
-  const playlistIds = playlists.map(p => p.playlist_id)
+  const playlistIds = playlists.map((p) => p.playlist_id)
 
   if (!playlistIds.length) return
   const { collections } = yield call(retrieveCollections, userId, playlistIds)
-  const cachedCollectionIds = Object.values(collections).map(c => c.playlist_id)
+  const cachedCollectionIds = Object.values(collections).map(
+    (c) => c.playlist_id
+  )
 
   yield put(
     cacheActions.update(Kind.USERS, [
@@ -175,8 +177,8 @@ function* watchAdd() {
       yield put(
         userActions.setHandleStatus(
           action.entries
-            .filter(entry => !!entry.metadata.handle)
-            .map(entry => ({
+            .filter((entry) => !!entry.metadata.handle)
+            .map((entry) => ({
               handle: entry.metadata.handle,
               id: entry.id,
               status: Status.SUCCESS

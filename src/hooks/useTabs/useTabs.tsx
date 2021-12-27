@@ -452,7 +452,7 @@ const GestureSupportingBodyContainer = memo(
       if (getGestureInProgress()) return
       const { from, to } = getTransitionInfo()
       onChangeComplete(from, to)
-      setInternalIndex(i => i + getIndexDelta())
+      setInternalIndex((i) => i + getIndexDelta())
       setIndexDelta(0)
       setTransitionInfo({ from: 0, to: 0 })
       setIsOngoingAnimation(false)
@@ -565,7 +565,7 @@ const GestureSupportingBodyContainer = memo(
             }
 
             if (indexAdjustment) {
-              setActiveIndex(i => i + indexAdjustment)
+              setActiveIndex((i) => i + indexAdjustment)
               setGestureInProgress(false)
               setMovementDirection(0)
               setTransitionInfo({
@@ -616,7 +616,7 @@ const GestureSupportingBodyContainer = memo(
           } else {
             // Set new active index and let
             // the regular animations take us there.
-            setActiveIndex(_ => newActiveIndex)
+            setActiveIndex((_) => newActiveIndex)
             window.scrollTo(0, initialScrollOffset)
             setTransitionInfo({ from: activeIndex, to: newActiveIndex })
           }
@@ -683,7 +683,7 @@ const GestureSupportingBodyContainer = memo(
                 getCachedIndices().has(i)
 
               if (shouldRender) {
-                setCachedIndicies(s => s.add(i))
+                setCachedIndicies((s) => s.add(i))
               }
 
               // If we're not transitioning, set
@@ -776,7 +776,7 @@ const BodyContainer = memo(
         }
       },
       enter: (_: any) => {
-        setActiveTransitions(t => t + 1)
+        setActiveTransitions((t) => t + 1)
         return {
           transform: 'translate3d(0px, 0px, 0px)',
           opacity: 1
@@ -793,10 +793,10 @@ const BodyContainer = memo(
         }
       },
       onDestroyed: () => {
-        setActiveTransitions(t => t - 1)
+        setActiveTransitions((t) => t - 1)
         didTransitionCallback()
       },
-      config: key => {
+      config: (key) => {
         return isMobile
           ? {} // use default config for mobile
           : key === activeIndex
@@ -997,9 +997,9 @@ const useTabs = ({
 
   // Find the starting index
   const controlledIndex = isControlled
-    ? tabs.findIndex(t => t.label === selectedTabLabel)
+    ? tabs.findIndex((t) => t.label === selectedTabLabel)
     : initialTab
-    ? tabs.findIndex(t => t.label === initialTab)
+    ? tabs.findIndex((t) => t.label === initialTab)
     : 0
   const [activeIndex, setActiveIndex] = useState(controlledIndex)
 
@@ -1091,7 +1091,7 @@ const useTabs = ({
     [isMobile, isControlled, onChangeComplete, activeIndex]
   )
 
-  const tabBarKey = tabs.map(t => t.label).join('-')
+  const tabBarKey = tabs.map((t) => t.label).join('-')
 
   const MemoizedTabBar = useMemo(
     () => (

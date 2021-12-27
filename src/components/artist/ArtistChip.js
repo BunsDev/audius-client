@@ -12,7 +12,7 @@ import { useUserProfilePicture } from 'hooks/useImageSize'
 
 import styles from './ArtistChip.module.css'
 
-const ArtistChip = props => {
+const ArtistChip = (props) => {
   const profilePicture = useUserProfilePicture(
     props.userId,
     props.profilePictureSizes,

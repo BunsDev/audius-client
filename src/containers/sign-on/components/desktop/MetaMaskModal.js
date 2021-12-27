@@ -66,11 +66,11 @@ class MetaMaskModal extends Component {
     }
   }
 
-  onModalClick = e => {
+  onModalClick = (e) => {
     e.stopPropagation()
   }
 
-  onContainerClick = e => {
+  onContainerClick = (e) => {
     this.props.onClickBack()
   }
 
@@ -114,7 +114,7 @@ class MetaMaskModal extends Component {
                   {messages.metaMaskConfigure}
                 </span>
               }
-              getPopupContainer={trigger => trigger.parentNode}
+              getPopupContainer={(trigger) => trigger.parentNode}
             >
               <div>
                 <Button

@@ -72,7 +72,7 @@ const useRewardIds = () => {
   const rewardsString = useRemoteVar(StringKeys.TRENDING_REWARD_IDS)
   if (!rewardsString) return []
   const rewards = rewardsString.split(',') as TrendingRewardID[]
-  const filteredRewards: TrendingRewardID[] = rewards.filter(reward =>
+  const filteredRewards: TrendingRewardID[] = rewards.filter((reward) =>
     validRewardIds.has(reward)
   )
   return filteredRewards
@@ -105,8 +105,8 @@ const RewardsTile = ({ className }: RewardsTileProps) => {
   const rewardIds = useRewardIds()
 
   const rewardsTiles = rewardIds
-    .map(id => trendingRewardsConfig[id])
-    .map(props => (
+    .map((id) => trendingRewardsConfig[id])
+    .map((props) => (
       <RewardPanel
         {...props}
         onClickButton={callbacksMap[props.id]}

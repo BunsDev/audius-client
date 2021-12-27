@@ -28,7 +28,7 @@ import styles from './SearchPageContent.module.css'
 
 const SEARCH_HEADER_MAX_WIDTH_PX = 720
 
-const SearchHeader = props => {
+const SearchHeader = (props) => {
   const secondary = (
     <span className={styles.searchText}>&#8220;{props.searchText}&#8221;</span>
   )
@@ -53,7 +53,7 @@ class SearchPageContent extends Component {
   }
 
   componentWillUnmount() {
-    Object.keys(this.state.cardToast).forEach(toastId =>
+    Object.keys(this.state.cardToast).forEach((toastId) =>
       this.clearCardToast(toastId)
     )
   }
@@ -89,7 +89,7 @@ class SearchPageContent extends Component {
     })
   }
 
-  clearCardToast = toastId => () => {
+  clearCardToast = (toastId) => () => {
     const cardToast = this.state.cardToast[toastId]
     clearTimeout(cardToast.timeout)
     this.setState({
@@ -333,7 +333,7 @@ class SearchPageContent extends Component {
                   tracksActions.fetchLineupMetadatas(offset, limit)
                 )
               }
-              playTrack={uid => this.props.dispatch(tracksActions.play(uid))}
+              playTrack={(uid) => this.props.dispatch(tracksActions.play(uid))}
               pauseTrack={() => this.props.dispatch(tracksActions.pause())}
               actions={tracksActions}
             />
@@ -416,8 +416,10 @@ class SearchPageContent extends Component {
                     tracksActions.fetchLineupMetadatas(offset, limit)
                   )
                 }
-                playTrack={uid => this.props.dispatch(tracksActions.play(uid))}
-                pauseTrack={uid => this.props.dispatch(tracksActions.pause())}
+                playTrack={(uid) =>
+                  this.props.dispatch(tracksActions.play(uid))
+                }
+                pauseTrack={(uid) => this.props.dispatch(tracksActions.pause())}
                 actions={tracksActions}
               />
             </div>

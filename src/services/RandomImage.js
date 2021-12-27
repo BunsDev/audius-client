@@ -8,9 +8,9 @@ const UNSPLASH_API_GATEWAY_TIMEOUT = 2000
 
 // Tries our API gateway first, then the public one.
 export default class RandomImage {
-  static get = async query => {
-    const timer = timeout =>
-      new Promise(resolve => {
+  static get = async (query) => {
+    const timer = (timeout) =>
+      new Promise((resolve) => {
         setTimeout(resolve, timeout, {
           timeout: true
         })

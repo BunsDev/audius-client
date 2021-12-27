@@ -93,7 +93,7 @@ const PasswordPage = ({
   const onPasswordBlur = useCallback(() => {
     // When the password blurs, check if the number and length req are met
     if (password) {
-      setRequirements(requirements => ({
+      setRequirements((requirements) => ({
         ...requirements,
         number: getNumberRequirement(password),
         length: getLenRequirement(password),
@@ -109,7 +109,7 @@ const PasswordPage = ({
   const onPasswordConfirmBlur = useCallback(() => {
     // When the password blurs, check if the number and length req are met
     if (password && passwordConfirm) {
-      setRequirements(requirements => ({
+      setRequirements((requirements) => ({
         ...requirements,
         match: getMatchRequirement(password, passwordConfirm)
       }))
@@ -139,7 +139,7 @@ const PasswordPage = ({
 
       setPassword(password)
       onPasswordChange(password)
-      setRequirements(requirements => ({
+      setRequirements((requirements) => ({
         ...requirements,
         number,
         length,
@@ -163,7 +163,7 @@ const PasswordPage = ({
     (passwordConfirm: string) => {
       setPasswordConfirm(passwordConfirm)
       if (requirements.match !== CheckState.DEFAULT) {
-        setRequirements(requirements => ({
+        setRequirements((requirements) => ({
           ...requirements,
           match:
             passwordConfirm === ''
@@ -171,7 +171,7 @@ const PasswordPage = ({
               : getMatchRequirement(password, passwordConfirm)
         }))
       } else if (password.length <= passwordConfirm.length) {
-        setRequirements(requirements => ({
+        setRequirements((requirements) => ({
           ...requirements,
           match: getMatchRequirement(password, passwordConfirm)
         }))
@@ -185,7 +185,7 @@ const PasswordPage = ({
   const fulfillsRequirements = useCallback(
     () =>
       Object.keys(requirements).every(
-        req => (requirements as any)[req] === CheckState.VALID
+        (req) => (requirements as any)[req] === CheckState.VALID
       ),
     [requirements]
   )
@@ -222,10 +222,10 @@ const PasswordPage = ({
     { status: requirements.match, label: messages.checks[2] }
   ]
   const isValid = Object.keys(requirements).every(
-    req => (requirements as any)[req] === CheckState.VALID
+    (req) => (requirements as any)[req] === CheckState.VALID
   )
   const hasError = Object.keys(requirements).some(
-    req => (requirements as any)[req] === CheckState.ERROR
+    (req) => (requirements as any)[req] === CheckState.ERROR
   )
 
   return (

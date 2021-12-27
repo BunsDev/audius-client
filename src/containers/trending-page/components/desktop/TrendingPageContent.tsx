@@ -186,8 +186,8 @@ const TrendingPageContent = (props: TrendingPageContentProps) => {
 
   if (shouldMoveToNextTab) {
     getRangesToDisable(trendingTimeRange)
-      .map(r => getTimeGenreCacheKey(r, trendingGenre))
-      .forEach(k => {
+      .map((r) => getTimeGenreCacheKey(r, trendingGenre))
+      .forEach((k) => {
         emptyTimeGenreSet.current.add(k)
       })
 

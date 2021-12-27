@@ -80,7 +80,7 @@ export const remoteConfig = <
       state.didInitialize = true
 
       // Call initializationCallbacks
-      state.initializationCallbacks.forEach(cb => cb())
+      state.initializationCallbacks.forEach((cb) => cb())
       state.initializationCallbacks = []
 
       // console.timeEnd('remote-config')
@@ -215,18 +215,18 @@ export const remoteConfig = <
   }
 
   const waitForRemoteConfig = async () => {
-    await new Promise<void>(resolve => onClientReady(() => resolve()))
+    await new Promise<void>((resolve) => onClientReady(() => resolve()))
   }
 
   // Type predicates
   function isIntKey(key: AllRemoteConfigKeys): key is IntKeys {
-    return !!Object.values(IntKeys).find(x => x === key)
+    return !!Object.values(IntKeys).find((x) => x === key)
   }
   function isStringKey(key: AllRemoteConfigKeys): key is StringKeys {
-    return !!Object.values(StringKeys).find(x => x === key)
+    return !!Object.values(StringKeys).find((x) => x === key)
   }
   function isDoubleKey(key: AllRemoteConfigKeys): key is DoubleKeys {
-    return !!Object.values(DoubleKeys).find(x => x === key)
+    return !!Object.values(DoubleKeys).find((x) => x === key)
   }
 
   // Removes some boilerplate around getting values, falling back to defaults,

@@ -45,7 +45,7 @@ const Description = (props: DescriptionProps) => {
   }, [])
 
   const setStartAnimation = useCallback(
-    node => {
+    (node) => {
       startAnimation.current = node
       refInView()
     },

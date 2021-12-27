@@ -14,7 +14,7 @@ const initialState = {
   prefix: PREFIX
 }
 
-const makeActionsMap = initialState => {
+const makeActionsMap = (initialState) => {
   return {
     [RESET_SUCCEEDED](state, action) {
       const newState = initialState
@@ -23,7 +23,7 @@ const makeActionsMap = initialState => {
   }
 }
 
-const makeTrendingReducer = prefix => {
+const makeTrendingReducer = (prefix) => {
   const newInitialState = { ...initialState, entryIds: new Set([]), prefix }
   const newActionsMap = makeActionsMap(newInitialState)
 

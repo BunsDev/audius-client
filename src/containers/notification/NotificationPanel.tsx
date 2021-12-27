@@ -87,7 +87,7 @@ const NotificationPanel = ({
     return simpleBarElement || null
   }
 
-  const setSimpleBarRef = useCallback(el => {
+  const setSimpleBarRef = useCallback((el) => {
     el.recalculate()
   }, [])
   const onCloseNotificationModal = useCallback(() => {
@@ -110,7 +110,7 @@ const NotificationPanel = ({
             anchorRef?.current,
             overflowMenuRef?.current,
             userListModalRef?.current
-          ].some(r => r?.contains(target))
+          ].some((r) => r?.contains(target))
         }
         return false
       }}

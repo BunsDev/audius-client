@@ -36,7 +36,7 @@ class WalletClient {
       })
       if (associatedWallets === null) throw new Error('Unable to fetch wallets')
       const balances = await Promise.all(
-        associatedWallets.wallets.map(wallet =>
+        associatedWallets.wallets.map((wallet) =>
           AudiusBackend.getAddressTotalStakedBalance(wallet, bustCache)
         )
       )
@@ -58,7 +58,7 @@ class WalletClient {
   ): Promise<{ address: string; balance: BNWei }[]> {
     try {
       const balances: { address: string; balance: BNWei }[] = await Promise.all(
-        wallets.map(async wallet => {
+        wallets.map(async (wallet) => {
           const balance = await AudiusBackend.getAddressTotalStakedBalance(
             wallet,
             bustCache
@@ -78,7 +78,7 @@ class WalletClient {
   ): Promise<{ address: string; balance: BNWei }[]> {
     try {
       const balances: { address: string; balance: BNWei }[] = await Promise.all(
-        wallets.map(async wallet => {
+        wallets.map(async (wallet) => {
           const balance = await AudiusBackend.getAddressWAudioBalance(wallet)
           return { address: wallet, balance: balance as BNWei }
         })

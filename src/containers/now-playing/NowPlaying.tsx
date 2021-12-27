@@ -169,7 +169,7 @@ const NowPlaying = g(
       if (playCounter !== prevPlayCounter) {
         setPrevPlayCounter(playCounter)
         setTiming({ position: 0, duration: timing.duration })
-        setMediaKey(mediaKey => mediaKey + 1)
+        setMediaKey((mediaKey) => mediaKey + 1)
         startSeeking()
       }
     }, [
@@ -307,7 +307,7 @@ const NowPlaying = g(
         seek(Math.max(0, newPosition))
         // Update mediakey so scrubber updates
         setTiming({ position: newPosition, duration: timing.duration })
-        setMediaKey(mediaKey => mediaKey + 1)
+        setMediaKey((mediaKey) => mediaKey + 1)
       } else {
         const shouldGoToPrevious = timing.position < RESTART_THRESHOLD_SEC
         if (shouldGoToPrevious) {
@@ -324,7 +324,7 @@ const NowPlaying = g(
         seek(Math.min(newPosition, timing.duration))
         // Update mediakey so scrubber updates
         setTiming({ position: newPosition, duration: timing.duration })
-        setMediaKey(mediaKey => mediaKey + 1)
+        setMediaKey((mediaKey) => mediaKey + 1)
       } else {
         next()
       }

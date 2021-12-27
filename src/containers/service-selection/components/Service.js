@@ -14,7 +14,7 @@ import { trimServiceName, countryCodeToFlag } from '../utils'
 
 import styles from './Service.module.css'
 
-const Service = props => {
+const Service = (props) => {
   const {
     className,
     id,

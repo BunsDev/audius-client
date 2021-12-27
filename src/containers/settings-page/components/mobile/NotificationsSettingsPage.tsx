@@ -144,7 +144,7 @@ const NotificationsSettingsPage = ({
               // The user should be able to configure push notifications only w/in
               // an app-context, not the mobile website.
               <Grouping>
-                {notificationToggles.map(notification => (
+                {notificationToggles.map((notification) => (
                   <Row key={notification.text} includeSpacing={false}>
                     <ToggleNotification
                       isDisabled={

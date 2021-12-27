@@ -44,7 +44,7 @@ export const filterHealthy = async (
 ) => {
   const healthy = (
     await Promise.all(
-      services.map(async request => {
+      services.map(async (request) => {
         const res = await testURL(endpointSelector(request))
         if (res.isHealthy) return request
         return false
@@ -59,7 +59,7 @@ export const filterHealthy = async (
  * @param {Object} request {id, url}
  * @returns { request, response, millis }
  */
-export const timeRequest = async request => {
+export const timeRequest = async (request) => {
   // This is non-perfect because of the js-event loop, but it is probably a good
   // enough approximation.
   const startTime = new Date().getTime()
@@ -74,9 +74,9 @@ export const timeRequest = async request => {
  * @param {Array<Object>} requests [{id, url}, {id, url}]
  * @returns { Array<{url, response, millis}> }
  */
-export const timeRequests = async requests => {
+export const timeRequests = async (requests) => {
   const timings = await Promise.all(
-    requests.map(async request => timeRequest(request))
+    requests.map(async (request) => timeRequest(request))
   )
 
   return timings.sort((a, b) => a.millis - b.millis)

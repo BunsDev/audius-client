@@ -21,7 +21,7 @@ const slice = createSlice({
   name: 'application/pages/remixes',
   initialState,
   reducers: {
-    reset: state => {
+    reset: (state) => {
       state.trackId = null
     },
     fetchTrack: (

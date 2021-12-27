@@ -16,7 +16,7 @@ import styles from 'containers/collectibles/components/CollectiblesPage.module.c
 import { findAncestor } from 'utils/domUtils'
 
 // @ts-ignore
-export const VisibleCollectibleRow = props => {
+export const VisibleCollectibleRow = (props) => {
   const {
     collectible,
     onHideClick,
@@ -111,7 +111,7 @@ export const VisibleCollectibleRow = props => {
 export const HiddenCollectibleRow: React.FC<{
   collectible: Collectible
   onShowClick: () => void
-}> = props => {
+}> = (props) => {
   const { collectible, onShowClick } = props
   const {
     name,

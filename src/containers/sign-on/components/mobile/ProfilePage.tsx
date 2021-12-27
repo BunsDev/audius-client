@@ -94,7 +94,7 @@ const ProfilePage = (props: ProfilePageProps) => {
   } = props
 
   const onToggleTwitterOverlay = useCallback(() => {
-    setShowTwitterOverlay(show => !show)
+    setShowTwitterOverlay((show) => !show)
     setIsInitial(false)
   }, [])
 

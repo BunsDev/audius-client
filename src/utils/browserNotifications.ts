@@ -80,7 +80,7 @@ type SafariPermissionData =
 export const subscribeSafariPushBrowser = async (): Promise<SafariPermissionData | null> => {
   try {
     if (isSafariPushAvailable) {
-      const subscription = await new Promise(resolve => {
+      const subscription = await new Promise((resolve) => {
         ;(window as any).safari.pushNotification.requestPermission(
           webServiceUrl, // The web service URL.
           safariWebPushID, // The Website Push ID.

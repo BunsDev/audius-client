@@ -46,7 +46,7 @@ const LandingPage = (props: LandingPageProps) => {
   // Show Cookie Banner if in the EU
   const [showCookieBanner, setShowCookieBanner] = useState(false)
   useEffect(() => {
-    shouldShowCookieBanner().then(show => {
+    shouldShowCookieBanner().then((show) => {
       setShowCookieBanner(show)
     })
   }, [])

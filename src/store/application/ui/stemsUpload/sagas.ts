@@ -17,7 +17,7 @@ function* watchUploadStems() {
     action: ReturnType<typeof startStemUploads>
   ) {
     const { uploads, parentId, batchUID } = action.payload
-    const stemTracks = uploads.map(u => {
+    const stemTracks = uploads.map((u) => {
       const metadata = createStemMetadata({
         parentTrackId: parentId,
         track: u.metadata,

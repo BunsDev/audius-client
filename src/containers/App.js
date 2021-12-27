@@ -184,7 +184,7 @@ const ConnectedMusicConfetti = lazyWithPreload(
 const NATIVE_MOBILE = process.env.REACT_APP_NATIVE_MOBILE
 export const MAIN_CONTENT_ID = 'mainContent'
 
-export const includeSearch = search => {
+export const includeSearch = (search) => {
   return search.includes('oauth_token') || search.includes('code')
 }
 
@@ -224,7 +224,7 @@ class App extends Component {
     this.removeHistoryEventListener = this.props.history.listen(
       (location, action) => {
         this.scrollToTop()
-        this.setState(prevState => ({
+        this.setState((prevState) => ({
           initialPage: false,
           lastRoute: prevState.currentRoute,
           currentRoute: getPathname(location)
@@ -295,7 +295,7 @@ class App extends Component {
                 hostname: a.hostname
               }
             },
-            set: locationHref => {
+            set: (locationHref) => {
               popup.location = locationHref
               this.locationHref = locationHref
             }
@@ -313,7 +313,7 @@ class App extends Component {
     if (
       !this.props.hasAccount &&
       this.props.accountStatus !== Status.LOADING &&
-      authenticatedRoutes.some(route => {
+      authenticatedRoutes.some((route) => {
         const match = matchPath(getPathname(this.props.location), {
           path: route,
           exact: true
@@ -391,7 +391,7 @@ class App extends Component {
     }
   }
 
-  pushWithToken = route => {
+  pushWithToken = (route) => {
     const search = this.props.location.search
     // Twitter and instagram search params
     if (includeSearch(search)) {
@@ -433,7 +433,7 @@ class App extends Component {
 
   componentDidCatch(error, errorInfo) {
     try {
-      Sentry.withScope(scope => {
+      Sentry.withScope((scope) => {
         scope.setExtras(errorInfo)
         Sentry.captureException(error)
       })
@@ -698,7 +698,7 @@ class App extends Component {
 
               <Route
                 path={SEARCH_CATEGORY_PAGE}
-                render={props => (
+                render={(props) => (
                   <SearchPage
                     {...props}
                     scrollToTop={this.scrollToTop}
@@ -708,7 +708,7 @@ class App extends Component {
               />
               <Route
                 path={SEARCH_PAGE}
-                render={props => (
+                render={(props) => (
                   <SearchPage
                     {...props}
                     scrollToTop={this.scrollToTop}
@@ -811,7 +811,7 @@ class App extends Component {
               <Route
                 exact
                 path={USER_ID_PAGE}
-                render={props => (
+                render={(props) => (
                   <ProfilePage
                     {...props}
                     containerRef={this.props.mainContentRef.current}
@@ -836,7 +836,7 @@ class App extends Component {
                   PROFILE_PAGE_COLLECTIBLE_DETAILS,
                   PROFILE_PAGE_COLLECTIBLES
                 ]}
-                render={props => (
+                render={(props) => (
                   <ProfilePage
                     {...props}
                     containerRef={this.props.mainContentRef.current}
@@ -849,7 +849,7 @@ class App extends Component {
               <Route
                 exact
                 path={TRACK_REMIXES_PAGE}
-                render={props => (
+                render={(props) => (
                   <RemixesPage
                     {...props}
                     containerRef={this.props.mainContentRef.current}
@@ -890,7 +890,7 @@ class App extends Component {
               <Route
                 exact
                 path={PROFILE_PAGE}
-                render={props => (
+                render={(props) => (
                   <ProfilePage
                     {...props}
                     containerRef={this.props.mainContentRef.current}
@@ -950,7 +950,7 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   hasAccount: getHasAccount(state),
   userId: getUserId(state),
   userHandle: getUserHandle(state),
@@ -962,9 +962,9 @@ const mapStateToProps = state => ({
   firstLoadConnectivityFailure: getConnectivityFailure(state)
 })
 
-const mapDispatchToProps = dispatch => ({
-  setTheme: theme => dispatch(setTheme(theme)),
-  updateRouteOnSignUpCompletion: route =>
+const mapDispatchToProps = (dispatch) => ({
+  setTheme: (theme) => dispatch(setTheme(theme)),
+  updateRouteOnSignUpCompletion: (route) =>
     dispatch(updateRouteOnSignUpCompletion(route)),
   openSignOn: (signIn = true, page = null, fields = {}) =>
     dispatch(openSignOn(signIn, page, fields)),

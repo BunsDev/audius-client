@@ -34,7 +34,7 @@ const messages = {
   manual: 'I’d rather fill out my profile manually'
 }
 
-const TwitterOverlay = props => {
+const TwitterOverlay = (props) => {
   const displayInstagram = useRemoteVar(
     BooleanKeys.DISPLAY_INSTAGRAM_VERIFICATION_WEB_AND_DESKTOP
   )
@@ -57,9 +57,9 @@ const TwitterOverlay = props => {
       leave={{ opacity: 0 }}
       config={{ duration: 100 }}
     >
-      {show =>
+      {(show) =>
         show &&
-        (transitionProps => (
+        ((transitionProps) => (
           <div
             style={{
               ...transitionProps,

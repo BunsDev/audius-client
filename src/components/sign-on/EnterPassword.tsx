@@ -165,7 +165,7 @@ const EnterPassword = ({
 
   const fulfillsRequirements = () =>
     Object.keys(requirements).every(
-      req => requirements[req] === CheckState.VALID
+      (req) => requirements[req] === CheckState.VALID
     )
 
   const onClickSubmit = () => {
@@ -187,10 +187,10 @@ const EnterPassword = ({
     { status: requirements.match, label: messages.checks[2] }
   ]
   const isValid = Object.keys(requirements).every(
-    req => requirements[req] === CheckState.VALID
+    (req) => requirements[req] === CheckState.VALID
   )
   const hasError = Object.keys(requirements).some(
-    req => requirements[req] === CheckState.ERROR
+    (req) => requirements[req] === CheckState.ERROR
   )
 
   return (
@@ -198,7 +198,7 @@ const EnterPassword = ({
       <form
         className={styles.form}
         method='post'
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault()
         }}
         autoComplete='off'

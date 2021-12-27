@@ -163,7 +163,7 @@ const AnimatedSwitch = ({
 
   const transitions = useTransition(
     location,
-    location => getPathname(location),
+    (location) => getPathname(location),
     getAnimation()
   )
 

@@ -134,7 +134,7 @@ function* fetchRemixables() {
   const artistLimit = 3
   const artistCount: Record<number, number> = {}
 
-  const filteredTracks = tracks.filter(trackMetadata => {
+  const filteredTracks = tracks.filter((trackMetadata) => {
     if (trackMetadata.user?.is_deactivated) {
       return false
     }
@@ -194,7 +194,7 @@ function* watchFetch() {
       waitForValue,
       getAccountStatus,
       {},
-      status => status !== Status.LOADING
+      (status) => status !== Status.LOADING
     )
 
     const { variant } = action.payload

@@ -120,7 +120,7 @@ const MobileOverflowModal = ({
     <ActionSheetModal
       isOpen={isOpen}
       onClose={onClose}
-      actions={actions ? actions.map(r => ({ text: rowMessageMap[r] })) : []}
+      actions={actions ? actions.map((r) => ({ text: rowMessageMap[r] })) : []}
       didSelectRow={didSelectRow}
     />
   )

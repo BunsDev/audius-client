@@ -43,8 +43,8 @@ const RECORD_LISTEN_INTERVAL = 1000
 
 function* setAudioStream() {
   if (!NATIVE_MOBILE) {
-    const chan = eventChannel(emitter => {
-      import('audio/AudioStream').then(AudioStream => {
+    const chan = eventChannel((emitter) => {
+      import('audio/AudioStream').then((AudioStream) => {
         emitter(AudioStream.default)
         emitter(END)
       })
@@ -89,7 +89,7 @@ export function* watchPlay() {
         ? apiClient.makeUrl(`/tracks/${encodedTrackId}/stream`)
         : null
 
-      const endChannel = eventChannel(emitter => {
+      const endChannel = eventChannel((emitter) => {
         audio.load(
           track.track_segments,
           () => {
@@ -200,7 +200,7 @@ export function* setAudioListeners() {
 
 export function* handleAudioBuffering() {
   const audioStream = yield call(waitForValue, getAudio)
-  const chan = eventChannel(emitter => {
+  const chan = eventChannel((emitter) => {
     audioStream.onBufferingChange = (isBuffering: boolean) => {
       emitter(setBuffering({ buffering: isBuffering }))
     }
@@ -212,7 +212,7 @@ export function* handleAudioBuffering() {
 export function* handleAudioErrors() {
   // Watch for audio errors and emit an error saga dispatching action
   const audioStream = yield call(waitForValue, getAudio)
-  const chan = eventChannel(emitter => {
+  const chan = eventChannel((emitter) => {
     audioStream.onError = (error: any, data: string) => {
       emitter({ error, data })
     }
@@ -226,7 +226,7 @@ export function* handleAudioErrors() {
 }
 
 function watchAudio(audio: HTMLAudioElement) {
-  return eventChannel(emitter => {
+  return eventChannel((emitter) => {
     const emitPlay = () => emitter(AudioEvents.PLAY)
     const emitPause = () => {
       if (!audio.ended) {

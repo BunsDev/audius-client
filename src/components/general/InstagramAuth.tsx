@@ -79,7 +79,7 @@ const InstagramAuth = ({
   }, [dialogWidth, dialogHeight])
 
   const getProfile = useCallback(
-    async code => {
+    async (code) => {
       try {
         const profileResp = await window.fetch(getUserUrl, {
           method: 'POST',
@@ -177,7 +177,7 @@ const InstagramAuth = ({
 
   const getRequestToken = useCallback(async () => {
     const popup = openPopup()
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await new Promise((resolve) => setTimeout(resolve, 500))
     if (!popup) {
       console.error('unable to open window')
     }

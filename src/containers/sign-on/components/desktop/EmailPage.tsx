@@ -144,7 +144,7 @@ export const EmailPage = ({
           to={{ opacity: 1 }}
           config={{ duration: 200 }}
         >
-          {animProps => (
+          {(animProps) => (
             <StatusMessage
               status='error'
               label={errorMessages[email.error]}

@@ -93,7 +93,7 @@ const ConnectedPlaylistTile = memo(
     const user = getUserWithFallback(nullableUser)
     const record = useRecord()
     const isActive = useMemo(() => {
-      return tracks.some(track => track.uid === playingUid)
+      return tracks.some((track) => track.uid === playingUid)
     }, [tracks, playingUid])
 
     const isOwner = collection.playlist_owner_id === currentUserId

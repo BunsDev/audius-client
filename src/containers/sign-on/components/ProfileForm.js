@@ -37,7 +37,7 @@ const messages = {
   completeWithInstagram: 'Link to Instagram to claim'
 }
 
-const ProfileForm = props => {
+const ProfileForm = (props) => {
   const [focus, onChangeFocus] = useState(false)
   const { profileValid, name, handle, profileImage, onContinue } = props
   const [shouldShowLoadingSpinner, setShouldShowLoadingSpinner] = useState(
@@ -51,7 +51,7 @@ const ProfileForm = props => {
     delay: 1000
   })
 
-  const onDropArtwork = async selectedFiles => {
+  const onDropArtwork = async (selectedFiles) => {
     try {
       let file = selectedFiles[0]
       file = await resizeImage(file)
@@ -150,7 +150,7 @@ const ProfileForm = props => {
             leave={{ opacity: 0 }}
             config={{ duration: 200 }}
           >
-            {animProps => (
+            {(animProps) => (
               <StatusMessage
                 status='error'
                 containerStyle={animProps}
@@ -167,7 +167,7 @@ const ProfileForm = props => {
             leave={{ opacity: 0 }}
             config={{ duration: 200 }}
           >
-            {animProps => (
+            {(animProps) => (
               <div style={animProps} className={styles.suggestTwitter}>
                 <TwitterLogin
                   onFailure={(...args) => console.log(args)}
@@ -189,7 +189,7 @@ const ProfileForm = props => {
             leave={{ opacity: 0 }}
             config={{ duration: 200 }}
           >
-            {animProps => (
+            {(animProps) => (
               <div style={animProps} className={styles.suggestTwitter}>
                 <InstagramAuth
                   onFailure={(...args) => console.log(args)}

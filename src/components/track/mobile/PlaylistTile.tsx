@@ -75,7 +75,7 @@ const TrackList = ({
   if (!tracks.length && isLoading && numLoadingSkeletonRows) {
     return (
       <>
-        {range(numLoadingSkeletonRows).map(i => (
+        {range(numLoadingSkeletonRows).map((i) => (
           <TrackItem key={i} active={false} index={i} forceSkeleton />
         ))}
       </>

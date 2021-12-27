@@ -140,7 +140,7 @@ const JoinTheCommmunity = (props: JoinTheCommmunityProps) => {
             style={{
               opacity: textStyles.opacity,
               transform: textStyles.x.interpolate(
-                x => `translate3d(0,${x}px,0)`
+                (x) => `translate3d(0,${x}px,0)`
               )
             }}
           >
@@ -151,7 +151,7 @@ const JoinTheCommmunity = (props: JoinTheCommmunityProps) => {
           </animated.div>
         </div>
         <div className={styles.cardsContainer}>
-          {cards.map(card => (
+          {cards.map((card) => (
             <Card
               key={card.title}
               {...card}

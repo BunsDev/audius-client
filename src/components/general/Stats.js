@@ -8,7 +8,7 @@ import UserListModal from 'components/artist/UserListModal'
 
 import styles from './Stats.module.css'
 
-const Stat = props => {
+const Stat = (props) => {
   const zero = props.number === 0
   const style = {
     [styles.clickable]: !!props.onClick && !zero
@@ -24,7 +24,7 @@ const Stat = props => {
   )
 }
 
-const Stats = props => {
+const Stats = (props) => {
   const [showFollowerModal, setShowFollowerModal] = useState(false)
   const [showFollowingModal, setShowFollowingModal] = useState(false)
 
@@ -33,7 +33,7 @@ const Stats = props => {
     [styles.large]: props.size === 'large'
   }
 
-  const statClick = stat => {
+  const statClick = (stat) => {
     if (props.clickable) {
       if (stat.key === 'follower') {
         return () => {
@@ -51,12 +51,12 @@ const Stats = props => {
   const onCloseFollowerModal = () => setShowFollowerModal(false)
   const onCloseFollowingModal = () => setShowFollowingModal(false)
 
-  const followerStat = props.stats.find(stat => stat.key === 'follower')
-  const followingStat = props.stats.find(stat => stat.key === 'following')
+  const followerStat = props.stats.find((stat) => stat.key === 'follower')
+  const followingStat = props.stats.find((stat) => stat.key === 'following')
 
   return (
     <div className={cn(styles.stats, sizing)}>
-      {props.stats.map(stat => (
+      {props.stats.map((stat) => (
         <Stat
           key={stat.key}
           number={stat.number}

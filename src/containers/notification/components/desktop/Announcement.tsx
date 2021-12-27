@@ -50,7 +50,7 @@ const Announcement = ({
   }, [longDescription, setNotificationModal, id])
 
   const onContainerClick = useCallback(
-    e => {
+    (e) => {
       e.stopPropagation()
       markAsRead(id)
       onOpenNotification()

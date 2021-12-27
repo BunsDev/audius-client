@@ -26,15 +26,15 @@ import { isMobile } from 'utils/clientUtil'
 
 const makeCollectionSourceId = (source, playlistId) =>
   `${source}:collection:${playlistId}`
-const getEntryId = entry => `${entry.kind}:${entry.id}`
+const getEntryId = (entry) => `${entry.kind}:${entry.id}`
 
-const flatten = list =>
+const flatten = (list) =>
   list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [])
 function* filterDeletes(tracksMetadata, removeDeleted) {
   const tracks = yield select(getTracks)
   const users = yield select(getUsers)
   return tracksMetadata
-    .map(metadata => {
+    .map((metadata) => {
       // If we said to remove deleted tracks and it is deleted, remove it
       if (removeDeleted && metadata.is_delete) return null
       // If we said to remove deleted and the track/playlist owner is deactivated, remove it
@@ -72,8 +72,8 @@ function getCollectionCacheables(
 ) {
   collectionsToCache.push({ id: metadata.playlist_id, uid, metadata })
 
-  const trackIds = metadata.playlist_contents.track_ids.map(t => t.track)
-  const trackUids = trackIds.map(id =>
+  const trackIds = metadata.playlist_contents.track_ids.map((t) => t.track)
+  const trackUids = trackIds.map((id) =>
     makeUid(Kind.TRACKS, id, `collection:${metadata.playlist_id}`)
   )
 
@@ -135,13 +135,13 @@ function* fetchLineupMetadatasAsync(
         ? yield select(sourceSelector)
         : lineup.prefix
 
-      const queueUids = Object.keys(yield select(getPositions)).map(uid =>
+      const queueUids = Object.keys(yield select(getPositions)).map((uid) =>
         Uid.fromString(uid)
       )
       // Get every UID in the queue whose source references this lineup
       // in the form of { id: [uid1, uid2] }
       const uidForSource = queueUids
-        .filter(uid => uid.source === source)
+        .filter((uid) => uid.source === source)
         .reduce((mapping, uid) => {
           if (uid.id in mapping) {
             mapping[uid.id].push(uid.toString())
@@ -157,7 +157,7 @@ function* fetchLineupMetadatasAsync(
         lineupMetadatasResponse,
         removeDeleted
       )
-      const allMetadatas = responseFilteredDeletes.map(item => {
+      const allMetadatas = responseFilteredDeletes.map((item) => {
         const id = item.track_id
         if (id && uidForSource[id] && uidForSource[id].length > 0) {
           item.uid = uidForSource[id].shift()
@@ -165,11 +165,11 @@ function* fetchLineupMetadatasAsync(
         return item
       })
 
-      const kinds = allMetadatas.map(metadata =>
+      const kinds = allMetadatas.map((metadata) =>
         metadata.track_id ? Kind.TRACKS : Kind.COLLECTIONS
       )
       const ids = allMetadatas.map(
-        metadata => metadata.track_id || metadata.playlist_id
+        (metadata) => metadata.track_id || metadata.playlist_id
       )
       const uids = makeUids(kinds, ids, source)
 
@@ -194,9 +194,11 @@ function* fetchLineupMetadatasAsync(
         }
       })
 
-      const lineupCollections = allMetadatas.filter(item => !!item.playlist_id)
+      const lineupCollections = allMetadatas.filter(
+        (item) => !!item.playlist_id
+      )
 
-      lineupCollections.forEach(metadata => {
+      lineupCollections.forEach((metadata) => {
         const trackUids = metadata.playlist_contents.track_ids.map(
           (track, idx) => {
             const id = track.track
@@ -276,7 +278,7 @@ function* updateQueueLineup(lineupPrefix, source, lineupEntries) {
     (!source || source === currentUidSource)
   ) {
     const toQueue = yield all(
-      lineupEntries.map(e => call(getToQueue, lineupPrefix, e))
+      lineupEntries.map((e) => call(getToQueue, lineupPrefix, e))
     )
     const flattenedQueue = flatten(toQueue)
     yield put(queueActions.add({ entries: flattenedQueue }))
@@ -296,7 +298,7 @@ function* play(lineupActions, lineupSelector, prefix, action) {
       source !== lineup.prefix
     ) {
       const toQueue = yield all(
-        lineup.entries.map(e => call(getToQueue, lineup.prefix, e))
+        lineup.entries.map((e) => call(getToQueue, lineup.prefix, e))
       )
       const flattenedQueue = flatten(toQueue)
       yield put(queueActions.clear({}))
@@ -354,7 +356,7 @@ function* reset(
     }
   }
   yield all(
-    Object.keys(subscriptionsToRemove).map(kind =>
+    Object.keys(subscriptionsToRemove).map((kind) =>
       put(cacheActions.unsubscribe(kind, subscriptionsToRemove[kind]))
     )
   )
@@ -405,7 +407,7 @@ function* refreshInView(lineupActions, lineupSelector, action) {
   }
 }
 
-const keepUidAndKind = entry => ({
+const keepUidAndKind = (entry) => ({
   uid: entry.uid,
   kind: entry.track_id ? Kind.TRACKS : Kind.COLLECTIONS,
   id: entry.track_id || entry.playlist_id

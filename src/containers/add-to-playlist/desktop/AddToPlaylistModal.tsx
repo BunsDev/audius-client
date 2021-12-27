@@ -134,7 +134,7 @@ const AddToPlaylistModal = () => {
             <span>{messages.newPlaylist}</span>
           </div>
           <div className={styles.list}>
-            {filteredPlaylists.map(playlist => (
+            {filteredPlaylists.map((playlist) => (
               <div key={`${playlist.playlist_id}`}>
                 <PlaylistItem
                   playlist={playlist}

@@ -124,7 +124,7 @@ const FeaturedContent = (props: FeaturedContentProps) => {
         <h3 className={styles.title}>{messages.title}</h3>
         <h4 className={styles.subTitle}>{messages.subTitle}</h4>
         <div className={styles.tracksContainer}>
-          {tracks.map(track => (
+          {tracks.map((track) => (
             <div
               key={track.title}
               className={styles.trackContainer}
@@ -157,7 +157,7 @@ const FeaturedContent = (props: FeaturedContentProps) => {
             style={{
               opacity: textStyles.opacity,
               transform: textStyles.x.interpolate(
-                x => `translate3d(0,${x}px,0)`
+                (x) => `translate3d(0,${x}px,0)`
               )
             }}
           >
@@ -168,7 +168,7 @@ const FeaturedContent = (props: FeaturedContentProps) => {
           </animated.div>
         </div>
         <div className={styles.tracksContainer}>
-          {tracks.map(track => (
+          {tracks.map((track) => (
             <Track
               key={track.title}
               {...track}

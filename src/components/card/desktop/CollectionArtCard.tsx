@@ -153,7 +153,7 @@ const CollectionArtCard = g(
             <Menu menu={menu} onClose={() => setIsPerspectiveDisabled(false)}>
               {(ref, triggerPopup) => (
                 <div
-                  onClick={e => {
+                  onClick={(e) => {
                     e.stopPropagation()
                     setIsPerspectiveDisabled(true)
                     triggerPopup()

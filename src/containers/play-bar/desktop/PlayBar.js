@@ -188,7 +188,7 @@ class PlayBar extends Component {
     }
   }
 
-  updateVolume = volume => {
+  updateVolume = (volume) => {
     const { audio } = this.props
     if (audio) {
       // If we already have an audio object set the volume immediately!
@@ -454,7 +454,7 @@ const makeMapStateToProps = () => {
   return mapStateToProps
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   play: () => {
     dispatch(play({}))
   },
@@ -467,26 +467,27 @@ const mapDispatchToProps = dispatch => ({
   previous: () => {
     dispatch(previous({}))
   },
-  reset: shouldAutoplay => {
+  reset: (shouldAutoplay) => {
     dispatch(reset({ shouldAutoplay }))
   },
-  seek: position => {
+  seek: (position) => {
     dispatch(seek({ seconds: position }))
   },
-  repeat: mode => {
+  repeat: (mode) => {
     dispatch(repeat({ mode }))
   },
-  shuffle: enable => {
+  shuffle: (enable) => {
     dispatch(shuffle({ enable }))
   },
-  repostTrack: trackId => dispatch(repostTrack(trackId, RepostSource.PLAYBAR)),
-  undoRepostTrack: trackId =>
+  repostTrack: (trackId) =>
+    dispatch(repostTrack(trackId, RepostSource.PLAYBAR)),
+  undoRepostTrack: (trackId) =>
     dispatch(undoRepostTrack(trackId, RepostSource.PLAYBAR)),
-  saveTrack: trackId => dispatch(saveTrack(trackId, FavoriteSource.PLAYBAR)),
-  unsaveTrack: trackId =>
+  saveTrack: (trackId) => dispatch(saveTrack(trackId, FavoriteSource.PLAYBAR)),
+  unsaveTrack: (trackId) =>
     dispatch(unsaveTrack(trackId, FavoriteSource.PLAYBAR)),
-  goToRoute: route => dispatch(pushRoute(route)),
-  record: event => dispatch(event)
+  goToRoute: (route) => dispatch(pushRoute(route)),
+  record: (event) => dispatch(event)
 })
 
 export default connect(makeMapStateToProps, mapDispatchToProps)(PlayBar)

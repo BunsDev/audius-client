@@ -236,7 +236,7 @@ const PlaylistLibrary = ({
       {account &&
         playlists &&
         library &&
-        library.contents.map(identifier => {
+        library.contents.map((identifier) => {
           switch (identifier.type) {
             case 'explore_playlist': {
               const playlist = SMART_COLLECTION_MAP[identifier.playlist_id]
@@ -268,7 +268,7 @@ const PlaylistLibrary = ({
           }
           return null
         })}
-      {Object.values(playlistsNotInLibrary).map(playlist => {
+      {Object.values(playlistsNotInLibrary).map((playlist) => {
         return renderPlaylist(playlist)
       })}
       {playlists && Object.keys(playlists).length === 0 ? (

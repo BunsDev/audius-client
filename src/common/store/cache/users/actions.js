@@ -7,7 +7,7 @@ export const FETCH_COVER_PHOTO = 'CACHE/USERS/FETCH_COVER_PHOTO'
 /**
  * @param {array} statuses {handle, status, id} id is optional
  */
-export const setHandleStatus = statuses => ({
+export const setHandleStatus = (statuses) => ({
   type: SET_HANDLE_STATUS,
   statuses
 })
@@ -15,7 +15,7 @@ export const setHandleStatus = statuses => ({
 /**
  * @param {string} handle
  */
-export const removeByHandle = handle => ({
+export const removeByHandle = (handle) => ({
   type: REMOVE_BY_HANDLE,
   handle
 })

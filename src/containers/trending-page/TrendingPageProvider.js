@@ -65,7 +65,7 @@ class TrendingPageProvider extends PureComponent {
     this.props.goToRoute(TRENDING_GENRES)
   }
 
-  matchesRoute = route => {
+  matchesRoute = (route) => {
     return matchPath(getPathname(), {
       path: route
     })
@@ -113,7 +113,7 @@ class TrendingPageProvider extends PureComponent {
     }
   }
 
-  getLineupProps = lineup => {
+  getLineupProps = (lineup) => {
     const { currentQueueItem, playing, buffering } = this.props
     const { uid: playingUid, track, source } = currentQueueItem
     return {
@@ -128,7 +128,7 @@ class TrendingPageProvider extends PureComponent {
     }
   }
 
-  getLineupForRange = timeRange => {
+  getLineupForRange = (timeRange) => {
     switch (timeRange) {
       case TimeRange.WEEK:
         return this.getLineupProps(this.props.trendingWeek)
@@ -140,14 +140,14 @@ class TrendingPageProvider extends PureComponent {
     }
   }
 
-  scrollToTop = timeRange => {
+  scrollToTop = (timeRange) => {
     const lineup = this.getLineupForRange(timeRange)
     if (lineup.scrollParent && lineup.scrollParent.scrollTo) {
       lineup.scrollParent.scrollTo(0, 0)
     }
   }
 
-  updateGenreUrlParam = genre => {
+  updateGenreUrlParam = (genre) => {
     const urlParams = new URLSearchParams(window.location.search)
     if (genre) {
       urlParams.set('genre', genre)
@@ -157,7 +157,7 @@ class TrendingPageProvider extends PureComponent {
     this.props.replaceRoute({ search: `?${urlParams.toString()}` })
   }
 
-  updateTimeRangeUrlParam = timeRange => {
+  updateTimeRangeUrlParam = (timeRange) => {
     const urlParams = new URLSearchParams(window.location.search)
     if (timeRange) {
       urlParams.set('timeRange', timeRange)
@@ -219,7 +219,7 @@ const makeMapStateToProps = () => {
     getDiscoverTrendingYearLineup
   )
 
-  const mapStateToProps = state => ({
+  const mapStateToProps = (state) => ({
     hasAccount: getHasAccount(state),
     trending: getTrendingLineup(state),
     trendingWeek: getTrendingWeekLineup(state),
@@ -236,30 +236,30 @@ const makeMapStateToProps = () => {
   return mapStateToProps
 }
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   dispatch,
-  openSignOn: signIn => dispatch(openSignOn(signIn)),
+  openSignOn: (signIn) => dispatch(openSignOn(signIn)),
   resetTrendingLineup: () => dispatch(trendingActions.reset()),
-  goToRoute: route => dispatch(pushRoute(route)),
-  replaceRoute: route => dispatch(replaceRoute(route)),
+  goToRoute: (route) => dispatch(pushRoute(route)),
+  replaceRoute: (route) => dispatch(replaceRoute(route)),
 
   // Trending Lineup Actions
-  refreshTrendingInView: overwrite =>
+  refreshTrendingInView: (overwrite) =>
     dispatch(trendingActions.refreshInView(overwrite)),
-  playTrendingTrack: uid => dispatch(trendingActions.play(uid)),
+  playTrendingTrack: (uid) => dispatch(trendingActions.play(uid)),
   pauseTrendingTrack: () => dispatch(trendingActions.pause()),
-  setTrendingGenre: genre =>
+  setTrendingGenre: (genre) =>
     dispatch(trendingPageActions.setTrendingGenre(genre)),
-  setTrendingTimeRange: timeRange =>
+  setTrendingTimeRange: (timeRange) =>
     dispatch(trendingPageActions.setTrendingTimeRange(timeRange)),
 
   // Dynamically dispatched trending actions
-  makeRefreshTrendingInView: timeRange => {
-    return overwrite => {
+  makeRefreshTrendingInView: (timeRange) => {
+    return (overwrite) => {
       dispatch(callLineupAction(timeRange, 'refreshInView', overwrite))
     }
   },
-  makeLoadMore: timeRange => {
+  makeLoadMore: (timeRange) => {
     return (offset, limit, overwrite) => {
       dispatch(
         callLineupAction(
@@ -274,22 +274,22 @@ const mapDispatchToProps = dispatch => ({
       dispatch(trackEvent)
     }
   },
-  makePlayTrack: timeRange => {
-    return uid => {
+  makePlayTrack: (timeRange) => {
+    return (uid) => {
       dispatch(callLineupAction(timeRange, 'play', uid))
     }
   },
-  makePauseTrack: timeRange => {
+  makePauseTrack: (timeRange) => {
     return () => {
       dispatch(callLineupAction(timeRange, 'pause'))
     }
   },
-  makeSetInView: timeRange => {
-    return inView => {
+  makeSetInView: (timeRange) => {
+    return (inView) => {
       dispatch(callLineupAction(timeRange, 'setInView', inView))
     }
   },
-  makeResetTrending: timeRange => {
+  makeResetTrending: (timeRange) => {
     return () => {
       dispatch(callLineupAction(timeRange, 'reset'))
     }

@@ -19,7 +19,7 @@ const Delineations = Object.freeze({
   EARLIER_THIS_MONTH: 'earlier this month'
 })
 
-const calculateBucket = timestamp => {
+const calculateBucket = (timestamp) => {
   const time = moment(timestamp)
   if (time > START_OF_DAY) {
     return Delineations.TODAY
@@ -89,7 +89,7 @@ export const delineateByFeatured = (
   const featured = []
   let hasFeatured = false
   const filteredTiles = tiles
-    .map(tile => {
+    .map((tile) => {
       if (tile.props.id === id) {
         featured.push(tile)
         hasFeatured = true

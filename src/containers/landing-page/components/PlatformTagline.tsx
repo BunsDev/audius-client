@@ -41,7 +41,7 @@ const PlatformTagline = (props: PlatformTaglineProps) => {
             style={{
               opacity: textStyles.opacity,
               transform: textStyles.x.interpolate(
-                x => `translate3d(0,${x}px,0)`
+                (x) => `translate3d(0,${x}px,0)`
               ),
               width: '100%'
             }}

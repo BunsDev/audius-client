@@ -64,14 +64,14 @@ export const makeGetAllNotifications = () => {
     [getModalNotificationIds, getAllNotifications],
     (notificationIds, notifications) => {
       return notificationIds.map(
-        notificationId => notifications[notificationId]
+        (notificationId) => notifications[notificationId]
       )
     }
   )
 }
 
 export const makeGetNotificationsUnreadCount = () => {
-  return createSelector([getAllNotifications], notifications => {
+  return createSelector([getAllNotifications], (notifications) => {
     return Object.values(notifications).reduce(
       (count, notification) => count + (notification.isRead ? 0 : 1),
       0
@@ -107,7 +107,7 @@ export const getNotificationUsers = (
   if ('userIds' in notification) {
     const userIds = notification.userIds.slice(0, limit)
     const userMap = getUsers(state, { ids: userIds })
-    return userIds.map(id => userMap[id])
+    return userIds.map((id) => userMap[id])
   }
   return null
 }

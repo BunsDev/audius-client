@@ -81,8 +81,8 @@ export function createUserListProvider<T>({
 
     // Filter out users from subsetIdSet
     const filteredUserIDs = allUsers
-      .map(u => u.user_id)
-      .filter(id => !subsetIdSet.has(id))
+      .map((u) => u.user_id)
+      .filter((id) => !subsetIdSet.has(id))
 
     // Get the existing users in the store
     const existingUserIDs: number[] = yield select(selectCurrentUserIDsInList)

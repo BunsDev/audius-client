@@ -15,13 +15,13 @@ class DropdownInput extends Component {
     focused: false
   }
 
-  onVisibleChange = visible => {
+  onVisibleChange = (visible) => {
     this.setState({
       focused: visible
     })
   }
 
-  onSelect = value => {
+  onSelect = (value) => {
     this.setState({
       focused: false
     })
@@ -82,7 +82,7 @@ class DropdownInput extends Component {
     })
 
     let goodDefault = false
-    menu.items.forEach(item => {
+    menu.items.forEach((item) => {
       if (defaultValue === item || defaultValue === item.text) {
         goodDefault = true
       }
@@ -96,7 +96,7 @@ class DropdownInput extends Component {
     let popupContainer = null
     switch (mount) {
       case 'parent':
-        popupContainer = triggerNode => triggerNode.parentNode
+        popupContainer = (triggerNode) => triggerNode.parentNode
         break
       case 'page': {
         const page = document.getElementById('page')

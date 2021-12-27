@@ -70,7 +70,7 @@ const ActionsBar = ({
           className={cn(styles.icon, styles.iconCast)}
           activeClassName={styles.activeButton}
           icon={isAirplay ? <IconAirplay /> : <IconChromecast />}
-          onClick={e => {
+          onClick={(e) => {
             e.stopPropagation()
             const message = isAirplay
               ? new AirplayMessage()
@@ -107,7 +107,7 @@ const ActionsBar = ({
       <IconButton
         icon={<IconKebabHorizontal />}
         className={styles.icon}
-        onClick={e => {
+        onClick={(e) => {
           e.stopPropagation()
           onClickOverflow()
         }}

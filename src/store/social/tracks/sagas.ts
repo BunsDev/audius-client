@@ -597,7 +597,7 @@ function* watchDownloadTrack() {
 
     const endpoints = action.creatorNodeEndpoints
       .split(',')
-      .map(endpoint => `${endpoint}/ipfs/`)
+      .map((endpoint) => `${endpoint}/ipfs/`)
 
     if (NATIVE_MOBILE) {
       yield call(

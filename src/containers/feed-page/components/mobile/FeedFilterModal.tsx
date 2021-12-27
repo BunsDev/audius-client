@@ -49,7 +49,7 @@ const FeedFilterModal = ({
     >
       <div className={styles.container}>
         <div className={styles.title}>{messages.title}</div>
-        {filters.map(filter => (
+        {filters.map((filter) => (
           <div
             key={filter}
             className={styles.filterItem}

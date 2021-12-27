@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 
 import styles from './DeleteConfirmationModal.module.css'
 
-const DeleteConfirmationModal = props => {
+const DeleteConfirmationModal = (props) => {
   const header = `This ${props.entity} Will Disappear For Everyone`
   const description = `Are you sure you want to delete this ${props.entity.toLowerCase()}?`
 

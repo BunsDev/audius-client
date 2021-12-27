@@ -31,7 +31,7 @@ const DesktopCardContainer = ({
         <CategoryHeader categoryName={categoryName} onMore={onMore} />
       )}
       <div className={cn(styles.cardsContainer, cardsClassName)}>
-        {cards.map(card => {
+        {cards.map((card) => {
           return card.props.link ? (
             <Draggable
               key={`draggable-${card.props.playlistId}`}

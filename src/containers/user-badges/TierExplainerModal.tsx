@@ -24,7 +24,7 @@ const TierExplainerModal = () => {
   const dispatch = useDispatch()
   const tier = useProfileTier()
 
-  const isOpen = useSelector(state =>
+  const isOpen = useSelector((state) =>
     getModalVisibility(state, 'TiersExplainer')
   )
 

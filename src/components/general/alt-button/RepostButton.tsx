@@ -89,7 +89,7 @@ const RepostButton = ({
       onAnimationEnd={() => {
         setIsDepressed(false)
       }}
-      onClick={e => {
+      onClick={(e) => {
         if (iconMode) return
         stopPropagation && e.stopPropagation()
         if (isDisabled) return

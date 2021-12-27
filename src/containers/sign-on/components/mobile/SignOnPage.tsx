@@ -304,7 +304,7 @@ const SignOnPage = ({
       <form
         className={styles.form}
         method='post'
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault()
         }}
         autoComplete='off'

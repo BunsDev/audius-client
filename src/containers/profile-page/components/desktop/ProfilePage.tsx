@@ -258,7 +258,7 @@ const ProfilePage = ({
 
   const { tierNumber } = useSelectTierInfo(userId ?? 0)
   const profileHasCollectiblesTierRequirement =
-    tierNumber >= badgeTiers.findIndex(t => t.tier === MIN_COLLECTIBLES_TIER)
+    tierNumber >= badgeTiers.findIndex((t) => t.tier === MIN_COLLECTIBLES_TIER)
 
   const profileHasCollectibles =
     profile?.collectibleList?.length || profile?.solanaCollectibleList?.length

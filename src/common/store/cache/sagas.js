@@ -27,20 +27,20 @@ const isMissingFields = (cacheEntry, requiredFields) => {
 }
 
 // If timestamp provided, check if expired
-const isExpired = timestamp => {
+const isExpired = (timestamp) => {
   if (timestamp) return timestamp + DEFAULT_ENTRY_TTL < Date.now()
   return false
 }
 
 // Makes a transformer function for persistent cache.
 // Removes UIDs from a collection's trackIds.
-const makeTransformer = kind => metadata => {
+const makeTransformer = (kind) => (metadata) => {
   if (kind !== Kind.COLLECTIONS || !metadata.playlist_contents) return metadata
 
   return {
     ...metadata,
     playlist_contents: {
-      track_ids: metadata.playlist_contents.track_ids.map(c => ({
+      track_ids: metadata.playlist_contents.track_ids.map((c) => ({
         track: c.track,
         time: c.time
       }))
@@ -115,7 +115,7 @@ export function* retrieve({
 
   // Figure out which IDs we need to retrive from source
   const idsToFetch = []
-  uniqueIds.forEach(id => {
+  uniqueIds.forEach((id) => {
     if (
       !(id in cachedEntries) ||
       isMissingFields(cachedEntries[id], requiredFields) ||
@@ -194,7 +194,7 @@ function* refreshCachedItems({
   // by handle (not ID) for users, but we want the idBlacklist to only ever
   // contain IDs. But we need to pass whatever keys cachedEntries into
   // retrieveFromSource, since it expects that format (e.g. handles)
-  const keysToRefresh = Object.keys(cachedEntries).filter(key => {
+  const keysToRefresh = Object.keys(cachedEntries).filter((key) => {
     const id = cachedEntries[key][idField]
     return !idBlacklist.has(id)
   })
@@ -202,10 +202,10 @@ function* refreshCachedItems({
   if (!keysToRefresh.length) return
 
   // Add them to the blacklist
-  keysToRefresh.forEach(key => idBlacklist.add(cachedEntries[key][idField]))
+  keysToRefresh.forEach((key) => idBlacklist.add(cachedEntries[key][idField]))
   // Clear them from the blacklist after a timeout
   setTimeout(() => {
-    keysToRefresh.forEach(key => {
+    keysToRefresh.forEach((key) => {
       const entry = cachedEntries[key]
       if (!entry) return
       idBlacklist.delete(entry[idField])
@@ -240,7 +240,7 @@ function* retrieveFromSourceThenCache({
     yield put(
       cacheActions.setStatus(
         kind,
-        idsToFetch.map(id => ({ id, status: Status.LOADING }))
+        idsToFetch.map((id) => ({ id, status: Status.LOADING }))
       )
     )
   }
@@ -262,7 +262,7 @@ function* retrieveFromSourceThenCache({
 
     // Either add or update the cache. If we're doing a cache refresh post load, it should
     // be an update.
-    const cacheMetadata = metadatas.map(m => ({
+    const cacheMetadata = metadatas.map((m) => ({
       id: m[idField],
       uid: uids[m[idField]],
       metadata: m
@@ -284,14 +284,14 @@ function* retrieveFromSourceThenCache({
     yield put(
       cacheActions.setStatus(
         kind,
-        idsToFetch.map(id => ({ id, status: Status.SUCCESS }))
+        idsToFetch.map((id) => ({ id, status: Status.SUCCESS }))
       )
     )
   } else {
     yield put(
       cacheActions.setStatus(
         kind,
-        idsToFetch.map(id => ({ id, status: Status.ERROR }))
+        idsToFetch.map((id) => ({ id, status: Status.ERROR }))
       )
     )
   }
@@ -303,12 +303,12 @@ export function* add(kind, entries, replace, persist) {
   const cache = yield select(getCache, { kind })
   const confirmCallsInCache = pick(
     cache.entries,
-    Object.keys(confirmCalls).map(kindId => getIdFromKindId(kindId))
+    Object.keys(confirmCalls).map((kindId) => getIdFromKindId(kindId))
   )
 
   const entriesToAdd = []
   const entriesToSubscribe = []
-  entries.forEach(entry => {
+  entries.forEach((entry) => {
     // If something is confirming and in the cache, we probably don't
     // want to replace it (unless explicit) because we would lose client
     // state, e.g. "has_current_user_reposted"
@@ -346,7 +346,7 @@ function* watchAddSucceeded() {
     if (!persist) return
 
     // Adding to cache can be fire and forget
-    yield entries.forEach(e =>
+    yield entries.forEach((e) =>
       persistentCache.add(
         kind,
         e.id,
@@ -360,7 +360,7 @@ function* watchAddSucceeded() {
 
 function* watchUpdate() {
   yield takeEvery(cacheActions.UPDATE, function* ({ kind, entries }) {
-    yield entries.forEach(e =>
+    yield entries.forEach((e) =>
       persistentCache.update(kind, e.id, e.metadata, makeTransformer(kind))
     )
   })
@@ -375,14 +375,14 @@ function* watchUnsubscribe() {
 
     // Remove all transitive subscriptions.
     const transitiveSubscriptions = {} // keyed by Kind
-    unsubscribers.forEach(s => {
+    unsubscribers.forEach((s) => {
       const { id = cache.uids[s.uid] } = s
       if (
         id in cache.subscriptions &&
         cache.subscribers[id] &&
         cache.subscribers[id].size <= 1
       ) {
-        cache.subscriptions[id].forEach(subscription => {
+        cache.subscriptions[id].forEach((subscription) => {
           if (!transitiveSubscriptions[subscription.kind]) {
             transitiveSubscriptions[subscription.kind] = [
               { uid: subscription.uid }
@@ -396,7 +396,7 @@ function* watchUnsubscribe() {
       }
     })
     yield all(
-      Object.keys(transitiveSubscriptions).map(subscriptionKind =>
+      Object.keys(transitiveSubscriptions).map((subscriptionKind) =>
         put(
           cacheActions.unsubscribe(
             subscriptionKind,
@@ -416,7 +416,7 @@ function* watchUnsubscribeSucceeded() {
     const cache = yield select(getCache, { kind })
 
     const idsToRemove = []
-    unsubscribers.forEach(s => {
+    unsubscribers.forEach((s) => {
       const { id } = s
       if (id && id in cache.subscribers && cache.subscribers[id].size === 0) {
         idsToRemove.push(id)

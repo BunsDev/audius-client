@@ -99,7 +99,7 @@ function* connectNotification(notification: Notification) {
 
 function* connectNotifications(notifications: Notification[]) {
   return yield all(
-    notifications.map(notification => connectNotification(notification))
+    notifications.map((notification) => connectNotification(notification))
   )
 }
 

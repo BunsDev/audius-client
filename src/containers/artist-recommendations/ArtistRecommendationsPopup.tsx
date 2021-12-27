@@ -36,7 +36,7 @@ export const ArtistRecommendationsPopup = ({
     FeatureFlags.ARTIST_RECOMMENDATIONS_ENABLED
   )
   // Get the artist
-  const user = useSelector<AppState, User | null>(state =>
+  const user = useSelector<AppState, User | null>((state) =>
     getUser(state, { id: artistId })
   )
   if (!user) return null
