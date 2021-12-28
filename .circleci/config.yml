@@ -19,7 +19,7 @@ jobs:
 workflows:
   select-workflows:
     jobs:
-      # - generate-config
+      - generate-config
       - path-filtering/filter:
           name: check-updated-files
           mapping: |
