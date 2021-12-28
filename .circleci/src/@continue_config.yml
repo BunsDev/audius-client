@@ -1,4 +1,4 @@
-version: 2.0
+version: 2.1
 
 # the default pipeline parameters, which will be updated according to
 # the results of the path-filtering orb in config.yml
@@ -11,4 +11,4 @@ parameters:
     default: false
 
 workflows:
-  version: 2.0
+  version: 2.1

@@ -1,4 +1,4 @@
-version: 2.0
+version: 2.1
 
 # this allows you to use CircleCI's dynamic configuration feature
 setup: true
@@ -21,8 +21,6 @@ workflows:
     jobs:
       - generate-config
       - path-filtering/filter:
-          requires:
-            - generate-config
           name: check-updated-files
           mapping: |
             web/.* run-web-job true
