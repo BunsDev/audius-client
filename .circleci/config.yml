@@ -13,7 +13,8 @@ jobs:
     steps:
       - checkout
       - swissknife/trigger-workflows-for-all-modified:
-          always-trigger-on-branch: master
+          base-branch: master
+          run-mode-for-base-branch: run_for_last_commit
           code-param-name-map: '
             [
             { "regex": "^(web).*", "param_name": "run_web_workflow" },
