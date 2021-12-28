@@ -1,5 +1,5 @@
 init:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/node:14.18
   steps:
@@ -40,7 +40,7 @@ init:
           - node_modules
 
 build-demo:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/node:14.18
   resource_class: large
@@ -59,7 +59,7 @@ build-demo:
           - build-demo
 
 build-staging:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/node:14.18
   resource_class: large
@@ -76,7 +76,7 @@ build-staging:
           - build-staging
 
 build-mobile-staging:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/node:14.18
   resource_class: large
@@ -93,7 +93,7 @@ build-mobile-staging:
           - build-mobile-staging
 
 build-ipfs-staging:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/node:14.18
   resource_class: large
@@ -145,12 +145,12 @@ test-staging:
         name: serve and run prober tests
         command: |
           npm install serve
-          node node_modules/serve/bin/serve.js -l 3001 -s build-staging &
+          node web/node_modules/serve/bin/serve.js -l 3001 -s build-staging &
           cd probers
           npm run test:ci
 
 build-production:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/node:14.18
   resource_class: large
@@ -167,7 +167,7 @@ build-production:
           - build-production
 
 build-mobile-production:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/node:14.18
   resource_class: large
@@ -184,7 +184,7 @@ build-mobile-production:
           - build-mobile-production
 
 build-ipfs-production:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/node:14.18
   resource_class: large
@@ -204,7 +204,7 @@ build-ipfs-production:
           - build-ipfs-production.zip
 
 deploy-demo:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/python:2.7-jessie
   steps:
@@ -221,7 +221,7 @@ deploy-demo:
         comment: Preview this change https://demo.audius.co/${CIRCLE_BRANCH}
 
 deploy-staging-s3:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/python:2.7-jessie
   steps:
@@ -238,7 +238,7 @@ deploy-staging-s3:
           aws s3 cp ./resources/apple-app-site-association s3://staging.audius.co --cache-control max-age=0 --content-type 'application/json' --metadata-directive REPLACE
 
 deploy-staging-cloudflare:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/node:14.18
   steps:
@@ -260,7 +260,7 @@ deploy-staging-cloudflare:
           npx wrangler publish --env staging
 
 deploy-mobile-staging:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/python:2.7-jessie
   steps:
@@ -274,7 +274,7 @@ deploy-mobile-staging:
         command: aws s3 sync build-mobile-staging s3://audius-mobile-staging/build --delete
 
 deploy-ipfs-staging:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/python:2.7-jessie
   steps:
@@ -288,7 +288,7 @@ deploy-ipfs-staging:
         command: aws s3 cp build-ipfs-staging.zip s3://audius-site-ipfs/build-ipfs-staging.zip
 
 update-staging-ga-ipfs-build:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/node:14.18
   steps:
@@ -304,7 +304,7 @@ update-staging-ga-ipfs-build:
           - ./build_cid.txt
 
 publish-staging-build-cids:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/python:2.7-jessie
   steps:
@@ -318,7 +318,7 @@ publish-staging-build-cids:
         command: aws s3 cp build_cid.txt s3://audius-site-ipfs/build_cid_staging.txt
 
 update-ipfs-staging-records:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/node:14.18
   steps:
@@ -336,7 +336,7 @@ update-ipfs-staging-records:
             --data '{"type":"TXT","name":"'"$DNS_NAME"'","content":"\"dnslink=/ipfs/'"$CID"'\"","ttl":1,"proxied":false}'
 
 deploy-release-candidate:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/node:14.18
   steps:
@@ -359,7 +359,7 @@ deploy-release-candidate:
           npx wrangler publish --env release
 
 deploy-production-s3:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/python:2.7-jessie
   steps:
@@ -383,7 +383,7 @@ deploy-production-s3:
         command: aws cloudfront create-invalidation --distribution-id E1ZJ9Z971FJQJ8 --paths "/*"
 
 deploy-production-cloudflare:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/node:14.18
   steps:
@@ -406,7 +406,7 @@ deploy-production-cloudflare:
           npx wrangler publish --env production
 
 deploy-sentry-sourcemaps:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/node:14.18
   steps:
@@ -427,7 +427,7 @@ deploy-sentry-sourcemaps:
         command: node_modules/.bin/sentry-cli --auth-token ${SENTRY_AUTH_TOKEN} releases --org audius --project audius-client finalize ${CIRCLE_SHA1}
 
 deploy-mobile-production:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/python:2.7-jessie
   steps:
@@ -441,7 +441,7 @@ deploy-mobile-production:
         command: aws s3 sync build-mobile-production s3://audius-mobile/build --delete
 
 deploy-ipfs-production:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/python:2.7-jessie
   steps:
@@ -455,7 +455,7 @@ deploy-ipfs-production:
         command: aws s3 cp build-ipfs-production.zip s3://audius-site-ipfs/build-ipfs-production.zip
 
 update-production-ga-ipfs-build:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/node:14.18
   steps:
@@ -471,7 +471,7 @@ update-production-ga-ipfs-build:
           - ./build_cid.txt
 
 publish-production-build-cids:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/python:2.7-jessie
   steps:
@@ -485,7 +485,7 @@ publish-production-build-cids:
         command: aws s3 cp build_cid.txt s3://audius-site-ipfs/build_cid_production.txt
 
 update-ipfs-production-records:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: circleci/node:14.18
   steps:
@@ -503,7 +503,7 @@ update-ipfs-production-records:
             --data '{"type":"TXT","name":"'"$DNS_NAME"'","content":"\"dnslink=/ipfs/'"$CID"'\"","ttl":1,"proxied":false}'
 
 dist-mac-staging:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   macos: # Run on osx so dmg can be created and signed.
     xcode: "12.2.0"
   steps:
@@ -516,7 +516,7 @@ dist-mac-staging:
         command: npm run dist:mac-publish
 
 dist-win-staging:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: electronuserland/builder:wine-mono
   steps:
@@ -529,7 +529,7 @@ dist-win-staging:
         command: npm run dist:win-publish
 
 dist-linux-staging:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: electronuserland/builder
   steps:
@@ -542,7 +542,7 @@ dist-linux-staging:
         command: npm run dist:linux-publish
 
 dist-mac-production:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   macos: # Run on osx so dmg can be created and signed.
     xcode: "12.2.0"
   steps:
@@ -555,7 +555,7 @@ dist-mac-production:
         command: npm run dist:mac-publish-production
 
 dist-win-production:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: electronuserland/builder:wine-mono
   steps:
@@ -568,7 +568,7 @@ dist-win-production:
         command: npm run dist:win-publish-production
 
 dist-linux-production:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: electronuserland/builder
   steps:
@@ -581,7 +581,7 @@ dist-linux-production:
         command: npm run dist:linux-publish-production
 
 publish-github-release:
-  working_directory: ~/audius-client
+  working_directory: ~/audius-client/web
   docker:
     - image: cibuilds/github:0.10
   steps:
