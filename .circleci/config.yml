@@ -5,22 +5,16 @@ setup: true
 
 orbs:
   path-filtering: circleci/path-filtering@0.0.2
-  continuation: circleci/continuation@0.1.2
-
-jobs:
-  generate-config:
-    executor: continuation/default
-    steps:
-      - checkout
-      - run:
-          name: Generate config
-          command: . .circleci/scripts/circle-config.sh
 
 workflows:
   select-workflows:
     jobs:
-      - generate-config
       - path-filtering/filter:
+          pre-steps:
+            - checkout
+            - run:
+                name: Generate config
+                command: . .circleci/scripts/circle-config.sh
           name: check-updated-files
           mapping: |
             web/.* run-web-job true
