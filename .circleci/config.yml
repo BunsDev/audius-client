@@ -12,7 +12,7 @@ jobs:
       - image: "circleci/node:latest"
     steps:
       - checkout
-      - swissknife/trigger_workflows_for_all_modified:
+      - swissknife/trigger-workflows-for-all-modified:
           always-trigger-on-branch: master
           code-param-name-map: '
             [
