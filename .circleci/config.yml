@@ -7,7 +7,7 @@ orbs:
   path-filtering: circleci/path-filtering@0.0.2
 
 jobs:
-  generate-config
+  generate-config:
     steps:
       - checkout
       - run:
