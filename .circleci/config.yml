@@ -7,6 +7,8 @@ orbs:
   path-filtering: circleci/path-filtering@0.0.2
 
 jobs:
+  docker:
+    - image: circleci/node:14.18
   generate-config:
     steps:
       - checkout
