@@ -6,15 +6,18 @@ setup: true
 orbs:
   path-filtering: circleci/path-filtering@0.0.2
 
+jobs:
+  generate-config
+    steps:
+      - checkout
+      - run:
+          name: Generate config
+          command: . ./scripts/circle-config.sh
+
 workflows:
-  always-run:
+  select-workflows:
     jobs:
-      generate
-        steps:
-          - checkout
-          - run:
-              name: Generate config
-              command: ". ./scripts/circle-config.sh"
+      - generate-config
       - path-filtering/filter:
           name: check-updated-files
           mapping: |
