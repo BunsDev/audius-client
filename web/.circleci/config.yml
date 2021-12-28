@@ -62,36 +62,36 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - dependency-cache-{{ checksum "package.json" }}
+            - dependency-cache-{{ checksum "web/package.json" }}
             # fallback to using the latest cache if no exact match is found
             - dependency-cache-
 
-      - run: rm -rf /home/circleci/audius-client/node_modules/websocket/.git
+      - run: rm -rf /home/circleci/audius-client/web/node_modules/websocket/.git
 
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN" > .npmrc
 
-      - run: npm install --ignore-scripts
+      - run: cd web && npm install --ignore-scripts
 
       - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "web/package.json" }}
           paths:
-            - ./node_modules
+            - ./web/node_modules
 
       # Lint
       - run:
           name: lint
-          command: npm run lint
+          command: cd web && npm run lint
 
       # Run tests
       - run:
           name: test
-          command: npm test
+          command: cd web && npm test
 
       # Persist the build directory to a workspace
       - persist_to_workspace:
           root: ./
           paths:
-            - node_modules
+            - web/node_modules
 
   build-demo:
     working_directory: ~/audius-client
@@ -559,7 +559,7 @@ jobs:
   dist-mac-staging:
     working_directory: ~/audius-client
     macos: # Run on osx so dmg can be created and signed.
-      xcode: "12.2.0"
+      xcode: '12.2.0'
     steps:
       - checkout
       - attach_workspace:
@@ -598,7 +598,7 @@ jobs:
   dist-mac-production:
     working_directory: ~/audius-client
     macos: # Run on osx so dmg can be created and signed.
-      xcode: "12.2.0"
+      xcode: '12.2.0'
     steps:
       - checkout
       - attach_workspace:
@@ -643,7 +643,7 @@ jobs:
       - attach_workspace:
           at: ./
       - run:
-          name: "Publish Release on GitHub"
+          name: 'Publish Release on GitHub'
           command: |
             VERSION=$(grep -m1 version ./package.json | awk -F: '{ print $2 }' | sed 's/[", ]//g')
             echo "$VERSION"
@@ -689,7 +689,7 @@ workflows:
       - deploy-staging-s3:
           context: Audius Client
           requires:
-           - build-staging
+            - build-staging
           filters:
             branches:
               only: /^master$/
@@ -697,7 +697,7 @@ workflows:
       - deploy-staging-cloudflare:
           context: Audius Client
           requires:
-           - build-staging
+            - build-staging
           filters:
             branches:
               only: /^master$/
@@ -935,7 +935,7 @@ workflows:
       - dist-win-staging:
           context: Audius Client
           requires:
-              - hold-dist-win-staging
+            - hold-dist-win-staging
           filters:
             branches:
               only: /(^master)|(^bounce.*)$/
