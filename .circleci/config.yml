@@ -15,6 +15,7 @@ workflows:
             web/.* run-web-job true
             mobile/.* run-mobile-job true
           base-revision: master
+          command: ". ./scripts/circle-config.sh"
           # this is the path of the configuration we should trigger once
           # path filtering and pipeline parameter value updates are
           # complete.
