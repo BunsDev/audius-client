@@ -14,7 +14,7 @@ jobs:
       - checkout
       - run:
           name: Generate config
-          command: . ./scripts/circle-config.sh
+          command: . .circleci/scripts/circle-config.sh
 
 workflows:
   select-workflows:
