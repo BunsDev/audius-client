@@ -9,8 +9,7 @@ orbs:
 
 jobs:
   generate-config:
-    docker:
-      - image: circleci/node:14.18
+    executor: continuation/default
     steps:
       - checkout
       - run:
