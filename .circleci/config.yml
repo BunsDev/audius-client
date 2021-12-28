@@ -12,48 +12,22 @@ jobs:
       - image: "circleci/node:latest"
     steps:
       - checkout
-      - swissknife/trigger-workflows-for-all-modified:
+      - swissknife/run_if_modified
           base-branch: master
-          run-mode-for-base-branch: run_for_last_commit
-          code-param-name-map: '
-            [
-            { "regex": "^(web).*", "param_name": "run_web_workflow" },
-            { "regex": "^(mobile).*", "param_name": "run_mobile_workflow" },
-            ]'
-          additional-param-map: '{"run_trigger_workflow": false}'
+          pattern: "^(web).*"
           use-divergence-point: true
-  trigger-web-workflow:
-    executor: continuation/default
-    steps:
-      - continuation/continue:
-          configuration_path: web/.circleci/config.yml
-  trigger-mobile-workflow:
-    executor: continuation/default
-    steps:
-      - continuation/continue:
-          configuration_path: mobile/.circleci/config.yml
+          steps-to-run: 
+            - continuation/continue:
+                configuration_path: web/.circleci/config.yml
+      - swissknife/run_if_modified
+          base-branch: master
+          pattern: "^(mobile).*"
+          use-divergence-point: true
+          steps-to-run: 
+            - continuation/continue:
+                configuration_path: mobile/.circleci/config.yml
 
 workflows:
   trigger-workflows:
-    when: << pipeline.parameters.run_trigger_workflow >>
     jobs:
       - trigger-workflows
-  trigger-web-workflow:
-    when: << pipeline.parameters.run_web_workflow >>
-    jobs:
-      - trigger-web-workflow
-  trigger-mobile-workflow:
-    when: << pipeline.parameters.run_mobile_workflow >>
-    jobs:
-      - trigger-mobile-workflow
-
-parameters:
-  run_web_workflow:
-    default: false
-    type: boolean
-  run_mobile_workflow:
-    default: false
-    type: boolean
-  run_trigger_workflow:
-    default: true
-    type: boolean
