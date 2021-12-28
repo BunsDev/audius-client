@@ -9,13 +9,18 @@ orbs:
 workflows:
   always-run:
     jobs:
+      generate
+        steps:
+          - checkout
+          - run:
+              name: Generate config
+              command: ". ./scripts/circle-config.sh"
       - path-filtering/filter:
           name: check-updated-files
           mapping: |
             web/.* run-web-job true
             mobile/.* run-mobile-job true
           base-revision: master
-          command: ". ./scripts/circle-config.sh"
           # this is the path of the configuration we should trigger once
           # path filtering and pipeline parameter value updates are
           # complete.
