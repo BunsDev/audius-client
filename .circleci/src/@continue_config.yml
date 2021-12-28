@@ -1,0 +1,14 @@
+version: 2.1
+
+# the default pipeline parameters, which will be updated according to
+# the results of the path-filtering orb in config.yml
+parameters:
+  run-web-job:
+    type: boolean
+    default: false
+  run-mobile-job:
+    type: boolean
+    default: false
+
+workflows:
+  version: 2.1
