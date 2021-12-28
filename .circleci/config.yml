@@ -12,18 +12,18 @@ jobs:
       - image: "circleci/node:latest"
     steps:
       - checkout
-      - swissknife/run_if_modified
+      - swissknife/run_if_modified:
           base-branch: "master"
           pattern: "^(web).*"
           use-divergence-point: true
-          steps-to-run: 
+          steps-to-run:
             - continuation/continue:
                 configuration_path: web/.circleci/config.yml
-      - swissknife/run_if_modified
-          base-branch: master
+      - swissknife/run_if_modified:
+          base-branch: "master"
           pattern: "^(mobile).*"
           use-divergence-point: true
-          steps-to-run: 
+          steps-to-run:
             - continuation/continue:
                 configuration_path: mobile/.circleci/config.yml
 
