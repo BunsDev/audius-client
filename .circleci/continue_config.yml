@@ -1,5 +1,8 @@
 version: 2.1
 
+# this allows you to use CircleCI's dynamic configuration feature
+setup: true
+
 # the default pipeline parameters, which will be updated according to
 # the results of the path-filtering orb in config.yml
 parameters:
