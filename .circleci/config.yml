@@ -10,11 +10,6 @@ workflows:
   select-workflows:
     jobs:
       - path-filtering/filter:
-          pre-steps:
-            - checkout
-            - run:
-                name: Generate config
-                command: circleci config pack .circleci/src > .circleci/continue_config.yml
           name: check-updated-files
           mapping: |
             web/.* run-web-job true
