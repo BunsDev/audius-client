@@ -1,21 +1,58 @@
 version: 2.1
 
-# this allows you to use CircleCI's dynamic configuration feature
 setup: true
 
 orbs:
-  path-filtering: circleci/path-filtering@0.0.2
+  continuation: circleci/continuation@0.1.2
+  swissknife: roopakv/swissknife@0.65.0
+
+jobs:
+  trigger-workflows:
+    docker:
+      - image: "circleci/node:latest"
+    steps:
+      - checkout
+      - swissknife/trigger_workflows_for_all_modified:
+          always-trigger-on-branch: master
+          code-param-name-map: '
+            [
+            { "regex": "^(web).*", "param_name": "run_web_workflow" },
+            { "regex": "^(mobile).*", "param_name": "run_mobile_workflow" },
+            ]'
+          additional-param-map: '{"run_trigger_workflow": false}'
+          use-divergence-point: true
+  trigger-web-workflow:
+    executor: continuation/default
+    steps:
+      - continuation/continue:
+          configuration_path: web/.circleci/config.yml
+  trigger-mobile-workflow:
+    executor: continuation/default
+    steps:
+      - continuation/continue:
+          configuration_path: mobile/.circleci/config.yml
 
 workflows:
-  select-workflows:
+  trigger-workflows:
+    when: << pipeline.parameters.run_trigger_workflow >>
     jobs:
-      - path-filtering/filter:
-          name: check-updated-files
-          mapping: |
-            web/.* run-web-job true
-            mobile/.* run-mobile-job true
-          base-revision: master
-          # this is the path of the configuration we should trigger once
-          # path filtering and pipeline parameter value updates are
-          # complete.
-          config-path: .circleci/continue_config.yml
+      - trigger-workflows
+  trigger-web-workflow:
+    when: << pipeline.parameters.run_web_workflow >>
+    jobs:
+      - trigger-web-workflow
+  trigger-mobile-workflow:
+    when: << pipeline.parameters.run_mobile_workflow >>
+    jobs:
+      - trigger-mobile-workflow
+
+parameters:
+  run_web_workflow:
+    default: false
+    type: boolean
+  run_mobile_workflow:
+    default: false
+    type: boolean
+  run_trigger_workflow:
+    default: true
+    type: boolean
