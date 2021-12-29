@@ -11,10 +11,13 @@ workflows:
     jobs:
       - path-filtering/filter:
           pre-steps:
+            - run:
+                name: Install cli
+                command: curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | DESTDIR=~/cli bash
             - checkout
             - run:
                 name: Generate config
-                command: circleci config pack .circleci/src > .circleci/continue_config.yml
+                command: ./cli config pack .circleci/src > .circleci/continue_config.yml
           name: check-updated-files
           mapping: |
             web/.* run-web-job true
