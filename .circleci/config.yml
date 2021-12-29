@@ -17,7 +17,7 @@ workflows:
             - checkout
             - run:
                 name: Generate config
-                command: ./cli config pack .circleci/src > .circleci/continue_config.yml
+                command: ~/cli config pack .circleci/src > .circleci/continue_config.yml
           name: check-updated-files
           mapping: |
             web/.* run-web-job true
