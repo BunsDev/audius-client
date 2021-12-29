@@ -77,21 +77,6 @@ jobs:
         branches:
           only: /(^hotfix.*)$/
 
-  # Staging Native Mobile
-  - build-mobile-staging:
-      requires:
-        - init
-      filters:
-        branches:
-          only: /^master$/
-  - deploy-mobile-staging:
-      context: Audius Client
-      requires:
-        - build-mobile-staging
-      filters:
-        branches:
-          only: /^master$/
-
   # Staging IPFS build
   - build-ipfs-staging:
       requires:
@@ -146,21 +131,6 @@ jobs:
       filters:
         branches:
           only: /^master$/
-
-  # Native Mobile
-  - build-mobile-production:
-      requires:
-        - init
-      filters:
-        branches:
-          only: /(^release.*)$/
-  - deploy-mobile-production:
-      context: Audius Client
-      requires:
-        - build-mobile-production
-      filters:
-        branches:
-          only: /(^release.*)$/
 
   # Release production web.
   - hold-production:
