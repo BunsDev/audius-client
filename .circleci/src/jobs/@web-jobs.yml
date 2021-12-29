@@ -183,7 +183,7 @@ web-deploy-demo:
     - run:
         name: Deploy to S3
         command: aws s3 sync web/build-demo s3://frontend-demo.audius.co/${CIRCLE_BRANCH} --delete --cache-control max-age=0
-    - web-pr-comment:
+    - pr-comment:
         comment: Preview this change https://demo.audius.co/${CIRCLE_BRANCH}
 
 web-deploy-staging-s3:
