@@ -1,11 +1,11 @@
 when: << pipeline.parameters.run-web-job >>
 jobs:
-  - init
+  - web-init
 
   # Cut a demo if not master
-  - build-demo:
+  - web-build-demo:
       requires:
-        - init
+        - web-init
       filters:
         branches:
           ignore: /^master$/
@@ -18,12 +18,12 @@ jobs:
           ignore: /^master$/
 
   # Build
-  - build-staging:
+  - web-build-staging:
       requires:
-        - init
-  - build-production:
+        - web-init
+  - web-build-production:
       requires:
-        - init
+        - web-init
       filters:
         branches:
           only: /(^master)|(^hotfix.*)|(^release.*)$/

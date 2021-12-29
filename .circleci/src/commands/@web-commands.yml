@@ -1,4 +1,4 @@
-pr-comment:
+web-pr-comment:
   parameters:
     comment:
       description: The comment to add to the PR
