@@ -18,7 +18,7 @@ jobs:
           code-param-name-map: '
             [
             { "regex": "^(web).*", "param_name": "run_web_workflow" },
-            { "regex": "^(mobile).*", "param_name": "run_mobile_workflow" },
+            { "regex": "^(mobile).*", "param_name": "run_mobile_workflow" }
             ]'
           additional-param-map: '{"run_trigger_workflow": false}'
           use-divergence-point: true
