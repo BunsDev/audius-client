@@ -25,11 +25,13 @@ jobs:
   trigger-web-workflow:
     executor: continuation/default
     steps:
+      - checkout
       - continuation/continue:
           configuration_path: web/.circleci/config.yml
   trigger-mobile-workflow:
     executor: continuation/default
     steps:
+      - checkout
       - continuation/continue:
           configuration_path: mobile/.circleci/config.yml
 
