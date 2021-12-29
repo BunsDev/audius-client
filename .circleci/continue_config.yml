@@ -1,0 +1,836 @@
+commands:
+    web-pr-comment:
+        parameters:
+            comment:
+                description: The comment to add to the PR
+                type: string
+            maxComments:
+                default: 1
+                description: Max nb of comments per PR
+                type: integer
+            pr:
+                default: $CIRCLE_PULL_REQUEST
+                description: The PR number or URL
+                type: string
+        steps:
+            - run:
+                command: sudo apt-get update && sudo apt-get install -y --force-yes ruby-full
+                name: Install Ruby
+            - run:
+                command: |
+                    curl -sL https://raw.githubusercontent.com/stephencelis/ghi/master/ghi > ghi
+                    chmod 755 ghi
+                    sudo mv ghi /usr/local/bin
+                name: Install GHI
+            - run:
+                command: |
+                    if [[ -z "${GHI_TOKEN}" ]]; then
+                      echo "GHI_TOKEN not set"
+                      /bin/false
+                    fi
+                name: Check Token
+            - run:
+                command: |
+                    GH_LOGIN=$(curl -sS https://api.github.com/user\?access_token\=$GHI_TOKEN | jq '.login' --raw-output)
+                    echo "Authenticated with $GH_LOGIN"
+                    PR_URL=<< parameters.pr >>
+                    PR_ID=${PR_URL##*/}
+                    echo "PR_ID=$PR_ID"
+                    if [ -z $PR_ID ]; then
+                      echo "No PR found, skipping"
+                    else
+                      if [ $(ghi comment --list $PR_ID | grep -c $GH_LOGIN) -ge << parameters.maxComments >> ]; then
+                        echo "Already commented, skip"
+                      else
+                        ghi comment -m "<< parameters.comment >>"  $PR_ID
+                      fi
+                    fi
+                name: Send Comment
+jobs:
+    web-build-demo:
+        docker:
+            - image: circleci/node:14.18
+        resource_class: large
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: export PUBLIC_URL=/${CIRCLE_BRANCH} && cd web && npm run build:stage && mv build-staging build-demo
+                name: build-demo
+            - persist_to_workspace:
+                paths:
+                    - web/build-demo
+                root: ./
+        working_directory: ~/audius-client
+    web-build-ipfs-production:
+        docker:
+            - image: circleci/node:14.18
+        resource_class: large
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: cd web && npm run build:ipfs-prod
+                name: build-ipfs-production
+            - run:
+                command: cd web && zip -r build-ipfs-production.zip ./build-ipfs-production
+                name: zip build
+            - persist_to_workspace:
+                paths:
+                    - web/build-ipfs-production.zip
+                root: ./
+        working_directory: ~/audius-client
+    web-build-ipfs-staging:
+        docker:
+            - image: circleci/node:14.18
+        resource_class: large
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: cd web && npm run build:ipfs-stage
+                name: build-ipfs-staging
+            - run:
+                command: cd web && zip -r build-ipfs-staging.zip ./build-ipfs-staging
+                name: zip build-ipfs-staging
+            - persist_to_workspace:
+                paths:
+                    - web/build-ipfs-staging.zip
+                root: ./
+        working_directory: ~/audius-client
+    web-build-production:
+        docker:
+            - image: circleci/node:14.18
+        resource_class: large
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: cd web && npm run build:prod-source-maps
+                name: build-production
+            - persist_to_workspace:
+                paths:
+                    - web/build-production
+                root: ./
+        working_directory: ~/audius-client
+    web-build-staging:
+        docker:
+            - image: circleci/node:14.18
+        resource_class: large
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: cd web && npm run build:stage
+                name: build-staging
+            - persist_to_workspace:
+                paths:
+                    - web/build-staging
+                root: ./
+        working_directory: ~/audius-client
+    web-deploy-demo:
+        docker:
+            - image: circleci/python:2.7-jessie
+        steps:
+            - checkout
+            - run:
+                command: sudo pip install awscli
+                name: install-awscli
+            - attach_workspace:
+                at: ./
+            - run:
+                command: aws s3 sync web/build-demo s3://frontend-demo.audius.co/${CIRCLE_BRANCH} --delete --cache-control max-age=0
+                name: Deploy to S3
+            - web-pr-comment:
+                comment: Preview this change https://demo.audius.co/${CIRCLE_BRANCH}
+        working_directory: ~/audius-client
+    web-deploy-ipfs-production:
+        docker:
+            - image: circleci/python:2.7-jessie
+        steps:
+            - run:
+                command: sudo pip install awscli
+                name: install-awscli
+            - attach_workspace:
+                at: ./
+            - run:
+                command: aws s3 cp web/build-ipfs-production.zip s3://audius-site-ipfs/build-ipfs-production.zip
+                name: Deploy to S3
+        working_directory: ~/audius-client
+    web-deploy-ipfs-staging:
+        docker:
+            - image: circleci/python:2.7-jessie
+        steps:
+            - run:
+                command: sudo pip install awscli
+                name: install-awscli
+            - attach_workspace:
+                at: ./
+            - run:
+                command: aws s3 cp web/build-ipfs-staging.zip s3://audius-site-ipfs/build-ipfs-staging.zip
+                name: Deploy to S3
+        working_directory: ~/audius-client
+    web-deploy-production-cloudflare:
+        docker:
+            - image: circleci/node:14.18
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: npm install @cloudflare/wrangler
+                name: install wrangler
+            - run:
+                command: |
+                    cd web/scripts/workers-site
+                    npm i
+                    cd ../../
+                    mv build-production build
+                    cp ./resources/apple-app-site-association build
+                    cp ./robots.txt build
+                    echo ${GA_ACCESS_TOKEN} | npx wrangler secret put GA_ACCESS_TOKEN --env production
+                    npx wrangler publish --env production
+                name: Deploy to Cloudflare
+        working_directory: ~/audius-client
+    web-deploy-production-s3:
+        docker:
+            - image: circleci/python:2.7-jessie
+        steps:
+            - checkout
+            - run:
+                command: sudo pip install awscli
+                name: install-awscli
+            - attach_workspace:
+                at: ./
+            - run:
+                command: |
+                    aws s3 sync --exclude "*.map" --exclude ./web/resources/apple-app-site-association --exclude robots.txt --exclude "web/sitemaps/*" web/build-production s3://audius.co --delete --cache-control max-age=604800
+                    aws s3 cp s3://audius.co/index.html s3://audius.co/index.html --cache-control max-age=0,no-cache,no-store,must-revalidate --content-type text/html --metadata-directive REPLACE --acl public-read
+                    aws s3 cp ./web/resources/apple-app-site-association s3://audius.co --cache-control max-age=0 --content-type 'application/json' --metadata-directive REPLACE
+                    aws s3 cp web/robots.txt s3://audius.co --cache-control max-age=0 --content-type 'application/json' --metadata-directive REPLACE
+                name: Deploy to S3
+            - run:
+                command: aws cloudfront create-invalidation --distribution-id E1ZJ9Z971FJQJ8 --paths "/*"
+                name: Invalidate cache
+        working_directory: ~/audius-client
+    web-deploy-release-candidate:
+        docker:
+            - image: circleci/node:14.18
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: cd web && npm install @cloudflare/wrangler
+                name: install wrangler
+            - run:
+                command: |
+                    cd web/scripts/workers-site
+                    npm i
+                    cd ../../
+                    mv build-production build
+                    cp ./resources/apple-app-site-association build
+                    cp ./robots.txt build
+                    echo ${GA_ACCESS_TOKEN} | npx wrangler secret put GA_ACCESS_TOKEN --env release
+                    npx wrangler publish --env release
+                name: Deploy to Cloudflare
+        working_directory: ~/audius-client
+    web-deploy-sentry-sourcemaps:
+        docker:
+            - image: circleci/node:14.18
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: cd web && npm install @sentry/cli
+                name: install-sentry-cli
+            - run:
+                command: cd web && node_modules/.bin/sentry-cli --auth-token ${SENTRY_AUTH_TOKEN} releases --org audius --project audius-client new ${CIRCLE_SHA1}
+                name: cut-sentry-release
+            - run:
+                command: cd web && node_modules/.bin/sentry-cli --auth-token ${SENTRY_AUTH_TOKEN} releases --org audius --project audius-client files ${CIRCLE_SHA1} upload-sourcemaps --no-rewrite build-production
+                name: upload-sourcemaps
+            - run:
+                command: cd web && node_modules/.bin/sentry-cli --auth-token ${SENTRY_AUTH_TOKEN} releases --org audius --project audius-client finalize ${CIRCLE_SHA1}
+                name: finalize-release
+        working_directory: ~/audius-client
+    web-deploy-staging-cloudflare:
+        docker:
+            - image: circleci/node:14.18
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: npm install @cloudflare/wrangler
+                name: install wrangler
+            - run:
+                command: |
+                    cd web/scripts/workers-site
+                    npm i
+                    cd ../../
+                    mv build-staging build
+                    cp ./resources/apple-app-site-association build
+                    echo ${GA_ACCESS_TOKEN} | npx wrangler secret put GA_ACCESS_TOKEN --env staging
+                    npx wrangler publish --env staging
+                name: Deploy to Cloudflare
+        working_directory: ~/audius-client
+    web-deploy-staging-s3:
+        docker:
+            - image: circleci/python:2.7-jessie
+        steps:
+            - checkout
+            - run:
+                command: sudo pip install awscli
+                name: install-awscli
+            - attach_workspace:
+                at: ./
+            - run:
+                command: |
+                    aws s3 sync --exclude ./web/resources/apple-app-site-association --exclude "web/sitemaps/*" web/build-staging s3://staging.audius.co --delete --cache-control max-age=0
+                    aws s3 cp ./web/resources/apple-app-site-association s3://staging.audius.co --cache-control max-age=0 --content-type 'application/json' --metadata-directive REPLACE
+                name: Deploy to S3
+        working_directory: ~/audius-client
+    web-dist-linux-production:
+        docker:
+            - image: electronuserland/builder
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: cd web && npm run dist:linux-publish-production
+                name: distribute
+        working_directory: ~/audius-client
+    web-dist-linux-staging:
+        docker:
+            - image: electronuserland/builder
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: cd web && npm run dist:linux-publish
+                name: distribute
+        working_directory: ~/audius-client
+    web-dist-mac-production:
+        macos:
+            xcode: 12.2.0
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: cd web && npm run dist:mac-publish-production
+                name: distribute
+        working_directory: ~/audius-client
+    web-dist-mac-staging:
+        macos:
+            xcode: 12.2.0
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: cd web && npm run dist:mac-publish
+                name: distribute
+        working_directory: ~/audius-client
+    web-dist-win-production:
+        docker:
+            - image: electronuserland/builder:wine-mono
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: cd web && npm run dist:win-publish-production
+                name: distribute
+        working_directory: ~/audius-client
+    web-dist-win-staging:
+        docker:
+            - image: electronuserland/builder:wine-mono
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: cd web && npm run dist:win-publish
+                name: distribute
+        working_directory: ~/audius-client
+    web-init:
+        docker:
+            - image: circleci/node:14.18
+        steps:
+            - checkout
+            - restore_cache:
+                keys:
+                    - dependency-cache-{{ checksum "web/package.json" }}
+                    - dependency-cache-
+            - run: rm -rf /home/circleci/audius-client/web/node_modules/websocket/.git
+            - run: echo "//registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN" > .npmrc
+            - run: cd web && npm install --ignore-scripts
+            - save_cache:
+                key: dependency-cache-{{ checksum "web/package.json" }}
+                paths:
+                    - ./web/node_modules
+            - run:
+                command: cd web && npm run lint
+                name: lint
+            - run:
+                command: cd web && npm test
+                name: test
+            - persist_to_workspace:
+                paths:
+                    - web/node_modules
+                root: ./
+        working_directory: ~/audius-client
+    web-publish-github-release:
+        docker:
+            - image: cibuilds/github:0.10
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: |
+                    VERSION=$(grep -m1 version ./web/package.json | awk -F: '{ print $2 }' | sed 's/[", ]//g')
+                    echo "$VERSION"
+                    ghr -t ${GHI_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ./web
+                name: Publish Release on GitHub
+        working_directory: ~/audius-client
+    web-publish-production-build-cids:
+        docker:
+            - image: circleci/python:2.7-jessie
+        steps:
+            - run:
+                command: sudo pip install awscli
+                name: install-awscli
+            - attach_workspace:
+                at: ./
+            - run:
+                command: aws s3 cp web/build_cid.txt s3://audius-site-ipfs/build_cid_production.txt
+                name: Push to S3
+        working_directory: ~/audius-client
+    web-publish-staging-build-cids:
+        docker:
+            - image: circleci/python:2.7-jessie
+        steps:
+            - run:
+                command: sudo pip install awscli
+                name: install-awscli
+            - attach_workspace:
+                at: ./
+            - run:
+                command: aws s3 cp web/build_cid.txt s3://audius-site-ipfs/build_cid_staging.txt
+                name: Push to S3
+        working_directory: ~/audius-client
+    web-test-staging:
+        docker:
+            - image: circleci/node:14.18-browsers
+        resource_class: large
+        steps:
+            - run:
+                command: |
+                    mkdir -p ~/.ssh && touch ~/.ssh/config && echo $'Host github.com\n\tStrictHostKeyChecking no' > ~/.ssh/config
+                    git clone git@github.com:AudiusProject/probers.git
+                    cd probers
+                name: download probers
+            - restore_cache:
+                keys:
+                    - probers-dependency-cache-{{ checksum "probers/package.json" }}
+                    - probers-dependency-cache-
+            - run:
+                command: |
+                    cd probers
+                    npm install
+                name: install probers dependencies
+            - save_cache:
+                key: probers-dependency-cache-{{ checksum "probers/package.json" }}
+                paths:
+                    - ./probers/node_modules
+            - attach_workspace:
+                at: ./
+            - run:
+                command: |
+                    npm install serve
+                    node node_modules/serve/bin/serve.js -l 3001 -s web/build-staging &
+                    cd probers
+                    npm run test:ci
+                name: serve and run prober tests
+        working_directory: ~/
+    web-update-ipfs-production-records:
+        docker:
+            - image: circleci/node:14.18
+        steps:
+            - attach_workspace:
+                at: ./
+            - run:
+                command: |
+                    DNS_NAME=_dnslink.ipfs.audius.co
+                    CID=$(cat ./web/build_cid.txt)
+                    curl -X PUT "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_AUDIUS_CO_ZONE}/dns_records/${CLOUDFLARE_PROD_SITE_IPFS_DNS_ID}" \
+                      -H "X-Auth-Email: ${CLOUDFLARE_AUTH_EMAIL}" \
+                      -H "Authorization: Bearer ${CLOUDFLARE_AUTH_KEY}" \
+                      -H "Content-Type: application/json" \
+                      --data '{"type":"TXT","name":"'"$DNS_NAME"'","content":"\"dnslink=/ipfs/'"$CID"'\"","ttl":1,"proxied":false}'
+                name: Update Cloudflare records
+        working_directory: ~/audius-client
+    web-update-ipfs-staging-records:
+        docker:
+            - image: circleci/node:14.18
+        steps:
+            - attach_workspace:
+                at: ./
+            - run:
+                command: |
+                    DNS_NAME=_dnslink.ipfs.staging.audius.co
+                    CID=$(cat ./web/build_cid.txt)
+                    curl -X PUT "https://api.cloudflare.com/client/v4/zones/${CLOUDFLARE_AUDIUS_CO_ZONE}/dns_records/${CLOUDFLARE_STAGE_SITE_IPFS_DNS_ID}" \
+                      -H "X-Auth-Email: ${CLOUDFLARE_AUTH_EMAIL}" \
+                      -H "Authorization: Bearer ${CLOUDFLARE_AUTH_KEY}" \
+                      -H "Content-Type: application/json" \
+                      --data '{"type":"TXT","name":"'"$DNS_NAME"'","content":"\"dnslink=/ipfs/'"$CID"'\"","ttl":1,"proxied":false}'
+                name: Update Cloudflare records
+        working_directory: ~/audius-client
+    web-update-production-ga-ipfs-build:
+        docker:
+            - image: circleci/node:14.18
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: cd web && npm run update-ipfs-build:prod
+                name: update ipfs build in ga
+            - persist_to_workspace:
+                paths:
+                    - ./web/build_cid.txt
+                root: ./
+        working_directory: ~/audius-client
+    web-update-staging-ga-ipfs-build:
+        docker:
+            - image: circleci/node:14.18
+        steps:
+            - checkout
+            - attach_workspace:
+                at: ./
+            - run:
+                command: cd web && npm run update-ipfs-build:stage
+                name: update ipfs build in ga
+            - persist_to_workspace:
+                paths:
+                    - ./web/build_cid.txt
+                root: ./
+        working_directory: ~/audius-client
+orbs:
+    ruby: circleci/ruby@1.2.0
+parameters:
+    run-mobile-job:
+        default: false
+        type: boolean
+    run-web-job:
+        default: false
+        type: boolean
+version: 2.1
+workflows:
+    version: 2.1
+    web:
+        jobs:
+            - web-init
+            - web-build-demo:
+                filters:
+                    branches:
+                        ignore: /^master$/
+                requires:
+                    - web-init
+            - web-deploy-demo:
+                context: Audius Client
+                filters:
+                    branches:
+                        ignore: /^master$/
+                requires:
+                    - web-build-demo
+            - web-build-staging:
+                requires:
+                    - web-init
+            - web-build-production:
+                filters:
+                    branches:
+                        only: /(^master)|(^hotfix.*)|(^release.*)$/
+                requires:
+                    - web-init
+            - web-test-staging:
+                context: Audius Client
+                requires:
+                    - web-build-staging
+            - web-deploy-staging-s3:
+                context: Audius Client
+                filters:
+                    branches:
+                        only: /^master$/
+                requires:
+                    - web-build-staging
+            - web-deploy-staging-cloudflare:
+                context: Audius Client
+                filters:
+                    branches:
+                        only: /^master$/
+                requires:
+                    - web-build-staging
+            - web-deploy-release-candidate:
+                context: Audius Client
+                filters:
+                    branches:
+                        only: /(^hotfix.*)|(^release.*)$/
+                requires:
+                    - web-init
+                    - web-build-production
+            - web-hold-staging:
+                filters:
+                    branches:
+                        only: /(^hotfix.*)$/
+                requires:
+                    - web-init
+                    - web-build-staging
+                type: approval
+            - web-deploy-staging-cloudflare:
+                context: Audius Client
+                filters:
+                    branches:
+                        only: /(^hotfix.*)$/
+                requires:
+                    - web-init
+                    - web-hold-staging
+            - web-build-ipfs-staging:
+                filters:
+                    branches:
+                        only: /^master$/
+                requires:
+                    - web-init
+            - web-deploy-ipfs-staging:
+                context: Audius Client
+                filters:
+                    branches:
+                        only: /^master$/
+                requires:
+                    - web-build-ipfs-staging
+            - web-hold-update-staging-ga-ipfs-build:
+                filters:
+                    branches:
+                        only: /^master$/
+                requires:
+                    - web-deploy-ipfs-staging
+                type: approval
+            - web-update-staging-ga-ipfs-build:
+                context:
+                    - Audius Client
+                    - Pinata
+                filters:
+                    branches:
+                        only: /^master$/
+                requires:
+                    - web-hold-update-staging-ga-ipfs-build
+            - web-publish-staging-build-cids:
+                context:
+                    - Audius Client
+                filters:
+                    branches:
+                        only: /^master$/
+                requires:
+                    - web-update-staging-ga-ipfs-build
+            - web-hold-update-ipfs-staging-records:
+                filters:
+                    branches:
+                        only: /^master$/
+                requires:
+                    - web-update-staging-ga-ipfs-build
+                type: approval
+            - web-update-ipfs-staging-records:
+                context:
+                    - Audius Client
+                    - Cloudflare API
+                filters:
+                    branches:
+                        only: /^master$/
+                requires:
+                    - web-hold-update-ipfs-staging-records
+            - web-hold-production:
+                filters:
+                    branches:
+                        only: /(^master)|(^hotfix.*)|(^release.*)$/
+                requires:
+                    - web-build-production
+                type: approval
+            - web-deploy-production-s3:
+                context: Audius Client
+                filters:
+                    branches:
+                        only: /(^master)|(^hotfix.*)|(^release.*)$/
+                requires:
+                    - web-hold-production
+            - web-deploy-production-cloudflare:
+                context: Audius Client
+                filters:
+                    branches:
+                        only: /(^master)|(^hotfix.*)|(^release.*)$/
+                requires:
+                    - web-hold-production
+            - web-deploy-sentry-sourcemaps:
+                context: Audius Client
+                filters:
+                    branches:
+                        only: /(^master)|(^hotfix.*)|(^release.*)$/
+                requires:
+                    - web-deploy-production-s3
+            - web-publish-github-release:
+                context: Audius Client
+                filters:
+                    branches:
+                        only: /(^master)|(^hotfix.*)|(^release.*)$/
+                requires:
+                    - web-hold-production
+            - web-build-ipfs-production:
+                filters:
+                    branches:
+                        only: /(^release.*)$/
+                requires:
+                    - web-init
+            - web-deploy-ipfs-production:
+                context: Audius Client
+                filters:
+                    branches:
+                        only: /(^release.*)$/
+                requires:
+                    - web-build-ipfs-production
+            - web-hold-update-production-ga-ipfs-build:
+                filters:
+                    branches:
+                        only: /(^release.*)$/
+                requires:
+                    - web-deploy-ipfs-production
+                type: approval
+            - web-update-production-ga-ipfs-build:
+                context:
+                    - Audius Client
+                    - Pinata
+                filters:
+                    branches:
+                        only: /(^release.*)$/
+                requires:
+                    - web-hold-update-production-ga-ipfs-build
+            - web-publish-production-build-cids:
+                context:
+                    - Audius Client
+                filters:
+                    branches:
+                        only: /(^release.*)$/
+                requires:
+                    - web-update-production-ga-ipfs-build
+            - web-hold-update-ipfs-production-records:
+                filters:
+                    branches:
+                        only: /(^release.*)$/
+                requires:
+                    - web-update-production-ga-ipfs-build
+                type: approval
+            - web-update-ipfs-production-records:
+                context:
+                    - Audius Client
+                    - Cloudflare API
+                filters:
+                    branches:
+                        only: /(^release.*)$/
+                requires:
+                    - web-hold-update-ipfs-production-records
+            - web-hold-dist-mac-staging:
+                filters:
+                    branches:
+                        only: /(^master)|(^bounce.*)$/
+                requires:
+                    - web-build-staging
+                type: approval
+            - web-dist-mac-staging:
+                context: Audius Client
+                filters:
+                    branches:
+                        only: /(^master)|(^bounce.*)$/
+                requires:
+                    - web-hold-dist-mac-staging
+            - web-hold-dist-win-staging:
+                filters:
+                    branches:
+                        only: /(^master)|(^bounce.*)$/
+                requires:
+                    - web-build-staging
+                type: approval
+            - web-dist-win-staging:
+                context: Audius Client
+                filters:
+                    branches:
+                        only: /(^master)|(^bounce.*)$/
+                requires:
+                    - web-hold-dist-win-staging
+            - web-hold-dist-linux-staging:
+                filters:
+                    branches:
+                        only: /(^master)|(^bounce.*)$/
+                requires:
+                    - web-build-staging
+                type: approval
+            - web-dist-linux-staging:
+                context: Audius Client
+                filters:
+                    branches:
+                        only: /(^master)|(^bounce.*)$/
+                requires:
+                    - web-hold-dist-linux-staging
+            - web-hold-dist-mac-production:
+                filters:
+                    branches:
+                        only: /(^master)|(^hotfix.*)|(^release.*)$/
+                requires:
+                    - web-build-production
+                type: approval
+            - web-dist-mac-production:
+                context: Audius Client
+                filters:
+                    branches:
+                        only: /(^master)|(^hotfix.*)|(^release.*)$/
+                requires:
+                    - web-hold-dist-mac-production
+            - web-hold-dist-win-production:
+                filters:
+                    branches:
+                        only: /(^master)|(^hotfix.*)|(^release.*)$/
+                requires:
+                    - web-build-production
+                type: approval
+            - web-dist-win-production:
+                context: Audius Client
+                filters:
+                    branches:
+                        only: /(^master)|(^hotfix.*)|(^release.*)$/
+                requires:
+                    - web-hold-dist-win-production
+            - web-hold-dist-linux-production:
+                filters:
+                    branches:
+                        only: /(^master)|(^hotfix.*)|(^release.*)$/
+                requires:
+                    - web-build-production
+                type: approval
+            - web-dist-linux-production:
+                context: Audius Client
+                filters:
+                    branches:
+                        only: /(^master)|(^hotfix.*)|(^release.*)$/
+                requires:
+                    - web-hold-dist-linux-production
+        when: << pipeline.parameters.run-web-job >>
+
