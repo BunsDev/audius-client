@@ -32,8 +32,7 @@
     "typecheck": "npx tsc -p ./tsconfig.json",
     "typecheck:watch": "npx tsc --watch",
     "typecheck:trace": "npx tsc --generateTrace tsc_trace",
-    "pre-commit": "npm run typecheck & npm run lint",
-    "prepare": "husky install"
+    "pre-commit": "npm run typecheck & npm run lint"
   },
   "dependencies": {
     "@amplitude/react-native": "2.6.0",
@@ -129,7 +128,6 @@
     "eslint-plugin-react": "7.26.0",
     "eslint-plugin-react-hooks": "3.0.0",
     "eslint-plugin-standard": "4.1.0",
-    "husky": "7.0.4",
     "jest": "24.9.0",
     "jetifier": "1.6.8",
     "metro-react-native-babel-preset": "0.56.4",
