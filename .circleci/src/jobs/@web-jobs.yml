@@ -1,4 +1,4 @@
-init:
+web-init:
   working_directory: ~/audius-client
   docker:
     - image: circleci/node:14.18
@@ -39,7 +39,7 @@ init:
         paths:
           - web/node_modules
 
-build-demo:
+web-build-demo:
   working_directory: ~/audius-client
   docker:
     - image: circleci/node:14.18
@@ -58,7 +58,7 @@ build-demo:
         paths:
           - web/build-demo
 
-build-staging:
+web-build-staging:
   working_directory: ~/audius-client
   docker:
     - image: circleci/node:14.18
@@ -75,7 +75,7 @@ build-staging:
         paths:
           - web/build-staging
 
-build-ipfs-staging:
+web-build-ipfs-staging:
   working_directory: ~/audius-client
   docker:
     - image: circleci/node:14.18
@@ -95,7 +95,7 @@ build-ipfs-staging:
         paths:
           - web/build-ipfs-staging.zip
 
-test-staging:
+web-test-staging:
   working_directory: ~/
   docker:
     - image: circleci/node:14.18-browsers
@@ -132,7 +132,7 @@ test-staging:
           cd probers
           npm run test:ci
 
-build-production:
+web-build-production:
   working_directory: ~/audius-client
   docker:
     - image: circleci/node:14.18
@@ -149,7 +149,7 @@ build-production:
         paths:
           - web/build-production
 
-build-ipfs-production:
+web-build-ipfs-production:
   working_directory: ~/audius-client
   docker:
     - image: circleci/node:14.18
@@ -169,7 +169,7 @@ build-ipfs-production:
         paths:
           - web/build-ipfs-production.zip
 
-deploy-demo:
+web-deploy-demo:
   working_directory: ~/audius-client
   docker:
     - image: circleci/python:2.7-jessie
@@ -186,7 +186,7 @@ deploy-demo:
     - pr-comment:
         comment: Preview this change https://demo.audius.co/${CIRCLE_BRANCH}
 
-deploy-staging-s3:
+web-deploy-staging-s3:
   working_directory: ~/audius-client
   docker:
     - image: circleci/python:2.7-jessie
@@ -203,7 +203,7 @@ deploy-staging-s3:
           aws s3 sync --exclude ./web/resources/apple-app-site-association --exclude "web/sitemaps/*" web/build-staging s3://staging.audius.co --delete --cache-control max-age=0
           aws s3 cp ./web/resources/apple-app-site-association s3://staging.audius.co --cache-control max-age=0 --content-type 'application/json' --metadata-directive REPLACE
 
-deploy-staging-cloudflare:
+web-deploy-staging-cloudflare:
   working_directory: ~/audius-client
   docker:
     - image: circleci/node:14.18
@@ -225,7 +225,7 @@ deploy-staging-cloudflare:
           echo ${GA_ACCESS_TOKEN} | npx wrangler secret put GA_ACCESS_TOKEN --env staging
           npx wrangler publish --env staging
 
-deploy-ipfs-staging:
+web-deploy-ipfs-staging:
   working_directory: ~/audius-client
   docker:
     - image: circleci/python:2.7-jessie
@@ -239,7 +239,7 @@ deploy-ipfs-staging:
         name: Deploy to S3
         command: aws s3 cp web/build-ipfs-staging.zip s3://audius-site-ipfs/build-ipfs-staging.zip
 
-update-staging-ga-ipfs-build:
+web-update-staging-ga-ipfs-build:
   working_directory: ~/audius-client
   docker:
     - image: circleci/node:14.18
@@ -255,7 +255,7 @@ update-staging-ga-ipfs-build:
         paths:
           - ./web/build_cid.txt
 
-publish-staging-build-cids:
+web-publish-staging-build-cids:
   working_directory: ~/audius-client
   docker:
     - image: circleci/python:2.7-jessie
@@ -269,7 +269,7 @@ publish-staging-build-cids:
         name: Push to S3
         command: aws s3 cp web/build_cid.txt s3://audius-site-ipfs/build_cid_staging.txt
 
-update-ipfs-staging-records:
+web-update-ipfs-staging-records:
   working_directory: ~/audius-client
   docker:
     - image: circleci/node:14.18
@@ -287,7 +287,7 @@ update-ipfs-staging-records:
             -H "Content-Type: application/json" \
             --data '{"type":"TXT","name":"'"$DNS_NAME"'","content":"\"dnslink=/ipfs/'"$CID"'\"","ttl":1,"proxied":false}'
 
-deploy-release-candidate:
+web-deploy-release-candidate:
   working_directory: ~/audius-client
   docker:
     - image: circleci/node:14.18
@@ -310,7 +310,7 @@ deploy-release-candidate:
           echo ${GA_ACCESS_TOKEN} | npx wrangler secret put GA_ACCESS_TOKEN --env release
           npx wrangler publish --env release
 
-deploy-production-s3:
+web-deploy-production-s3:
   working_directory: ~/audius-client
   docker:
     - image: circleci/python:2.7-jessie
@@ -334,7 +334,7 @@ deploy-production-s3:
         # Note: cache invalidation is charged per path, so this only counts as 1/1000 monthly quota.
         command: aws cloudfront create-invalidation --distribution-id E1ZJ9Z971FJQJ8 --paths "/*"
 
-deploy-production-cloudflare:
+web-deploy-production-cloudflare:
   working_directory: ~/audius-client
   docker:
     - image: circleci/node:14.18
@@ -357,7 +357,7 @@ deploy-production-cloudflare:
           echo ${GA_ACCESS_TOKEN} | npx wrangler secret put GA_ACCESS_TOKEN --env production
           npx wrangler publish --env production
 
-deploy-sentry-sourcemaps:
+web-deploy-sentry-sourcemaps:
   working_directory: ~/audius-client
   docker:
     - image: circleci/node:14.18
@@ -378,7 +378,7 @@ deploy-sentry-sourcemaps:
         name: finalize-release
         command: cd web && node_modules/.bin/sentry-cli --auth-token ${SENTRY_AUTH_TOKEN} releases --org audius --project audius-client finalize ${CIRCLE_SHA1}
 
-deploy-ipfs-production:
+web-deploy-ipfs-production:
   working_directory: ~/audius-client
   docker:
     - image: circleci/python:2.7-jessie
@@ -392,7 +392,7 @@ deploy-ipfs-production:
         name: Deploy to S3
         command: aws s3 cp web/build-ipfs-production.zip s3://audius-site-ipfs/build-ipfs-production.zip
 
-update-production-ga-ipfs-build:
+web-update-production-ga-ipfs-build:
   working_directory: ~/audius-client
   docker:
     - image: circleci/node:14.18
@@ -408,7 +408,7 @@ update-production-ga-ipfs-build:
         paths:
           - ./web/build_cid.txt
 
-publish-production-build-cids:
+web-publish-production-build-cids:
   working_directory: ~/audius-client
   docker:
     - image: circleci/python:2.7-jessie
@@ -422,7 +422,7 @@ publish-production-build-cids:
         name: Push to S3
         command: aws s3 cp web/build_cid.txt s3://audius-site-ipfs/build_cid_production.txt
 
-update-ipfs-production-records:
+web-update-ipfs-production-records:
   working_directory: ~/audius-client
   docker:
     - image: circleci/node:14.18
@@ -440,7 +440,7 @@ update-ipfs-production-records:
             -H "Content-Type: application/json" \
             --data '{"type":"TXT","name":"'"$DNS_NAME"'","content":"\"dnslink=/ipfs/'"$CID"'\"","ttl":1,"proxied":false}'
 
-dist-mac-staging:
+web-dist-mac-staging:
   working_directory: ~/audius-client
   macos: # Run on osx so dmg can be created and signed.
     xcode: "12.2.0"
@@ -453,7 +453,7 @@ dist-mac-staging:
         name: distribute
         command: cd web && npm run dist:mac-publish
 
-dist-win-staging:
+web-dist-win-staging:
   working_directory: ~/audius-client
   docker:
     - image: electronuserland/builder:wine-mono
@@ -466,7 +466,7 @@ dist-win-staging:
         name: distribute
         command: cd web && npm run dist:win-publish
 
-dist-linux-staging:
+web-dist-linux-staging:
   working_directory: ~/audius-client
   docker:
     - image: electronuserland/builder
@@ -479,7 +479,7 @@ dist-linux-staging:
         name: distribute
         command: cd web && npm run dist:linux-publish
 
-dist-mac-production:
+web-dist-mac-production:
   working_directory: ~/audius-client
   macos: # Run on osx so dmg can be created and signed.
     xcode: "12.2.0"
@@ -492,7 +492,7 @@ dist-mac-production:
         name: distribute
         command: cd web && npm run dist:mac-publish-production
 
-dist-win-production:
+web-dist-win-production:
   working_directory: ~/audius-client
   docker:
     - image: electronuserland/builder:wine-mono
@@ -505,7 +505,7 @@ dist-win-production:
         name: distribute
         command: cd web && npm run dist:win-publish-production
 
-dist-linux-production:
+web-dist-linux-production:
   working_directory: ~/audius-client
   docker:
     - image: electronuserland/builder
@@ -518,7 +518,7 @@ dist-linux-production:
         name: distribute
         command: cd web && npm run dist:linux-publish-production
 
-publish-github-release:
+web-publish-github-release:
   working_directory: ~/audius-client
   docker:
     - image: cibuilds/github:0.10
