@@ -905,3 +905,14 @@ workflows:
           filters:
             branches:
               only: /(^master)|(^hotfix.*)|(^release.*)$/
+
+parameters:
+  run_web_workflow:
+    default: false
+    type: boolean
+  run_mobile_workflow:
+    default: false
+    type: boolean
+  run_trigger_workflow:
+    default: true
+    type: boolean
