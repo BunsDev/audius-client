@@ -1,4 +1,4 @@
-web-init:
+mobile-init:
   working_directory: ~/audius-client
   docker:
     - image: circleci/node:14.18
