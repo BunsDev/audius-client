@@ -41,6 +41,8 @@ workflows:
           # path filtering and pipeline parameter value updates are
           # complete.
           config-path: .circleci/continue_config.yml
+          requires:
+            - generate-config
           filters:
             branches:
               ignore: << pipeline.parameters.branch-regex-to-run-all-workflows-for >>
@@ -50,6 +52,8 @@ workflows:
             "run-web-workflow": true,
             "run-mobile-workflow": true
             }'
+          requires:
+            - generate-config
           filters:
             branches:
               only: << pipeline.parameters.branch-regex-to-run-all-workflows-for >>
