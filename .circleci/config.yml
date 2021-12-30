@@ -1,5 +1,11 @@
 version: 2.1
 
+parameters:
+  # Run all workflows for branches that match this regex
+  run-all-workflows-branch-regex:
+    type: string
+    default: /(^master)|(^release.*)$/
+
 setup: true
 
 orbs:
@@ -7,10 +13,10 @@ orbs:
   path-filtering: circleci/path-filtering@0.1.1
 
 jobs:
+  # Generate the CircleCI continue_config.yml from .circleci/src
   generate-config:
     docker:
       - image: cimg/base:2021.04
-
     steps:
       # The circleci cli exposed in the image doesn't support config packing
       # so we install a version that does
@@ -30,40 +36,35 @@ workflows:
   trigger-workflows:
     jobs:
       - generate-config
-      # - path-filtering/filter:
-      #     workspace_path: ../workspace
-      #     name: trigger-relevant-workflows
-      #     mapping: |
-      #       web/.* run-web-workflow true
-      #       mobile/.* run-mobile-workflow true
-      #     base-revision: master
-      #     # this is the path of the configuration we should trigger once
-      #     # path filtering and pipeline parameter value updates are
-      #     # complete.
-      #     config-path: ../workspace/.circleci/continue_config.yml
-      #     requires:
-      #       - generate-config
-      #     filters:
-      #       branches:
-      #         ignore: << pipeline.parameters.branch-regex-to-run-all-workflows-for >>
+
+      # Trigger relevant workflows for the files that have changed
+      - path-filtering/filter:
+          base-revision: master
+          config-path: ../workspace/.circleci/continue_config.yml
+          mapping: |
+            web/.* run-web-workflow true
+            mobile/.* run-mobile-workflow true
+          name: trigger-relevant-workflows
+          filters:
+            branches:
+              ignore: << pipeline.parameters.run-all-workflows-branch-regex >>
+          requires:
+            - generate-config
+          workspace_path: ../workspace
+
+      # Trigger all workflows for branches that match regex
       - continuation/continue:
-          name: trigger-all-workflows
-          pre-steps:
-            - attach_workspace:
-                at: ../workspace
           configuration_path: ../workspace/.circleci/continue_config.yml
+          name: trigger-all-workflows
+          filters:
+            branches:
+              only: << pipeline.parameters.run-all-workflows-branch-regex >>
           parameters: '{
             "run-web-workflow": true,
             "run-mobile-workflow": true
             }'
+          pre-steps:
+            - attach_workspace:
+                at: ../workspace
           requires:
             - generate-config
-          # filters:
-          #   branches:
-          #     only: << pipeline.parameters.branch-regex-to-run-all-workflows-for >>
-
-parameters:
-  # Run all workflows for branches that match this regex
-  branch-regex-to-run-all-workflows-for:
-    type: string
-    default: /(^master)|(^release.*)$/
