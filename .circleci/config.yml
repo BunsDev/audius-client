@@ -33,7 +33,7 @@ jobs:
             - .circleci/continue_config.yml
 
 workflows:
-  trigger-workflows:
+  setup:
     jobs:
       - generate-config
 
