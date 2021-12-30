@@ -47,6 +47,9 @@ workflows:
       #       branches:
       #         ignore: << pipeline.parameters.branch-regex-to-run-all-workflows-for >>
       - continuation/continue:
+          pre-steps:
+            - attach_workspace:
+                at: ./workspace
           configuration_path: ../workspace/.circleci/continue_config.yml
           parameters: '{
             "run-web-workflow": true,
