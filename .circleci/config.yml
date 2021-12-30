@@ -32,7 +32,7 @@ workflows:
       - generate-config
       # - path-filtering/filter:
       #     workspace_path: ../workspace
-      #     name: check-updated-files
+      #     name: trigger-relevant-workflows
       #     mapping: |
       #       web/.* run-web-workflow true
       #       mobile/.* run-mobile-workflow true
@@ -47,9 +47,10 @@ workflows:
       #       branches:
       #         ignore: << pipeline.parameters.branch-regex-to-run-all-workflows-for >>
       - continuation/continue:
+          name: trigger-all-workflows
           pre-steps:
             - attach_workspace:
-                at: ./workspace
+                at: ../workspace
           configuration_path: ../workspace/.circleci/continue_config.yml
           parameters: '{
             "run-web-workflow": true,
