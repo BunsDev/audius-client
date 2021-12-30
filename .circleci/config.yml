@@ -9,7 +9,8 @@ orbs:
 jobs:
   generate-config:
     docker:
-      - image: cimg/base
+      - image: cimg/base:2021.04
+
     steps:
       # The circleci cli exposed in the image doesn't support config packing
       # so we install a version that does
