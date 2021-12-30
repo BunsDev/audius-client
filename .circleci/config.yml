@@ -20,7 +20,7 @@ jobs:
       - checkout
       - run:
           name: Generate config
-          command: circleci config pack .circleci/src > .circleci/continue_config.yml
+          command: ~/cli config pack .circleci/src > .circleci/continue_config.yml
       - persist_to_workspace:
           root: ./
           paths:
@@ -30,22 +30,22 @@ workflows:
   trigger-workflows:
     jobs:
       - generate-config
-      - path-filtering/filter:
-          workspace_path: ../workspace
-          name: check-updated-files
-          mapping: |
-            web/.* run-web-workflow true
-            mobile/.* run-mobile-workflow true
-          base-revision: master
-          # this is the path of the configuration we should trigger once
-          # path filtering and pipeline parameter value updates are
-          # complete.
-          config-path: ../workspace/.circleci/continue_config.yml
-          requires:
-            - generate-config
-          filters:
-            branches:
-              ignore: << pipeline.parameters.branch-regex-to-run-all-workflows-for >>
+      # - path-filtering/filter:
+      #     workspace_path: ../workspace
+      #     name: check-updated-files
+      #     mapping: |
+      #       web/.* run-web-workflow true
+      #       mobile/.* run-mobile-workflow true
+      #     base-revision: master
+      #     # this is the path of the configuration we should trigger once
+      #     # path filtering and pipeline parameter value updates are
+      #     # complete.
+      #     config-path: ../workspace/.circleci/continue_config.yml
+      #     requires:
+      #       - generate-config
+      #     filters:
+      #       branches:
+      #         ignore: << pipeline.parameters.branch-regex-to-run-all-workflows-for >>
       - continuation/continue:
           configuration_path: ../workspace/.circleci/continue_config.yml
           parameters: '{
@@ -54,9 +54,9 @@ workflows:
             }'
           requires:
             - generate-config
-          filters:
-            branches:
-              only: << pipeline.parameters.branch-regex-to-run-all-workflows-for >>
+          # filters:
+          #   branches:
+          #     only: << pipeline.parameters.branch-regex-to-run-all-workflows-for >>
 
 parameters:
   # Run all workflows for branches that match this regex
