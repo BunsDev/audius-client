@@ -39,6 +39,8 @@ type VisualizerState = {
   trackId: ID | null
   trackSegment: any
   toastText: string
+  fadingVisualizer: boolean
+  showVisualizer: boolean
 }
 
 const Artwork = ({ track }: { track?: Track | null }) => {
@@ -58,7 +60,9 @@ class Visualizer extends Component<VisualizerProps, VisualizerState> {
   state = {
     trackId: null,
     trackSegment: null,
-    toastText: ''
+    toastText: '',
+    fadingVisualizer: false,
+    showVisualizer: false,
   }
 
   messages = (browser: string) => ({
@@ -67,15 +71,20 @@ class Visualizer extends Component<VisualizerProps, VisualizerState> {
 
   updateVisibility() {
     if (!webGLExists) return
-    const { audio, playing, theme, recordOpen, recordClose, dominantColors } = this.props
-
+    const { audio, playing, theme, recordOpen, recordClose, dominantColors, visualizerVisible } = this.props
+    // console.log('visible: ', visualizerVisible)
     // Set visibility for the visualizer
-    if (this.props.visualizerVisible) {
+    if (visualizerVisible) {
       if (!Visualizer1?.isShowing()) {
         const darkMode = shouldShowDark(theme)
         Visualizer1?.show(darkMode)
         recordOpen()
       }
+      // console.log("changing states")
+      this.setState({ fadingVisualizer: true })
+      setTimeout(() => {
+        this.setState({ fadingVisualizer: false, showVisualizer: true})
+      }, 1500)
     } else {
       if (Visualizer1?.isShowing()) {
         Visualizer1?.hide()
@@ -110,8 +119,14 @@ class Visualizer extends Component<VisualizerProps, VisualizerState> {
     Visualizer1?.stop()
   }
 
-  componentDidUpdate() {
-    this.updateVisibility()
+  componentDidUpdate(prevProps: VisualizerProps, prevState: VisualizerState) {
+    if (this.props.audio !== prevProps.audio 
+      || this.props.playing !== prevProps.playing
+      || this.props.dominantColors !== prevProps.dominantColors
+      || this.props.theme !== prevProps.theme
+      || this.props.visualizerVisible !== prevProps.visualizerVisible) {
+        this.updateVisibility()    
+    }
   }
   
   goToTrackPage = () => {
@@ -180,15 +195,20 @@ class Visualizer extends Component<VisualizerProps, VisualizerState> {
       visualizerVisible,
       onClose,
     } = this.props
-    const { toastText } = this.state
+    const { toastText, fadingVisualizer, showVisualizer } = this.state
 
     if (!webGLExists) return null
+
+    console.log({visualizerVisible, fadingVisualizer, showVisualizer})
 
     return (
       <div
         className={cn(
-          { [styles.hideWrapper]: !visualizerVisible },
-          styles.visualizer
+          { 
+            [styles.visualizer]: visualizerVisible && showVisualizer,
+            [styles.fade]: visualizerVisible && fadingVisualizer,
+            [styles.hideWrapper]: !visualizerVisible,
+          },
         )}
       >
         <div className='visualizer' />
