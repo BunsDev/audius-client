@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import { push as pushRoute } from 'connected-react-router'
 import { AppState } from 'store/types'
 import { Dispatch } from 'redux'
@@ -39,7 +39,7 @@ type VisualizerState = {
   trackId: ID | null
   trackSegment: any
   toastText: string
-  fadingVisualizer: boolean
+  fadeIn: boolean
   showVisualizer: boolean
 }
 
@@ -61,7 +61,7 @@ class Visualizer extends Component<VisualizerProps, VisualizerState> {
     trackId: null,
     trackSegment: null,
     toastText: '',
-    fadingVisualizer: false,
+    fadeIn: false,
     showVisualizer: false,
   }
 
@@ -81,15 +81,19 @@ class Visualizer extends Component<VisualizerProps, VisualizerState> {
         recordOpen()
       }
       // console.log("changing states")
-      this.setState({ fadingVisualizer: true })
-      setTimeout(() => {
-        this.setState({ fadingVisualizer: false, showVisualizer: true})
-      }, 1500)
+      this.setState({ showVisualizer: true })
+      setImmediate(() => {
+        this.setState({ fadeIn: true })
+      })
     } else {
       if (Visualizer1?.isShowing()) {
         Visualizer1?.hide()
         recordClose()
       }
+      this.setState({ fadeIn: false })
+      setTimeout(() => {
+        this.setState({ showVisualizer: false })
+      }, 300)
     }
     // Rebind audio
     if ((audio as AudioStream).audioCtx && playing) Visualizer1?.bind(audio)
@@ -195,19 +199,19 @@ class Visualizer extends Component<VisualizerProps, VisualizerState> {
       visualizerVisible,
       onClose,
     } = this.props
-    const { toastText, fadingVisualizer, showVisualizer } = this.state
+    const { toastText, fadeIn, showVisualizer } = this.state
 
     if (!webGLExists) return null
 
-    console.log({visualizerVisible, fadingVisualizer, showVisualizer})
+    console.log({visualizerVisible, fadeIn, showVisualizer})
 
     return (
       <div
         className={cn(
+          styles.visualizer,
           { 
-            [styles.visualizer]: visualizerVisible && showVisualizer,
-            [styles.fade]: visualizerVisible && fadingVisualizer,
-            [styles.hideWrapper]: !visualizerVisible,
+            [styles.fadeIn]: fadeIn,
+            [styles.show]: showVisualizer,
           },
         )}
       >
