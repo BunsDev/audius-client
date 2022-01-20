@@ -8,7 +8,6 @@ import { ReactComponent as IconReceive } from 'assets/img/iconReceive.svg'
 import { ReactComponent as IconSend } from 'assets/img/iconSend.svg'
 import { Chain } from 'common/models/Chain'
 import { BNWei, StringWei, WalletAddress } from 'common/models/Wallet'
-import { FeatureFlags } from 'common/services/remote-config'
 import { getAccountUser } from 'common/store/account/selectors'
 import {
   getHasAssociatedWallets,
@@ -29,7 +28,6 @@ import { getAccountBalance } from 'common/store/wallet/selectors'
 import { Nullable } from 'common/utils/typeUtils'
 import { stringWeiToBN, weiToString } from 'common/utils/wallet'
 import { useWithMobileStyle } from 'hooks/useWithMobileStyle'
-import { remoteConfigInstance } from 'services/remote-config/remote-config-instance'
 import { isMobile } from 'utils/clientUtil'
 import { useSelector } from 'utils/reducer'
 
@@ -46,7 +44,6 @@ import SendInputSuccess from './components/SendInputSuccess'
 import SendingModalBody from './components/SendingModalBody'
 import ModalDrawer from './components/modals/ModalDrawer'
 
-const { getFeatureEnabled } = remoteConfigInstance
 const DISCORD_URL = ' https://discord.gg/audius'
 
 const messages = {
@@ -98,9 +95,10 @@ const titlesMap = {
   },
   RECEIVE: {
     KEY_DISPLAY: () => {
-      const useSolSPLAudio = getFeatureEnabled(
-        FeatureFlags.ENABLE_SPL_AUDIO
-      ) as boolean
+      // const useSolSPLAudio = getFeatureEnabled(
+      //   FeatureFlags.ENABLE_SPL_AUDIO
+      // ) as boolean
+      const useSolSPLAudio = true
       return (
         <TitleWrapper
           label={useSolSPLAudio ? messages.receiveSPL : messages.receive}
@@ -200,9 +198,10 @@ const ModalContent = ({
   const account = useSelector(getAccountUser)
   const amountPendingTransfer = useSelector(getSendData)
   const discordCode = useSelector(getDiscordCode)
-  const useSolSPLAudio = getFeatureEnabled(
-    FeatureFlags.ENABLE_SPL_AUDIO
-  ) as boolean
+  // const useSolSPLAudio = getFeatureEnabled(
+  //   FeatureFlags.ENABLE_SPL_AUDIO
+  // ) as boolean
+  const useSolSPLAudio = true
 
   if (!modalState || !account || (useSolSPLAudio && !account.userBank)) {
     return null

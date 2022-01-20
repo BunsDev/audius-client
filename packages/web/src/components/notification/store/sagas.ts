@@ -15,7 +15,7 @@ import { Name } from 'common/models/Analytics'
 import { ID } from 'common/models/Identifiers'
 import Status from 'common/models/Status'
 import { Track } from 'common/models/Track'
-import { FeatureFlags, IntKeys } from 'common/services/remote-config'
+import { IntKeys } from 'common/services/remote-config'
 import { remoteConfigIntDefaults } from 'common/services/remote-config/defaults'
 import { getUserId, getHasAccount } from 'common/store/account/selectors'
 import { retrieveCollections } from 'common/store/cache/collections/utils'
@@ -106,9 +106,10 @@ export function* fetchNotifications(
     const timeOffset = lastNotification
       ? lastNotification.timestamp
       : moment().toISOString()
-    const withRewards = remoteConfigInstance.getFeatureEnabled(
-      FeatureFlags.REWARDS_NOTIFICATIONS_ENABLED
-    )
+    // const withRewards = remoteConfigInstance.getFeatureEnabled(
+    //   FeatureFlags.REWARDS_NOTIFICATIONS_ENABLED
+    // )
+    const withRewards = true
     const notificationsResponse = yield call(AudiusBackend.getNotifications, {
       limit,
       timeOffset,
@@ -471,9 +472,11 @@ export function* getNotifications(isFirstFetch: boolean) {
       )
       if (!hasAccount) return
       const timeOffset = moment().toISOString()
-      const withRewards = remoteConfigInstance.getFeatureEnabled(
-        FeatureFlags.REWARDS_NOTIFICATIONS_ENABLED
-      )
+      // const withRewards = remoteConfigInstance.getFeatureEnabled(
+      //   FeatureFlags.REWARDS_NOTIFICATIONS_ENABLED
+      // )
+
+      const withRewards = true
 
       const notificationsResponse = yield call(AudiusBackend.getNotifications, {
         limit,

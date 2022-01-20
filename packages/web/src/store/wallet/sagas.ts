@@ -5,7 +5,6 @@ import { all, call, put, take, takeEvery } from 'redux-saga/effects'
 import { Name } from 'common/models/Analytics'
 import { Chain } from 'common/models/Chain'
 import { BNWei } from 'common/models/Wallet'
-import { FeatureFlags } from 'common/services/remote-config'
 import { fetchAccountSucceeded } from 'common/store/account/reducer'
 import { getAccountUser } from 'common/store/account/selectors'
 import {
@@ -26,12 +25,9 @@ import {
 } from 'common/store/wallet/slice'
 import { stringWeiToBN, weiToString } from 'common/utils/wallet'
 import { checkIsCreatedTokenAccount } from 'services/audius-backend/waudio'
-import { remoteConfigInstance } from 'services/remote-config/remote-config-instance'
 import walletClient from 'services/wallet-client/WalletClient'
 import { make } from 'store/analytics/actions'
 import { SETUP_BACKEND_SUCCEEDED } from 'store/backend/actions'
-
-const { getFeatureEnabled } = remoteConfigInstance
 
 // TODO: handle errors
 const errors = {
@@ -163,7 +159,8 @@ function* fetchBalanceAsync() {
   const audioWeiBalance = currentEthAudioWeiBalance.add(
     currentSolAudioWeiBalance
   ) as BNWei
-  const useSolAudio = getFeatureEnabled(FeatureFlags.ENABLE_SPL_AUDIO)
+  // const useSolAudio = getFeatureEnabled(FeatureFlags.ENABLE_SPL_AUDIO)
+  const useSolAudio = true
   if (useSolAudio) {
     const totalBalance = audioWeiBalance.add(associatedWalletBalance) as BNWei
     yield put(

@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react'
 
 import { useDispatch } from 'react-redux'
 
-import { FeatureFlags } from 'common/services/remote-config'
 import { preloadWalletProviders } from 'common/store/pages/token-dashboard/slice'
 import Header from 'components/header/desktop/Header'
 import { useMobileHeader } from 'components/header/mobile/hooks'
@@ -12,7 +11,6 @@ import NavContext, {
   RightPreset
 } from 'components/nav/store/context'
 import Page from 'components/page/Page'
-import { useFlag } from 'hooks/useRemoteConfig'
 import { useRequiresAccount } from 'hooks/useRequiresAccount'
 import { useWithMobileStyle } from 'hooks/useWithMobileStyle'
 import { isMobile } from 'utils/clientUtil'
@@ -33,9 +31,10 @@ export const messages = {
 
 export const RewardsContent = () => {
   const wm = useWithMobileStyle(styles.mobile)
-  const { isEnabled: isChallengeRewardsEnabled } = useFlag(
-    FeatureFlags.CHALLENGE_REWARDS_UI
-  )
+  // const { isEnabled: isChallengeRewardsEnabled } = useFlag(
+  //   FeatureFlags.CHALLENGE_REWARDS_UI
+  // )
+  const isChallengeRewardsEnabled = true
   useRequiresAccount(TRENDING_PAGE)
   return (
     <>

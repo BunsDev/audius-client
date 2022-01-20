@@ -4,9 +4,7 @@ import { Button, ButtonType, LogoSol } from '@audius/stems'
 import cn from 'classnames'
 
 import { SolanaWalletAddress, WalletAddress } from 'common/models/Wallet'
-import { FeatureFlags } from 'common/services/remote-config'
 import { useLocalStorage } from 'hooks/useLocalStorage'
-import { remoteConfigInstance } from 'services/remote-config/remote-config-instance'
 
 import { ModalBodyWrapper } from '../WalletModal'
 
@@ -18,7 +16,6 @@ type ReceiveBodyProps = {
   solWallet: SolanaWalletAddress
 }
 
-const { getFeatureEnabled } = remoteConfigInstance
 const messages = {
   warning: 'PROCEED WITH CAUTION',
   warning2: 'If $AUDIO is sent to the wrong address it will be lost.',
@@ -49,9 +46,10 @@ const useLocalStorageClickedReceiveUnderstand = (): [boolean, () => void] => {
 }
 
 const ReceiveBody = ({ wallet, solWallet }: ReceiveBodyProps) => {
-  const useSolSPLAudio = getFeatureEnabled(
-    FeatureFlags.ENABLE_SPL_AUDIO
-  ) as boolean
+  // const useSolSPLAudio = getFeatureEnabled(
+  //   FeatureFlags.ENABLE_SPL_AUDIO
+  // ) as boolean
+  const useSolSPLAudio = true
   const [
     hasClickedUnderstand,
     onClickUnderstand
