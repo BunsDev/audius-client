@@ -26,7 +26,7 @@ jobs:
         - web-init
       filters:
         branches:
-          only: /(^master)|(^hotfix.*)|(^release.*)$/
+          only: /(^release.*)$/
 
   - web-test-staging:
       context: Audius Client
@@ -56,26 +56,7 @@ jobs:
         - web-build-production
       filters:
         branches:
-          only: /(^hotfix.*)|(^release.*)$/
-
-  # Allow hotfix to go to staging on command
-  - web-hold-staging:
-      type: approval
-      requires:
-        - web-init
-        - web-build-staging
-      filters:
-        branches:
-          only: /(^hotfix.*)$/
-
-  - web-deploy-staging-cloudflare:
-      context: Audius Client
-      requires:
-        - web-init
-        - web-hold-staging
-      filters:
-        branches:
-          only: /(^hotfix.*)$/
+          only: /(^release.*)$/
 
   # Staging IPFS build
   - web-build-ipfs-staging:
@@ -91,19 +72,12 @@ jobs:
       filters:
         branches:
           only: /^master$/
-  - web-hold-update-staging-ga-ipfs-build:
-      type: approval
-      requires:
-        - web-deploy-ipfs-staging
-      filters:
-        branches:
-          only: /^master$/
   - web-update-staging-ga-ipfs-build:
       context:
         - Audius Client
         - Pinata
       requires:
-        - web-hold-update-staging-ga-ipfs-build
+        - web-deploy-ipfs-staging
       filters:
         branches:
           only: /^master$/
@@ -115,19 +89,12 @@ jobs:
       filters:
         branches:
           only: /^master$/
-  - web-hold-update-ipfs-staging-records:
-      type: approval
-      requires:
-        - web-update-staging-ga-ipfs-build
-      filters:
-        branches:
-          only: /^master$/
   - web-update-ipfs-staging-records:
       context:
         - Audius Client
         - Cloudflare API
       requires:
-        - web-hold-update-ipfs-staging-records
+        - web-update-staging-ga-ipfs-build
       filters:
         branches:
           only: /^master$/
@@ -139,21 +106,21 @@ jobs:
         - web-build-production
       filters:
         branches:
-          only: /(^master)|(^hotfix.*)|(^release.*)$/
+          only: /(^release.*)$/
   - web-deploy-production-s3:
       context: Audius Client
       requires:
         - web-hold-production
       filters:
         branches:
-          only: /(^master)|(^hotfix.*)|(^release.*)$/
+          only: /(^release.*)$/
   - web-deploy-production-cloudflare:
       context: Audius Client
       requires:
         - web-hold-production
       filters:
         branches:
-          only: /(^master)|(^hotfix.*)|(^release.*)$/
+          only: /(^release.*)$/
 
   # Upload sourcemaps
   - web-deploy-sentry-sourcemaps:
@@ -162,7 +129,7 @@ jobs:
         - web-deploy-production-s3
       filters:
         branches:
-          only: /(^master)|(^hotfix.*)|(^release.*)$/
+          only: /(^release.*)$/
 
   - web-publish-github-release:
       context: Audius Client
@@ -170,7 +137,7 @@ jobs:
         - web-hold-production
       filters:
         branches:
-          only: /(^master)|(^hotfix.*)|(^release.*)$/
+          only: /(^release.*)$/
 
   # Production IPFS build
   - web-build-ipfs-production:
@@ -228,48 +195,27 @@ jobs:
           only: /(^release.*)$/
 
   # Distribute staging desktop binaries.
-  - web-hold-dist-mac-staging:
-      type: approval
-      requires:
-        - web-build-staging
-      filters:
-        branches:
-          only: /(^master)|(^bounce.*)$/
   - web-dist-mac-staging:
       context: Audius Client
       requires:
-        - web-hold-dist-mac-staging
-      filters:
-        branches:
-          only: /(^master)|(^bounce.*)$/
-  - web-hold-dist-win-staging:
-      type: approval
-      requires:
         - web-build-staging
       filters:
         branches:
-          only: /(^master)|(^bounce.*)$/
+          only: /(^master)$/
   - web-dist-win-staging:
       context: Audius Client
       requires:
-        - web-hold-dist-win-staging
+        - web-build-staging
       filters:
         branches:
-          only: /(^master)|(^bounce.*)$/
-  - web-hold-dist-linux-staging:
-      type: approval
+          only: /(^master)$/
+  - web-dist-linux-staging:
+      context: Audius Client
       requires:
         - web-build-staging
       filters:
         branches:
-          only: /(^master)|(^bounce.*)$/
-  - web-dist-linux-staging:
-      context: Audius Client
-      requires:
-        - web-hold-dist-linux-staging
-      filters:
-        branches:
-          only: /(^master)|(^bounce.*)$/
+          only: /(^master)$/
 
   # Distribute production desktop binaries.
   - web-hold-dist-mac-production:
@@ -278,39 +224,39 @@ jobs:
         - web-build-production
       filters:
         branches:
-          only: /(^master)|(^hotfix.*)|(^release.*)$/
+          only: /(^release.*)$/
   - web-dist-mac-production:
       context: Audius Client
       requires:
         - web-hold-dist-mac-production
       filters:
         branches:
-          only: /(^master)|(^hotfix.*)|(^release.*)$/
+          only: /(^release.*)$/
   - web-hold-dist-win-production:
       type: approval
       requires:
         - web-build-production
       filters:
         branches:
-          only: /(^master)|(^hotfix.*)|(^release.*)$/
+          only: /(^release.*)$/
   - web-dist-win-production:
       context: Audius Client
       requires:
         - web-hold-dist-win-production
       filters:
         branches:
-          only: /(^master)|(^hotfix.*)|(^release.*)$/
+          only: /(^release.*)$/
   - web-hold-dist-linux-production:
       type: approval
       requires:
         - web-build-production
       filters:
         branches:
-          only: /(^master)|(^hotfix.*)|(^release.*)$/
+          only: /(^release.*)$/
   - web-dist-linux-production:
       context: Audius Client
       requires:
         - web-hold-dist-linux-production
       filters:
         branches:
-          only: /(^master)|(^hotfix.*)|(^release.*)$/
+          only: /(^release.*)$/

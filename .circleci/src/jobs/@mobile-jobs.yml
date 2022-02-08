@@ -22,13 +22,13 @@ mobile-init:
     # Download and cache dependencies
     - restore_cache:
         keys:
-          - dependency-cache-{{ checksum "mobile/package.json" }}
+          - dependency-cache-{{ checksum "mobile/package-lock.json" }}
           # fallback to using the latest cache if no exact match is found
           - dependency-cache-
-    - run: cd mobile && npm install
+    - run: cd mobile && npm ci
 
     - save_cache:
-        key: dependency-cache-{{ checksum "mobile/package.json" }}
+        key: dependency-cache-{{ checksum "mobile/package-lock.json" }}
         paths:
           - ./mobile/node_modules
     - run:
@@ -78,7 +78,7 @@ mobile-build-upload-staging-ios:
         env: ".env.stage"
     - when:
         condition:
-          matches: { pattern: "^release.*$", value: << pipeline.git.branch >> }
+          matches: { pattern: "^master$", value: << pipeline.git.branch >> }
         steps:
           - mobile-upload-ios:
               bundle-id: "co.audius.audiusmusic.bounce"
@@ -116,7 +116,7 @@ mobile-build-upload-staging-android:
         remote-directory: "audius-mobile-staging"
     - when:
         condition:
-          matches: { pattern: "^release.*$", value: << pipeline.git.branch >> }
+          matches: { pattern: "^master$", value: << pipeline.git.branch >> }
         steps:
           - mobile-upload-android:
               upload-type: "bounce"
