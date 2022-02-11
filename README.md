@@ -9,6 +9,7 @@
     The Decentralized <a target="_blank" href="https://audius.co">Audius.co</a> Client
     <br/>
     🎧🎸🎹🤘🎶🥁🎷🎻🎤🔊
+    Nothing to see here
   </p>
 </p>
 
@@ -22,6 +23,7 @@
 ## Development
 
 There are 3 environments you can develop against
+
 - development (local net, see the [Audius Protocol](https://github.com/AudiusProject/audius-protocol))
 - staging (test net)
 - production (main net)
@@ -90,7 +92,9 @@ npm run lint:fix  # Fix lint errors
 ```
 
 ### Web Workers
+
 Audius DApp supports [Web Workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) by default to perform heavyweight async tasks. In order to include a package dependency for a worker, a scripts exists:
+
 > ./scripts/publishScripts.sh
 
 that sources JS files from /node_modules and exports a copy to /public/scripts for the
@@ -98,8 +102,8 @@ worker to pull via ImportScripts. See /src/workers for examples.
 
 ## Useful links
 
-* [React](https://reactjs.org/tutorial/tutorial.html)
-* [Redux](https://redux.js.org/basics)
-* [Redux Saga](https://redux-saga.js.org/)
-* [Redux Saga Test Plan](https://github.com/jfairbank/redux-saga-test-plan)
-* [JavaScript Standard Style](https://standardjs.com)
+- [React](https://reactjs.org/tutorial/tutorial.html)
+- [Redux](https://redux.js.org/basics)
+- [Redux Saga](https://redux-saga.js.org/)
+- [Redux Saga Test Plan](https://github.com/jfairbank/redux-saga-test-plan)
+- [JavaScript Standard Style](https://standardjs.com)
