@@ -19,7 +19,7 @@ import { StyleSheet, View } from 'react-native'
 
 import IconTikTok from 'app/assets/images/iconTikTok.svg'
 import IconTikTokInverted from 'app/assets/images/iconTikTokInverted.svg'
-import Button from 'app/components/button'
+import { Button } from 'app/components/core'
 import Drawer from 'app/components/drawer'
 import LoadingSpinner from 'app/components/loading-spinner'
 import Text from 'app/components/text'

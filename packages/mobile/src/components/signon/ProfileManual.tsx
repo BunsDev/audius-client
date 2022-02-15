@@ -27,7 +27,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import IconArrow from 'app/assets/images/iconArrow.svg'
 import ValidationIconX from 'app/assets/images/iconValidationX.svg'
-import Button from 'app/components/button'
+import { Button } from 'app/components/core'
 import LoadingSpinner from 'app/components/loading-spinner'
 import { useDispatchWeb } from 'app/hooks/useDispatchWeb'
 import { MessageType } from 'app/message/types'

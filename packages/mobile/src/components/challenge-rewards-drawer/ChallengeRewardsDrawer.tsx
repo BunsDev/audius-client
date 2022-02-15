@@ -7,7 +7,7 @@ import LinearGradient from 'react-native-linear-gradient'
 
 import IconCheck from 'app/assets/images/iconCheck.svg'
 import IconVerified from 'app/assets/images/iconVerified.svg'
-import Button, { ButtonType } from 'app/components/button'
+import { Button, ButtonType } from 'app/components/core'
 import Drawer from 'app/components/drawer'
 import GradientText from 'app/components/gradient-text'
 import LoadingSpinner from 'app/components/loading-spinner'

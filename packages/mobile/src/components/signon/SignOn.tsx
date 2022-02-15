@@ -27,7 +27,7 @@ import audiusLogoHorizontal from 'app/assets/images/Horizontal-Logo-Full-Color.p
 import IconArrow from 'app/assets/images/iconArrow.svg'
 import ValidationIconX from 'app/assets/images/iconValidationX.svg'
 import signupCTA from 'app/assets/images/signUpCTA.png'
-import Button from 'app/components/button'
+import { Button } from 'app/components/core'
 import LoadingSpinner from 'app/components/loading-spinner'
 import { remindUserToTurnOnNotifications } from 'app/components/notification-reminder/NotificationReminder'
 import useAppState from 'app/hooks/useAppState'

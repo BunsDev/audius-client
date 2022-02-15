@@ -7,13 +7,12 @@ import { StyleSheet, View } from 'react-native'
 
 import IconArrow from 'app/assets/images/iconArrow.svg'
 import IconValidationCheck from 'app/assets/images/iconValidationCheck.svg'
+import { Button, ButtonType } from 'app/components/core'
 import Text from 'app/components/text'
 import { usePushRouteWeb } from 'app/hooks/usePushRouteWeb'
 import { useSelectorWeb } from 'app/hooks/useSelectorWeb'
 import { useThemedStyles } from 'app/hooks/useThemedStyles'
 import { ThemeColors } from 'app/utils/theme'
-
-import Button, { ButtonType } from '../button'
 
 const messages = {
   profileCheckNameAndHandle: 'Name & Handle',

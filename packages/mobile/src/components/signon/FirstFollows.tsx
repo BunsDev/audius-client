@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import IconArrow from 'app/assets/images/iconArrow.svg'
 import IconWand from 'app/assets/images/iconWand.svg'
-import Button from 'app/components/button'
+import { Button } from 'app/components/core'
 import { useDispatchWeb } from 'app/hooks/useDispatchWeb'
 import { usePressScaleAnimation } from 'app/hooks/usePressScaleAnimation'
 import { MessageType } from 'app/message/types'

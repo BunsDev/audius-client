@@ -38,13 +38,12 @@ import WhiteHeavyCheckMark from 'app/assets/images/emojis/white-heavy-check-mark
 import IconArrow from 'app/assets/images/iconArrow.svg'
 import IconCheck from 'app/assets/images/iconCheck.svg'
 import IconUpload from 'app/assets/images/iconUpload.svg'
+import { Button, ButtonType } from 'app/components/core'
+import { ToastContext } from 'app/components/toast/ToastContext'
 import { useDispatchWeb } from 'app/hooks/useDispatchWeb'
 import { usePushRouteWeb } from 'app/hooks/usePushRouteWeb'
 import { useRemoteVar } from 'app/hooks/useRemoteConfig'
 import { useSelectorWeb } from 'app/hooks/useSelectorWeb'
-
-import Button, { ButtonType } from '../button'
-import { ToastContext } from '../toast/ToastContext'
 
 import { ChallengeRewardsDrawer } from './ChallengeRewardsDrawer'
 import { ProfileCompletionChecks } from './ProfileCompletionChecks'

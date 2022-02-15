@@ -13,7 +13,7 @@ import { View } from 'react-native'
 import { useSelector } from 'react-redux'
 
 import IconDownload from 'app/assets/images/iconDownload.svg'
-import Button, { ButtonType } from 'app/components/button'
+import { Button, ButtonType } from 'app/components/core'
 import LoadingSpinner from 'app/components/loading-spinner'
 import { useDispatchWeb } from 'app/hooks/useDispatchWeb'
 import { useSelectorWeb } from 'app/hooks/useSelectorWeb'

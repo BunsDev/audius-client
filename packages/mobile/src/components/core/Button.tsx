@@ -141,7 +141,7 @@ export type ButtonProps = {
   underlayColor?: string
 }
 
-const Button = ({
+export const Button = ({
   title,
   onPress,
   type = ButtonType.PRIMARY,
@@ -198,5 +198,3 @@ const Button = ({
     </Animated.View>
   )
 }
-
-export default Button

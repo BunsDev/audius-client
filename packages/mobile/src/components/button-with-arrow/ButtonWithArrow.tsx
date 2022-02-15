@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 
 import IconArrow from 'app/assets/images/iconArrow.svg'
-import Button, { ButtonProps, ButtonType } from 'app/components/button'
+import { Button, ButtonProps, ButtonType } from 'app/components/core'
 import { useThemeColors } from 'app/utils/theme'
 
 const styles = StyleSheet.create({
