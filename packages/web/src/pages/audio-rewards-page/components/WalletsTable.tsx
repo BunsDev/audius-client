@@ -66,9 +66,10 @@ const Wallet = ({
   hasActions,
   hideCollectibles
 }: WalletProps) => {
-  const { isEnabled: solWalletAudioEnabled } = useFlag(
-    FeatureFlags.SOL_WALLET_AUDIO_ENABLED
-  )
+  // const { isEnabled: solWalletAudioEnabled } = useFlag(
+  //   FeatureFlags.SOL_WALLET_AUDIO_ENABLED
+  // )
+  const solWalletAudioEnabled = true
 
   const isMobile = useIsMobile()
   const dispatch = useDispatch()

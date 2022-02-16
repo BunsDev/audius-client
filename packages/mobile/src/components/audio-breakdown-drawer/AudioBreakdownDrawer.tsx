@@ -314,7 +314,7 @@ const Wallet = ({ chain, address, balance }: WalletProps) => {
   // const { isEnabled: solWalletAudioEnabled } = useFlag(
   //   FeatureFlags.SOL_WALLET_AUDIO_ENABLED
   // )
-  const solWalletAudioEnabled = false
+  const solWalletAudioEnabled = true
   const styles = useThemedStyles(createStyles)
 
   const { scale, handlePressIn, handlePressOut } = usePressScaleAnimation(0.98)

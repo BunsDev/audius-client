@@ -30,7 +30,8 @@ const messages = {
 const NavAudio = () => {
   // TODO: remove this feature flag ASAP as rewards launches because we could show $AUDIO far earlier
   // but need to wait for remote config
-  const { isEnabled } = useFlag(FeatureFlags.SURFACE_AUDIO_ENABLED)
+  // const { isEnabled } = useFlag(FeatureFlags.SURFACE_AUDIO_ENABLED)
+  const isEnabled = true
 
   const navigate = useNavigateToPage()
   const account = useSelector(getAccountUser)
