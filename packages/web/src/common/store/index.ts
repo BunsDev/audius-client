@@ -23,6 +23,8 @@ import feed from 'common/store/pages/feed/reducer'
 import { FeedPageState } from 'common/store/pages/feed/types'
 import profileReducer from 'common/store/pages/profile/reducer'
 import { ProfilePageState } from 'common/store/pages/profile/types'
+import searchResults from 'common/store/pages/search-results/reducer'
+import { SearchPageState } from 'common/store/pages/search-results/types'
 import tokenDashboardSlice from 'common/store/pages/token-dashboard/slice'
 import track from 'common/store/pages/track/reducer'
 import TrackPageState from 'common/store/pages/track/types'
@@ -105,7 +107,8 @@ export const reducers = {
     exploreCollections: exploreCollectionsReducer,
     profile: profileReducer,
     tokenDashboard: tokenDashboardSlice.reducer,
-    track
+    track,
+    searchResults
   }),
 
   // Solana
@@ -188,6 +191,7 @@ export type CommonState = {
     tokenDashboard: ReturnType<typeof tokenDashboardSlice.reducer>
     track: TrackPageState
     profile: ProfilePageState
+    searchResults: SearchPageState
   }
 
   solana: ReturnType<typeof solanaReducer>
