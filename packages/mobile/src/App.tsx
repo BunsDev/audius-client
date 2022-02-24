@@ -27,7 +27,6 @@ import NavigationContainer from 'app/components/navigation-container'
 import Notifications from 'app/components/notifications/Notifications'
 import OAuth from 'app/components/oauth/OAuth'
 import OverflowMenuDrawer from 'app/components/overflow-menu-drawer'
-import Search from 'app/components/search/Search'
 import { ShareDrawer } from 'app/components/share-drawer'
 import ShareToTiktokDrawer from 'app/components/share-to-tiktok-drawer'
 import { ToastContextProvider } from 'app/components/toast/ToastContext'
@@ -125,7 +124,6 @@ const App = () => {
                   <WebAppManager webApp={<WebApp webRef={webRef} />}>
                     <GoogleCast webRef={webRef} />
                     <AppNavigator />
-                    <Search />
                     <Notifications webRef={webRef} />
                     <Drawers />
                     <Modals />

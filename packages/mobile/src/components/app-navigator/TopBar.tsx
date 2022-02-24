@@ -11,7 +11,6 @@ import IconSearch from 'app/assets/images/iconSearch.svg'
 import { useDispatchWeb } from 'app/hooks/useDispatchWeb'
 import { useNavigation } from 'app/hooks/useNavigation'
 import { open as openNotificationPanel } from 'app/store/notifications/actions'
-import { open as openSearch } from 'app/store/search/actions'
 import { makeStyles } from 'app/styles'
 import { useThemeColors } from 'app/utils/theme'
 
@@ -90,9 +89,17 @@ export const TopBar = memo(
       })
     }, [navigation])
 
+    // Old way
+    // const handlePressSearch = useCallback(() => {
+    //   dispatch(openSearch())
+    // }, [dispatch])
+
     const handlePressSearch = useCallback(() => {
-      dispatch(openSearch())
-    }, [dispatch])
+      navigation.navigate({
+        native: { screen: 'search', params: undefined },
+        web: { route: 'search' }
+      })
+    }, [navigation])
 
     return (
       <View style={styles.root}>
