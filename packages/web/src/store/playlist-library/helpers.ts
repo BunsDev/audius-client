@@ -8,14 +8,14 @@ import { SmartCollectionVariant } from 'common/models/SmartCollectionVariant'
 import { uuid } from 'common/utils/uid'
 
 /**
- * Finds an item by id in the playlist library
+ * Finds a playlist by id in the playlist library
  * @param library
  * @param playlistId
  * @returns the identifier or false
  */
 export const findInPlaylistLibrary = (
   library: PlaylistLibrary | PlaylistLibraryFolder,
-  playlistId: ID | SmartCollectionVariant
+  playlistId: ID | SmartCollectionVariant | string
 ): PlaylistLibraryIdentifier | false => {
   if (!library.contents) return false
 
@@ -38,28 +38,34 @@ export const findInPlaylistLibrary = (
 }
 
 /**
- * Finds the index of a playlist id in the library, returning false if not found
+ * Finds the index of a playlist or folder id in the library, returning -1 if not found
+ * If the target item is nested in a folder, this returns a tuple where the first value is the
+ * index of the folder and the second value is the index of the item within that folder's contents.
  * @param library
- * @param playlistId
- * @returns {number | false}
+ * @param entityId
+ * @returns {number | number[] | false}
  */
 export const findIndexInPlaylistLibrary = (
   library: PlaylistLibrary | PlaylistLibraryFolder,
-  playlistId: ID | SmartCollectionVariant
-): number => {
+  entityId: ID | SmartCollectionVariant | string
+): number | number[] | -1 => {
   if (!library.contents) return -1
 
   // Simple DFS (this likely is very small, so this is fine)
   for (const [i, item] of library.contents.entries()) {
     switch (item.type) {
       case 'folder': {
-        // TODO support folders. Need to devise a better system reorders
+        if (item.id === entityId) return i
+        const indexInFolder = findIndexInPlaylistLibrary(item, entityId)
+        if (indexInFolder !== -1) {
+          return [i].concat(indexInFolder)
+        }
         break
       }
       case 'playlist':
       case 'explore_playlist':
       case 'temp_playlist':
-        if (item.playlist_id === playlistId) return i
+        if (item.playlist_id === entityId) return i
         break
     }
   }
@@ -67,41 +73,48 @@ export const findIndexInPlaylistLibrary = (
 }
 
 /**
- * Removes a playlist from the library and returns the removed item as well as the
+ * Removes a playlist or folder from the library and returns the removed item as well as the
  * updated library (does not mutate)
  * @param library
- * @param playlistId the id of the playlist to remove
+ * @param entityId the id of the playlist or folder to remove
  * @returns { library, removed }
  */
 export const removeFromPlaylistLibrary = (
   library: PlaylistLibrary | PlaylistLibraryFolder,
-  playlistId: ID | SmartCollectionVariant
+  entityId: ID | SmartCollectionVariant | string
 ): {
   library: PlaylistLibrary | PlaylistLibraryFolder
-  removed: PlaylistLibraryIdentifier | null
+  removed: PlaylistLibraryIdentifier | PlaylistLibraryFolder | null
 } => {
   if (!library.contents) return { library, removed: null }
 
   const newContents: (PlaylistLibraryFolder | PlaylistLibraryIdentifier)[] = []
-  let removed: PlaylistLibraryIdentifier | null = null
+  let removed: PlaylistLibraryIdentifier | PlaylistLibraryFolder | null = null
   for (const item of library.contents) {
     let newItem: PlaylistLibraryFolder | PlaylistLibraryIdentifier | null = item
     switch (item.type) {
       case 'folder': {
-        const res = removeFromPlaylistLibrary(item, playlistId)
-        removed = res.removed
-        newItem = {
-          id: item.id,
-          type: item.type,
-          name: item.name,
-          contents: res.library.contents
+        if (item.id === entityId) {
+          removed = item
+          newItem = null
+        } else {
+          const res = removeFromPlaylistLibrary(item, entityId)
+          if (res.removed) {
+            removed = res.removed
+          }
+          newItem = {
+            id: item.id,
+            type: item.type,
+            name: item.name,
+            contents: res.library.contents
+          }
         }
         break
       }
       case 'playlist':
       case 'explore_playlist':
       case 'temp_playlist':
-        if (item.playlist_id === playlistId) {
+        if (item.playlist_id === entityId) {
           removed = item
           newItem = null
         }
@@ -129,6 +142,91 @@ export const constructPlaylistFolder = (
     type: 'folder',
     name,
     contents: contents
+  }
+}
+
+const playlistIdToPlaylistLibraryIdentifier = (
+  playlistId: ID | SmartCollectionVariant | string
+): PlaylistLibraryIdentifier => {
+  if (typeof playlistId === 'number') {
+    return {
+      type: 'playlist',
+      playlist_id: playlistId
+    }
+  } else if (
+    (Object.values(SmartCollectionVariant) as string[]).includes(playlistId)
+  ) {
+    return {
+      type: 'explore_playlist',
+      playlist_id: playlistId as SmartCollectionVariant
+    }
+  } else {
+    // This is a temp ID which requires special attention
+    return {
+      type: 'temp_playlist',
+      playlist_id: playlistId
+    }
+  }
+}
+
+/**
+ * Adds playlist with given id to folder with given id and returns the resulting updated library.
+ * If the playlist is already in the library but not in the folder, it removes the playlist from its current position and into the folder.
+ * This is a no op if the folder is not in the library or the playlist is already in the target folder. In these cases, the original library is returned.
+ * @param library
+ * @param playlistId
+ * @param folderId
+ * @returns the updated playlist library
+ */
+export const addPlaylistToFolder = (
+  library: PlaylistLibrary,
+  playlistId: ID | SmartCollectionVariant | string,
+  folderId: string
+): PlaylistLibrary => {
+  if (!library.contents) return library
+  let folderIndex = library.contents.findIndex(item => {
+    return item.type === 'folder' && item.id === folderId
+  })
+  if (folderIndex < 0) return library
+  const folder = library.contents[folderIndex] as PlaylistLibraryFolder
+  // If the playlist is in the right folder already, return the original library.
+  if (findInPlaylistLibrary(folder, playlistId) !== false) {
+    return library
+  }
+
+  // Remove the playlist from the library if it's already there but not in the given folder
+  let entry: PlaylistLibraryIdentifier | null
+  const { library: newLibrary, removed } = removeFromPlaylistLibrary(
+    library,
+    playlistId
+  )
+
+  if (removed?.type === 'folder') {
+    // Shouldn't hit this but this enforces the right type for `removed`
+    return library
+  }
+  entry = removed as PlaylistLibraryIdentifier
+
+  if (!entry) {
+    entry = playlistIdToPlaylistLibraryIdentifier(playlistId)
+  } else {
+    // If playlist was removed the folder index might be different now.
+    folderIndex = newLibrary.contents.findIndex(item => {
+      return item.type === 'folder' && item.id === folderId
+    })
+  }
+  const updatedFolder = reorderPlaylistLibrary(
+    folder,
+    playlistId,
+    -1
+  ) as PlaylistLibraryFolder
+  const newContents = [...newLibrary.contents]
+
+  newContents.splice(folderIndex, 1, updatedFolder)
+
+  return {
+    ...newLibrary,
+    contents: newContents
   }
 }
 
@@ -259,46 +357,41 @@ export const removePlaylistLibraryDuplicates = (
 
 /**
  * Reorders a playlist library
- * TODO: Support folder reordering
+ * Note that this helper assumes that folders cannot be inside folders.
+ * If we ever support nesting folders, this must be updated.
  * @param library
  * @param draggingId the playlist being reordered
  * @param droppingId the playlist where the dragged one was dropped onto
  */
 export const reorderPlaylistLibrary = (
   library: PlaylistLibrary | PlaylistLibraryFolder,
-  draggingId: ID | SmartCollectionVariant,
-  droppingId: ID | SmartCollectionVariant
+  draggingId: ID | SmartCollectionVariant | string,
+  droppingId: ID | SmartCollectionVariant | string,
+  draggingKind:
+    | 'library-playlist'
+    | 'playlist'
+    | 'playlist-folder' = 'library-playlist',
+  reorderBeforeTarget = false
 ) => {
   // Find the dragging id and remove it from the library if present.
-  let entry: PlaylistLibraryIdentifier | null
+  let entry: PlaylistLibraryIdentifier | PlaylistLibraryFolder | null
   const { library: newLibrary, removed } = removeFromPlaylistLibrary(
     library,
     draggingId
   )
   entry = removed
   if (!entry) {
-    if (typeof draggingId === 'number') {
-      entry = {
-        type: 'playlist',
-        playlist_id: draggingId
-      }
-    } else if (Object.values(SmartCollectionVariant).includes(draggingId)) {
-      entry = {
-        type: 'explore_playlist',
-        playlist_id: draggingId
-      }
+    if (draggingKind === 'playlist-folder') {
+      // Soft fail if the thing being dragged is a folder and it doesn't exist in the library yet. This shouldn't be possible.
+      return library
     } else {
-      // This is a temp ID. We want to reorder it, but pay special attention
-      entry = {
-        type: 'temp_playlist',
-        playlist_id: draggingId
-      }
+      entry = playlistIdToPlaylistLibraryIdentifier(draggingId)
     }
   }
 
   const newContents = [...newLibrary.contents]
 
-  let index: number
+  let index: number | number[]
   // We are dropping to the top
   if (droppingId === -1) {
     index = 0
@@ -306,10 +399,27 @@ export const reorderPlaylistLibrary = (
     // Find the droppable id and place the draggable id after it
     const found = findIndexInPlaylistLibrary(newLibrary, droppingId)
     if (found === -1) return library
-    index = found + 1
+    const indexShift = reorderBeforeTarget ? 0 : 1
+    if (Array.isArray(found)) {
+      index = [found[0], found[1] + indexShift]
+    } else {
+      index = found + indexShift
+    }
   }
-  // Doesn't support folder reorder
-  newContents.splice(index, 0, entry)
+  if (Array.isArray(index)) {
+    // The lines below assumes that folders cannot be nested inside folders; that is, that the
+    // dropId will only ever be up to one level deep.
+    // This must be updated if we ever allow nested folders.
+    const folderIndex = index[0]
+    const dropIndex = index[1]
+    const folder = newContents[folderIndex] as PlaylistLibraryFolder
+    const updatedFolderContents = [...folder.contents]
+    updatedFolderContents.splice(dropIndex, 0, entry)
+    const updatedFolder = { ...folder, contents: updatedFolderContents }
+    newContents.splice(folderIndex, 1, updatedFolder)
+  } else {
+    newContents.splice(index, 0, entry)
+  }
   return {
     ...library,
     contents: newContents

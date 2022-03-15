@@ -20,14 +20,11 @@ import IconButton from 'components/icon-button/IconButton'
 import navColumnStyles from './NavColumn.module.css'
 import styles from './PlaylistLibrary.module.css'
 
-type PlaylistFolderNavButtonProps = React.ComponentPropsWithoutRef<'button'> & {
-  onReorder: () => void
-}
+type PlaylistFolderNavButtonProps = React.ComponentPropsWithoutRef<'button'>
 
 const FolderNavLink = ({
   id,
   name,
-  onReorder,
   children,
   className,
   ...buttonProps
@@ -41,31 +38,23 @@ const FolderNavLink = ({
   }, [setIsDragging])
 
   return (
-    <Droppable
-      key={id}
-      className={styles.droppable}
-      hoverClassName={styles.droppableHover}
-      onDrop={(id: ID | SmartCollectionVariant) => onReorder()}
-      acceptedKinds={['library-playlist', 'playlist-folder']}
+    <Draggable
+      id={id}
+      text={name}
+      kind='playlist-folder'
+      onDrag={onDrag}
+      onDrop={onDrop}
     >
-      <Draggable
-        id={id}
-        text={name}
-        kind='playlist-folder'
-        onDrag={onDrag}
-        onDrop={onDrop}
+      <button
+        {...buttonProps}
+        draggable={false}
+        className={cn(className, styles.navLink, {
+          [styles.dragging]: isDragging
+        })}
       >
-        <button
-          {...buttonProps}
-          draggable={false}
-          className={cn(className, styles.navLink, {
-            [styles.dragging]: isDragging
-          })}
-        >
-          {children}
-        </button>
-      </Draggable>
-    </Droppable>
+        {children}
+      </button>
+    </Draggable>
   )
 }
 
@@ -75,6 +64,16 @@ type PlaylistFolderNavItemProps = {
   dragging: boolean
   draggingKind: string
   onClickEdit: (folderId: string) => void
+  onDropInFolder: (
+    folder: PlaylistLibraryFolder,
+    draggingKind: 'library-playlist' | 'playlist',
+    draggingId: ID | string | SmartCollectionVariant
+  ) => void
+  onDropBelowFolder: (
+    folderId: string,
+    draggingKind: 'playlist-folder' | 'library-playlist',
+    draggingId: ID | string | SmartCollectionVariant
+  ) => void
   children?: React.ReactNode
 }
 
@@ -84,13 +83,13 @@ export const PlaylistFolderNavItem = ({
   dragging,
   draggingKind,
   onClickEdit,
+  onDropBelowFolder,
+  onDropInFolder,
   children
 }: PlaylistFolderNavItemProps) => {
   const { id, name } = folder
   const isDroppableKind =
-    draggingKind === 'track' ||
-    draggingKind === 'playlist' ||
-    draggingKind === 'playlist-folder'
+    draggingKind === 'library-playlist' || draggingKind === 'playlist'
   const [isHovering, setIsHovering] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const [ref, bounds] = useMeasure()
@@ -101,76 +100,86 @@ export const PlaylistFolderNavItem = ({
   })
 
   return (
-    <Droppable
-      key={id}
-      className={navColumnStyles.droppable}
-      hoverClassName={navColumnStyles.droppableHover}
-      onDrop={() => {}}
-      acceptedKinds={['library-playlist']}
-    >
-      <FolderNavLink
-        onMouseEnter={() => {
-          setIsHovering(true)
+    <React.Fragment>
+      {/* This is the droppable area for adding a playlist into a folder */}
+      <Droppable
+        className={navColumnStyles.droppable}
+        hoverClassName={navColumnStyles.droppableHover}
+        onDrop={(playlistId, kind) => {
+          onDropInFolder(folder, kind, playlistId)
         }}
-        onMouseLeave={() => setIsHovering(false)}
-        id={id}
-        name={name}
-        onReorder={() => {}}
-        className={cn(navColumnStyles.link, navColumnStyles.editable, {
-          [navColumnStyles.droppableLink]: dragging && isDroppableKind,
-          [navColumnStyles.disabledLink]:
-            dragging && !isDroppableKind && draggingKind !== 'library-playlist'
-        })}
-        onClick={e => {
-          e.preventDefault()
-          e.stopPropagation()
-          setIsExpanded(!isExpanded)
-        }}
+        acceptedKinds={['library-playlist', 'playlist']}
       >
-        <div className={styles.libraryLinkContentContainer}>
-          {children == null ? (
-            <IconFolderOutline
-              width={12}
-              height={12}
-              className={styles.iconFolder}
-            />
-          ) : (
-            <IconFolder
-              width={12}
-              height={12}
-              className={cn(styles.iconFolder, {
-                [styles.iconFolderUpdated]: hasUpdate
+        <FolderNavLink
+          onMouseEnter={() => {
+            setIsHovering(true)
+          }}
+          onMouseLeave={() => setIsHovering(false)}
+          id={id}
+          name={name}
+          className={cn(navColumnStyles.link, navColumnStyles.editable, {
+            [navColumnStyles.droppableLink]: dragging && isDroppableKind,
+            [navColumnStyles.disabledLink]: dragging && !isDroppableKind
+          })}
+          onClick={() => {
+            setIsExpanded(!isExpanded)
+          }}
+        >
+          <div className={styles.libraryLinkContentContainer}>
+            {children == null ? (
+              <IconFolderOutline
+                width={12}
+                height={12}
+                className={styles.iconFolder}
+              />
+            ) : (
+              <IconFolder
+                width={12}
+                height={12}
+                className={cn(styles.iconFolder, {
+                  [styles.iconFolderUpdated]: hasUpdate
+                })}
+              />
+            )}
+            <div className={styles.libraryLinkTextContainer}>
+              <span>{name}</span>
+            </div>
+            <IconCaretRight
+              height={11}
+              width={11}
+              className={cn(styles.iconCaret, {
+                [styles.iconCaretDown]: isExpanded
               })}
             />
-          )}
-          <div className={styles.libraryLinkTextContainer}>
-            <span>{name}</span>
+            <IconButton
+              className={cn(styles.iconKebabHorizontal, {
+                [styles.hidden]: !isHovering || dragging
+              })}
+              icon={<IconKebabHorizontal height={11} width={11} />}
+              onClick={e => {
+                e.preventDefault()
+                e.stopPropagation()
+                onClickEdit(id)
+              }}
+            />
           </div>
-          <IconCaretRight
-            height={11}
-            width={11}
-            className={cn(styles.iconCaret, {
-              [styles.iconCaretDown]: isExpanded
-            })}
-          />
-          <IconButton
-            className={cn(styles.iconKebabHorizontal, {
-              [styles.hidden]: !isHovering || dragging
-            })}
-            icon={<IconKebabHorizontal height={11} width={11} />}
-            onClick={e => {
-              e.preventDefault()
-              e.stopPropagation()
-              onClickEdit(id)
-            }}
-          />
-        </div>
-      </FolderNavLink>
-      {children == null ? null : (
-        <animated.div style={contentsStyle}>
-          <div ref={ref}>{children}</div>
-        </animated.div>
-      )}
-    </Droppable>
+        </FolderNavLink>
+        {children == null ? null : (
+          <animated.div style={contentsStyle}>
+            <div ref={ref}>{children}</div>
+          </animated.div>
+        )}
+      </Droppable>
+      {/* This is the droppable area for reordering something below this playlist
+      folder item. */}
+      <Droppable
+        className={styles.droppable}
+        hoverClassName={styles.droppableHover}
+        onDrop={(draggingId, kind) => {
+          onDropBelowFolder(id, kind, draggingId)
+        }}
+        acceptedKinds={['playlist-folder', 'library-playlist']}
+      />
+    </React.Fragment>
   )
 }
