@@ -145,7 +145,7 @@ export const ActionsBar = ({ track }: ActionsBarProps) => {
 
   const renderCastButton = () => {
     const airplay = NativeModules.AirplayViewManager
-    if (castMethod === 'airplay') {
+    if (airplay && castMethod === 'airplay') {
       return (
         <IconButton
           onPress={airplay.click}
