@@ -68,6 +68,8 @@ const WAUDIO_MINT_ADDRESS = process.env.REACT_APP_WAUDIO_MINT_ADDRESS
 const SOLANA_TOKEN_ADDRESS = process.env.REACT_APP_SOLANA_TOKEN_PROGRAM_ADDRESS
 const CLAIMABLE_TOKEN_PDA = process.env.REACT_APP_CLAIMABLE_TOKEN_PDA
 const SOLANA_FEE_PAYER_ADDRESS = process.env.REACT_APP_SOLANA_FEE_PAYER_ADDRESS
+const ANCHOR_PROGRAM_ID = process.env.REACT_APP_ANCHOR_PROGRAM_ID
+const ANCHOR_ADMIN_STORAGE_KEYPAIR_PUBLIC_KEY = process.env.REACT_APP_ANCHOR_ADMIN_STORAGE_KEYPAIR_PUBLIC_KEY
 
 const CLAIMABLE_TOKEN_PROGRAM_ADDRESS =
   process.env.REACT_APP_CLAIMABLE_TOKEN_PROGRAM_ADDRESS
@@ -570,6 +572,15 @@ class AudiusBackend {
         rewardsManagerProgramId: REWARDS_MANAGER_PROGRAM_ID,
         rewardsManagerProgramPDA: REWARDS_MANAGER_PROGRAM_PDA,
         rewardsManagerTokenPDA: REWARDS_MANAGER_TOKEN_PDA,
+        anchorAdminStorageKeypairPublicKey: ANCHOR_ADMIN_STORAGE_KEYPAIR_PUBLIC_KEY,
+        anchorProgramId: ANCHOR_PROGRAM_ID,
+        // prod: solanaDataProgramId: 'Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS' // prod
+        // FAKE
+        // local: changes for local -- in ~/.audius/solana-program-config.json, use "anchorProgramId"
+
+        // use what is generated for you locally, if see 111111 short circuit
+        // separation of logic and storage VS cofntracts = stateful
+        //
         useRelay: true
       })
     }
