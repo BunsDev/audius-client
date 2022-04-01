@@ -553,7 +553,9 @@ class AudiusBackend {
       !CLAIMABLE_TOKEN_PROGRAM_ADDRESS ||
       !REWARDS_MANAGER_PROGRAM_ID ||
       !REWARDS_MANAGER_PROGRAM_PDA ||
-      !REWARDS_MANAGER_TOKEN_PDA
+      !REWARDS_MANAGER_TOKEN_PDA ||
+      !ANCHOR_ADMIN_STORAGE_KEYPAIR_PUBLIC_KEY ||
+      !ANCHOR_PROGRAM_ID
     ) {
       console.error('Missing solana configs')
       return {
