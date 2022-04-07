@@ -75,6 +75,8 @@ const WAUDIO_MINT_ADDRESS = process.env.REACT_APP_WAUDIO_MINT_ADDRESS
 const SOLANA_TOKEN_ADDRESS = process.env.REACT_APP_SOLANA_TOKEN_PROGRAM_ADDRESS
 const CLAIMABLE_TOKEN_PDA = process.env.REACT_APP_CLAIMABLE_TOKEN_PDA
 const SOLANA_FEE_PAYER_ADDRESS = process.env.REACT_APP_SOLANA_FEE_PAYER_ADDRESS
+const ANCHOR_PROGRAM_ID = process.env.REACT_APP_ANCHOR_PROGRAM_ID
+const ANCHOR_ADMIN_STORAGE_KEYPAIR_PUBLIC_KEY = process.env.REACT_APP_ANCHOR_ADMIN_STORAGE_KEYPAIR_PUBLIC_KEY
 
 const CLAIMABLE_TOKEN_PROGRAM_ADDRESS =
   process.env.REACT_APP_CLAIMABLE_TOKEN_PROGRAM_ADDRESS
@@ -422,6 +424,7 @@ class AudiusBackend {
     const { web3Error, web3Config } = await AudiusBackend.getWeb3Config()
     const { ethWeb3Config } = AudiusBackend.getEthWeb3Config()
     const { solanaWeb3Config } = AudiusBackend.getSolanaWeb3Config()
+    console.log('WHAT IS AUDIUSBACKEND SOL CONFIG', solanaWeb3Config)
     const { wormholeConfig } = AudiusBackend.getWormholeConfig()
 
     let contentNodeBlockList = getRemoteVar(StringKeys.CONTENT_NODE_BLOCK_LIST)
@@ -561,7 +564,9 @@ class AudiusBackend {
       !CLAIMABLE_TOKEN_PROGRAM_ADDRESS ||
       !REWARDS_MANAGER_PROGRAM_ID ||
       !REWARDS_MANAGER_PROGRAM_PDA ||
-      !REWARDS_MANAGER_TOKEN_PDA
+      !REWARDS_MANAGER_TOKEN_PDA ||
+      !ANCHOR_ADMIN_STORAGE_KEYPAIR_PUBLIC_KEY ||
+      !ANCHOR_PROGRAM_ID
     ) {
       console.error('Missing solana configs')
       return {
@@ -580,6 +585,8 @@ class AudiusBackend {
         rewardsManagerProgramId: REWARDS_MANAGER_PROGRAM_ID,
         rewardsManagerProgramPDA: REWARDS_MANAGER_PROGRAM_PDA,
         rewardsManagerTokenPDA: REWARDS_MANAGER_TOKEN_PDA,
+        anchorAdminStorageKeypairPublicKey: ANCHOR_ADMIN_STORAGE_KEYPAIR_PUBLIC_KEY,
+        anchorProgramId: ANCHOR_PROGRAM_ID,
         useRelay: true
       })
     }
