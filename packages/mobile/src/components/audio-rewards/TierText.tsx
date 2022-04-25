@@ -4,7 +4,7 @@ import { AudioTier } from './audioTier'
 
 const tierGradientMap = {
   none: {
-    colors: []
+    colors: undefined
   },
   bronze: {
     colors: ['rgba(141, 48, 8, 0.5)', 'rgba(182, 97, 11, 1)']
