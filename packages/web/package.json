@@ -6,7 +6,7 @@
   "version": "1.1.2",
   "private": true,
   "dependencies": {
-    "@audius/libs": "1.2.91",
+    "@audius/libs": "1.2.113-flare70.0",
     "@audius/stems": "0.3.24",
     "@craco/craco": "6.4.3",
     "@fingerprintjs/fingerprintjs-pro": "^3.5.6",
