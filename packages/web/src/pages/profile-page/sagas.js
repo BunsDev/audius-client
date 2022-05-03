@@ -47,8 +47,11 @@ import { isMobile } from 'utils/clientUtil'
 import { dataURLtoFile } from 'utils/fileUtils'
 import { getCreatorNodeIPFSGateways } from 'utils/gatewayUtil'
 import { waitForValue } from 'utils/sagaHelpers'
+import { FeatureFlags } from 'common/services/remote-config'
+import { fetchSupporting, fetchSupporters } from 'services/audius-backend/Tipping'
+import { setSupportingForUser, setSupportersForUser } from 'common/store/tipping/slice'
 
-const { getRemoteVar, waitForRemoteConfig } = remoteConfigInstance
+const { getRemoteVar, getFeatureEnabled, waitForRemoteConfig } = remoteConfigInstance
 
 function* watchFetchProfile() {
   yield takeLatest(profileActions.FETCH_PROFILE, fetchProfileAsync)
@@ -138,6 +141,106 @@ export function* fetchSolanaCollectibles(user) {
   )
 }
 
+function* fetchSupportersAndSupporting(userId) {
+  yield call(waitForRemoteConfig)
+  const isTippingEnabled = getFeatureEnabled(FeatureFlags.TIPPING_ENABLED)
+  console.log({ isTippingEnabled })
+  // if (!isTippingEnabled) {
+  //   return
+  // }
+
+  // const supportingForUser = yield fetchSupporting(userId)
+  // const supportersForUser = yield fetchSupporters(userId)
+  // const supportingForUser = []
+  // const supportersForUser = []
+  const supportingForUser = [{
+    supporting: {
+      name: 'One Two',
+      handle: 'onetwo',
+      user_id: 38698,
+      _profile_picture_sizes: {
+        "150x150": "https://creatornode5.staging.audius.co/ipfs/QmTCgXVmezUW3pTRgiWvYLBe2TA6FwFZn8Y56Unq1mmLDC/150x150.jpg",
+        "480x480": "https://creatornode5.staging.audius.co/ipfs/QmTCgXVmezUW3pTRgiWvYLBe2TA6FwFZn8Y56Unq1mmLDC/480x480.jpg",
+        "1000x1000": "https://creatornode5.staging.audius.co/ipfs/QmTCgXVmezUW3pTRgiWvYLBe2TA6FwFZn8Y56Unq1mmLDC/1000x1000.jpg"
+      },
+      _cover_photo_sizes: {
+        "640x": "https://creatornode5.staging.audius.co/ipfs/QmUtYDKbUmhnRnNLpRStsZ7biSaAuFviGkiLHkUftHiysw/640x.jpg",
+        "2000x": "https://creatornode5.staging.audius.co/ipfs/QmUtYDKbUmhnRnNLpRStsZ7biSaAuFviGkiLHkUftHiysw/2000x.jpg"
+      }
+      // profile_picture: 'https://usermetadata.staging.audius.co/ipfs/QmUZR8LoYVEqs4m4LFcCFdgYuuHzZSFXfKrH8QFBqzctoR/150x150.jpg',
+      // cover_photo: 'https://usermetadata.staging.audius.co/ipfs/QmYqkWLpqDCDGFeRwxDhSBm6CkUxhum71otsKVjbxL2oit/640x.jpg'
+    },
+    amount: 25,
+    rank: 1,
+    updated_at: 'yesterday'
+  }, {
+    supporting: {
+      name: 'Three Four',
+      handle: 'three_four',
+      user_id: 1,
+      _profile_picture_sizes: {
+        "150x150": "https://creatornode5.staging.audius.co/ipfs/QmTCgXVmezUW3pTRgiWvYLBe2TA6FwFZn8Y56Unq1mmLDC/150x150.jpg",
+        "480x480": "https://creatornode5.staging.audius.co/ipfs/QmTCgXVmezUW3pTRgiWvYLBe2TA6FwFZn8Y56Unq1mmLDC/480x480.jpg",
+        "1000x1000": "https://creatornode5.staging.audius.co/ipfs/QmTCgXVmezUW3pTRgiWvYLBe2TA6FwFZn8Y56Unq1mmLDC/1000x1000.jpg"
+      },
+      _cover_photo_sizes: {
+        "640x": "https://creatornode5.staging.audius.co/ipfs/QmUtYDKbUmhnRnNLpRStsZ7biSaAuFviGkiLHkUftHiysw/640x.jpg",
+        "2000x": "https://creatornode5.staging.audius.co/ipfs/QmUtYDKbUmhnRnNLpRStsZ7biSaAuFviGkiLHkUftHiysw/2000x.jpg"
+      },
+      // profile_picture: 'https://usermetadata.staging.audius.co/ipfs/QmUZR8LoYVEqs4m4LFcCFdgYuuHzZSFXfKrH8QFBqzctoR/150x150.jpg',
+      // cover_photo: 'https://usermetadata.staging.audius.co/ipfs/QmYqkWLpqDCDGFeRwxDhSBm6CkUxhum71otsKVjbxL2oit/640x.jpg',
+      is_verified: true
+    },
+    amount: 10,
+    rank: 10,
+    updated_at: 'today'
+  }, {
+    supporting: {
+      name: 'Five Six',
+      handle: 'five6',
+      user_id: 6,
+      _profile_picture_sizes: {
+        "150x150": "https://creatornode5.staging.audius.co/ipfs/QmTCgXVmezUW3pTRgiWvYLBe2TA6FwFZn8Y56Unq1mmLDC/150x150.jpg",
+        "480x480": "https://creatornode5.staging.audius.co/ipfs/QmTCgXVmezUW3pTRgiWvYLBe2TA6FwFZn8Y56Unq1mmLDC/480x480.jpg",
+        "1000x1000": "https://creatornode5.staging.audius.co/ipfs/QmTCgXVmezUW3pTRgiWvYLBe2TA6FwFZn8Y56Unq1mmLDC/1000x1000.jpg"
+      },
+      _cover_photo_sizes: {
+        "640x": "https://creatornode5.staging.audius.co/ipfs/QmUtYDKbUmhnRnNLpRStsZ7biSaAuFviGkiLHkUftHiysw/640x.jpg",
+        "2000x": "https://creatornode5.staging.audius.co/ipfs/QmUtYDKbUmhnRnNLpRStsZ7biSaAuFviGkiLHkUftHiysw/2000x.jpg"
+      }
+      // profile_picture: 'https://usermetadata.staging.audius.co/ipfs/QmUZR8LoYVEqs4m4LFcCFdgYuuHzZSFXfKrH8QFBqzctoR/150x150.jpg',
+      // cover_photo: 'https://usermetadata.staging.audius.co/ipfs/QmYqkWLpqDCDGFeRwxDhSBm6CkUxhum71otsKVjbxL2oit/640x.jpg'
+    },
+    amount: 5,
+    rank: 3,
+    updated_at: 'today'
+  }, {
+    supporting: {
+      name: 'Seven Eight',
+      handle: 'seveneight',
+      user_id: 2,
+      _profile_picture_sizes: {
+        "150x150": "https://creatornode5.staging.audius.co/ipfs/QmTCgXVmezUW3pTRgiWvYLBe2TA6FwFZn8Y56Unq1mmLDC/150x150.jpg",
+        "480x480": "https://creatornode5.staging.audius.co/ipfs/QmTCgXVmezUW3pTRgiWvYLBe2TA6FwFZn8Y56Unq1mmLDC/480x480.jpg",
+        "1000x1000": "https://creatornode5.staging.audius.co/ipfs/QmTCgXVmezUW3pTRgiWvYLBe2TA6FwFZn8Y56Unq1mmLDC/1000x1000.jpg"
+      },
+      _cover_photo_sizes: {
+        "640x": "https://creatornode5.staging.audius.co/ipfs/QmUtYDKbUmhnRnNLpRStsZ7biSaAuFviGkiLHkUftHiysw/640x.jpg",
+        "2000x": "https://creatornode5.staging.audius.co/ipfs/QmUtYDKbUmhnRnNLpRStsZ7biSaAuFviGkiLHkUftHiysw/2000x.jpg"
+      }
+      // profile_picture: 'https://usermetadata.staging.audius.co/ipfs/QmUZR8LoYVEqs4m4LFcCFdgYuuHzZSFXfKrH8QFBqzctoR/150x150.jpg',
+      // cover_photo: 'https://usermetadata.staging.audius.co/ipfs/QmYqkWLpqDCDGFeRwxDhSBm6CkUxhum71otsKVjbxL2oit/640x.jpg'
+    },
+    amount: 1,
+    rank: 4,
+    updated_at: 'last week'
+  }]
+  const supportersForUser = supportingForUser.map(s => ({ ...s, supporter: { ...s.supporting }, supporting: undefined }))
+  console.log('heeeeere')
+  yield put(setSupportingForUser({ userId, supportingForUser }))
+  yield put(setSupportersForUser({ userId, supportersForUser }))
+}
+
 function* fetchProfileAsync(action) {
   try {
     let user
@@ -172,6 +275,7 @@ function* fetchProfileAsync(action) {
     // Fetch user socials and collections after fetching the user itself
     yield fork(fetchUserSocials, action.handle)
     yield fork(fetchUserCollections, user.user_id)
+    yield fork(fetchSupportersAndSupporting, user.user_id)
     yield fork(fetchProfileCustomizedCollectibles, user)
     yield fork(fetchOpenSeaAssets, user)
     yield fork(fetchSolanaCollectibles, user)
