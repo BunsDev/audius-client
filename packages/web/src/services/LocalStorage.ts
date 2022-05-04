@@ -1,4 +1,4 @@
-import { CURRENT_USER_EXISTS_LOCAL_STORAGE_KEY } from '@audius/libs/src/constants'
+import { CURRENT_USER_EXISTS_LOCAL_STORAGE_KEY } from '@audius/libs/dist/core'
 import { DISCOVERY_PROVIDER_TIMESTAMP } from '@audius/libs/src/services/discoveryProvider/constants'
 
 import { User } from 'common/models/User'
