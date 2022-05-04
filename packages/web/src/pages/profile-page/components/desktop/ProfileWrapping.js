@@ -1,9 +1,12 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 
+import { IconTrending } from '@audius/stems'
 import cn from 'classnames'
 import Linkify from 'linkifyjs/react'
 
 import { ReactComponent as BadgeArtist } from 'assets/img/badgeArtist.svg'
+import { ReactComponent as IconCaretDownLine } from 'assets/img/iconCaretDownLine.svg'
+import { ReactComponent as IconCaretUpLine } from 'assets/img/iconCaretUpLine.svg'
 import { useSelector } from 'common/hooks/useSelector'
 import { Name } from 'common/models/Analytics'
 import { FeatureFlags } from 'common/services/remote-config'
@@ -15,6 +18,8 @@ import Input from 'components/data-entry/Input'
 import TextArea from 'components/data-entry/TextArea'
 import More from 'components/more/More'
 import ProfilePicture from 'components/profile-picture/ProfilePicture'
+import { SupportingList } from 'components/tipping/support/SupportingList'
+import { TopSupporters } from 'components/tipping/support/TopSupporters'
 import { TipAudioButton } from 'components/tipping/tip-audio/TipAudioButton'
 import Tag from 'components/track/Tag'
 import UploadChip from 'components/upload/UploadChip'
@@ -31,6 +36,15 @@ import styles from './ProfilePage.module.css'
 
 const { getFeatureEnabled } = remoteConfigInstance
 
+const messages = {
+  seeMore: 'See More',
+  seeLess: 'See Less',
+  topTags: 'Top Tags'
+}
+
+const DESCRIPTION_LINE_HEIGHT = 16
+const NUM_DESCRIPTION_LINES_TRUNCATED = 4
+
 const Tags = props => {
   const { tags, goToRoute } = props
   const record = useRecord()
@@ -44,7 +58,11 @@ const Tags = props => {
 
   return tags && tags.length > 0 ? (
     <div className={styles.tags}>
-      <div className={styles.infoHeader}>MOST USED TAGS</div>
+      <div className={styles.tagsTitleContainer}>
+        <IconTrending className={styles.topTagsIcon} />
+        <span className={styles.tagsTitleText}>{messages.topTags}</span>
+        <span className={styles.tagsLine} />
+      </div>
       <div className={styles.tagsContent}>
         {tags.map(tag => (
           <Tag
@@ -102,6 +120,29 @@ const ProfileWrapping = props => {
     tikTokHandle,
     website
   } = props
+
+  const hasSocial =
+    props.twitterHandle || props.instagramHandle || props.tikTokHandle
+
+  const bioRef = useRef(null)
+  const [isTruncated, setIsTruncated] = useState(false)
+
+  useEffect(() => {
+    if (bioRef?.current) {
+      const height = parseInt(
+        document.defaultView
+          .getComputedStyle(bioRef.current, null)
+          .getPropertyValue('height')
+          .slice(0, -2)
+      )
+      setIsTruncated(
+        height / DESCRIPTION_LINE_HEIGHT > NUM_DESCRIPTION_LINES_TRUNCATED
+      )
+    }
+  }, [bioRef])
+
+  const handleToggleTruncate = () => setIsTruncated(!isTruncated)
+
   const onClickTwitter = useCallback(() => {
     record(
       make(Name.PROFILE_PAGE_CLICK_TWITTER, {
@@ -243,52 +284,111 @@ const ProfileWrapping = props => {
       <div className={styles.about}>
         <ProfilePageBadge userId={props.userId} className={styles.badge} />
         <Linkify options={{ attributes: { onClick: onExternalLinkClick } }}>
-          <div className={styles.description}>{squashNewLines(props.bio)}</div>
+          <div
+            className={cn(styles.description, {
+              [styles.truncated]: isTruncated
+            })}
+            ref={bioRef}
+          >
+            {squashNewLines(props.bio)}
+          </div>
         </Linkify>
-        <div className={styles.location}>{props.location}</div>
-        <div className={styles.joined}>Joined {props.created}</div>
-        <div className={styles.socials}>
-          {props.twitterHandle && (
-            <SocialLink
-              type={Type.TWITTER}
-              link={props.twitterHandle}
-              onClick={onClickTwitter}
-            />
-          )}
-          {props.instagramHandle && (
-            <SocialLink
-              type={Type.INSTAGRAM}
-              link={props.instagramHandle}
-              onClick={onClickInstagram}
-            />
-          )}
-          {props.tikTokHandle && (
-            <SocialLink
-              type={Type.TIKTOK}
-              link={props.tikTokHandle}
-              onClick={onClickTikTok}
-            />
-          )}
-          {props.website && (
-            <SocialLink
-              type={Type.WEBSITE}
-              link={props.website}
-              onClick={onClickWebsite}
-            />
-          )}
-          {props.donation && (
-            <SocialLink
-              type={Type.DONATION}
-              link={props.donation}
-              onClick={onClickDonation}
-            />
-          )}
-        </div>
+        {isTruncated && (
+          <div>
+            {hasSocial && (
+              <div className={styles.socialsTruncated}>
+                {props.twitterHandle && (
+                  <SocialLink
+                    type={Type.TWITTER}
+                    link={props.twitterHandle}
+                    onClick={onClickTwitter}
+                    iconOnly
+                  />
+                )}
+                {props.instagramHandle && (
+                  <SocialLink
+                    type={Type.INSTAGRAM}
+                    link={props.instagramHandle}
+                    onClick={onClickInstagram}
+                    iconOnly
+                  />
+                )}
+                {props.tikTokHandle && (
+                  <SocialLink
+                    type={Type.TIKTOK}
+                    link={props.tikTokHandle}
+                    onClick={onClickTikTok}
+                    iconOnly
+                  />
+                )}
+              </div>
+            )}
+            <div
+              className={styles.truncateContainer}
+              onClick={handleToggleTruncate}
+            >
+              <span>{messages.seeMore}</span>
+              <IconCaretDownLine />
+            </div>
+          </div>
+        )}
+        {!isTruncated && (
+          <div className={styles.socials}>
+            {props.twitterHandle && (
+              <SocialLink
+                type={Type.TWITTER}
+                link={props.twitterHandle}
+                onClick={onClickTwitter}
+              />
+            )}
+            {props.instagramHandle && (
+              <SocialLink
+                type={Type.INSTAGRAM}
+                link={props.instagramHandle}
+                onClick={onClickInstagram}
+              />
+            )}
+            {props.tikTokHandle && (
+              <SocialLink
+                type={Type.TIKTOK}
+                link={props.tikTokHandle}
+                onClick={onClickTikTok}
+              />
+            )}
+            {props.website && (
+              <SocialLink
+                type={Type.WEBSITE}
+                link={props.website}
+                onClick={onClickWebsite}
+              />
+            )}
+            {props.donation && (
+              <SocialLink
+                type={Type.DONATION}
+                link={props.donation}
+                onClick={onClickDonation}
+              />
+            )}
+            <div className={styles.location}>{props.location}</div>
+            <div className={styles.joined}>Joined {props.created}</div>
+            <div
+              className={styles.truncateContainer}
+              onClick={handleToggleTruncate}
+            >
+              <span>{messages.seeLess}</span>
+              <IconCaretUpLine />
+            </div>
+          </div>
+        )}
         {isTippingEnabled &&
         accountUser &&
         accountUser.user_id !== props.userId ? (
-          <TipAudioButton />
+          <div className={styles.tipAudioButton}>
+            <TipAudioButton />
+          </div>
         ) : null}
+        <SupportingList />
+        <TopSupporters />
         {props.isArtist ? (
           <Tags goToRoute={props.goToRoute} tags={props.tags} />
         ) : null}

@@ -15,17 +15,21 @@ const USER_LENGTH_LIMIT = 8
 
 type UserProfileListProps = {
   users: Array<User>
+  limit?: number
 }
 
-export const UserProfilePictureList = ({ users }: UserProfileListProps) => {
-  const showUserListModal = users.length > USER_LENGTH_LIMIT
-  const remainingUsersCount = users.length - USER_LENGTH_LIMIT
+export const UserProfilePictureList = ({
+  users,
+  limit = USER_LENGTH_LIMIT
+}: UserProfileListProps) => {
+  const showUserListModal = users.length > limit
+  const remainingUsersCount = users.length - limit
 
   return (
     <div className={styles.root}>
       {users
         .filter(u => !u.is_deactivated)
-        .slice(0, USER_LENGTH_LIMIT)
+        .slice(0, limit)
         .map(user => (
           <ProfilePicture
             key={user.user_id}
