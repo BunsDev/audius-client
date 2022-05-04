@@ -41,10 +41,10 @@ import { makeUid, makeKindId } from 'common/utils/uid'
 import AudiusBackend, { fetchCID } from 'services/AudiusBackend'
 import { setAudiusAccountUser } from 'services/LocalStorage'
 import apiClient from 'services/audius-api-client/AudiusAPIClient'
-import {
-  fetchSupporting,
-  fetchSupporters
-} from 'services/audius-backend/Tipping'
+// import {
+//   fetchSupporting,
+//   fetchSupporters
+// } from 'services/audius-backend/Tipping'
 import OpenSeaClient from 'services/opensea-client/OpenSeaClient'
 import { remoteConfigInstance } from 'services/remote-config/remote-config-instance'
 import SolanaClient from 'services/solana-client/SolanaClient'

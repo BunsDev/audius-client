@@ -13,6 +13,7 @@ import { push as pushRoute } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 
+import { useSelector } from 'common/hooks/useSelector'
 import { FollowSource } from 'common/models/Analytics'
 import { ID } from 'common/models/Identifiers'
 import { WidthSizes, SquareSizes } from 'common/models/ImageSizes'
@@ -20,6 +21,7 @@ import { getUserId } from 'common/store/account/selectors'
 import { getUser } from 'common/store/cache/users/selectors'
 import { setNotificationSubscription } from 'common/store/pages/profile/actions'
 import * as socialActions from 'common/store/social/users/actions'
+import { getSupporting } from 'common/store/tipping/selectors'
 import { useUserCoverPhoto } from 'hooks/useUserCoverPhoto'
 import { useUserProfilePicture } from 'hooks/useUserProfilePicture'
 import { AppState } from 'store/types'
@@ -69,6 +71,11 @@ const ArtistPopover = ({
     true
   )
 
+  const supportingMap = useSelector(getSupporting)
+  const supportingList = creator?.user_id
+    ? supportingMap[creator.user_id] ?? []
+    : []
+
   const onMouseEnter = useCallback(() => {
     getCoverPhoto()
     getProfilePicture()
@@ -111,6 +118,7 @@ const ArtistPopover = ({
         coverPhotoSizes={creator._cover_photo_sizes}
         isVerified={creator.is_verified}
         isArtist={creator.is_creator || creator.track_count > 0}
+        supportingList={supportingList}
         onNameClick={onNameClick}
         following={following}
         onFollow={onClickFollow}

@@ -10,7 +10,7 @@ import { UserProfilePictureList } from 'components/notification/Notifications/Us
 
 import styles from './Support.module.css'
 
-const MAX_TOP_SUPPORTERS = 5
+const MAX_TOP_SUPPORTERS = 4
 
 const messages = {
   topSupporters: 'Top Supporters',
@@ -23,9 +23,9 @@ export const TopSupporters = () => {
   const supportersList = profile ? supportersMap[profile.user_id] ?? [] : []
 
   const handleClick = useCallback((event: MouseEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLDivElement
-    const className = (target?.className ?? '').toString()
-    const isProfilePicture = className.includes('ProfilePicture_profilePicture')
+    // const target = event.target as HTMLDivElement
+    // const className = (target?.className ?? '').toString()
+    // const isProfilePicture = className.includes('ProfilePicture_profilePicture')
     // console.log(isProfilePicture, { hi: event.target, isProfilePicture })
     // todo: open user list modal for supporters paginated
   }, [])
