@@ -3,7 +3,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { IconTrending } from '@audius/stems'
 import cn from 'classnames'
 import Linkify from 'linkifyjs/react'
-import { animated, Transition } from 'react-spring/renderprops'
+import { animated } from 'react-spring'
 
 import { ReactComponent as BadgeArtist } from 'assets/img/badgeArtist.svg'
 import { ReactComponent as IconCaretDownLine } from 'assets/img/iconCaretDownLine.svg'
@@ -23,6 +23,7 @@ import { SupportingList } from 'components/tipping/support/SupportingList'
 import { TopSupporters } from 'components/tipping/support/TopSupporters'
 import { TipAudioButton } from 'components/tipping/tip-audio/TipAudioButton'
 import Tag from 'components/track/Tag'
+import { OpacityTransition } from 'components/transition-container/OpacityTransition'
 import UploadChip from 'components/upload/UploadChip'
 import FollowsYouBadge from 'components/user-badges/FollowsYouBadge'
 import ProfilePageBadge from 'components/user-badges/ProfilePageBadge'
@@ -103,21 +104,6 @@ const Followers = props => {
           ))}
       </div>
     </div>
-  )
-}
-
-const OpacityTransition = props => {
-  const { renderFunc, duration } = props
-  return (
-    <Transition
-      items={null}
-      from={{ opacity: 0 }}
-      enter={{ opacity: 1 }}
-      leave={{ opacity: 0 }}
-      config={{ duration }}
-    >
-      {item => style => renderFunc(item, style)}
-    </Transition>
   )
 }
 
@@ -295,6 +281,12 @@ const ProfileWrapping = props => {
     </animated.div>
   )
 
+  const renderTipAudioButton = (_, style) => (
+    <animated.div className={styles.tipAudioButton} style={style}>
+      <TipAudioButton />
+    </animated.div>
+  )
+
   let leftNav = null
   if (props.editMode) {
     leftNav = (
@@ -386,7 +378,10 @@ const ProfileWrapping = props => {
         </Linkify>
         {isCollapsed && (
           <div>
-            <OpacityTransition renderFunc={renderCollapsedContent} />
+            <OpacityTransition
+              renderFunc={renderCollapsedContent}
+              duration={300}
+            />
             <div
               className={styles.truncateContainer}
               onClick={handleToggleCollapse}
@@ -400,7 +395,7 @@ const ProfileWrapping = props => {
           <div>
             <OpacityTransition
               renderFunc={renderExpandedContent}
-              duration={isCollapsible ? 500 : 300}
+              duration={300}
             />
             {isCollapsible && (
               <div
@@ -416,13 +411,7 @@ const ProfileWrapping = props => {
         {isTippingEnabled &&
         accountUser &&
         accountUser.user_id !== props.userId ? (
-          <OpacityTransition
-            renderFunc={(_, style) => (
-              <animated.div className={styles.tipAudioButton} style={style}>
-                <TipAudioButton />
-              </animated.div>
-            )}
-          />
+          <OpacityTransition renderFunc={renderTipAudioButton} />
         ) : null}
         <SupportingList />
         <TopSupporters />
