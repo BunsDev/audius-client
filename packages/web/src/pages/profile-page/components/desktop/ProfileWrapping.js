@@ -126,7 +126,8 @@ const ProfileWrapping = props => {
     props.twitterHandle || props.instagramHandle || props.tikTokHandle
 
   const bioRef = useRef(null)
-  const [isTruncated, setIsTruncated] = useState(false)
+  const [isCollapsible, setIsCollapsible] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(false)
 
   useEffect(() => {
     if (bioRef?.current) {
@@ -136,14 +137,15 @@ const ProfileWrapping = props => {
           .getPropertyValue('height')
           .slice(0, -2)
       )
-      setIsTruncated(
+      const toCollapse =
         height / DESCRIPTION_LINE_HEIGHT > NUM_DESCRIPTION_LINES_TRUNCATED
-      )
+      setIsCollapsed(toCollapse)
+      setIsCollapsible(toCollapse)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bioRef.current])
 
-  const handleToggleTruncate = () => setIsTruncated(!isTruncated)
+  const handleToggleCollapse = () => setIsCollapsed(!isCollapsed)
 
   const onClickTwitter = useCallback(() => {
     record(
@@ -360,14 +362,14 @@ const ProfileWrapping = props => {
         <Linkify options={{ attributes: { onClick: onExternalLinkClick } }}>
           <div
             className={cn(styles.description, {
-              [styles.truncated]: isTruncated
+              [styles.truncated]: isCollapsed
             })}
             ref={bioRef}
           >
             {squashNewLines(props.bio)}
           </div>
         </Linkify>
-        {isTruncated && (
+        {isCollapsed && (
           <div>
             <Transition
               items={null}
@@ -380,14 +382,14 @@ const ProfileWrapping = props => {
             </Transition>
             <div
               className={styles.truncateContainer}
-              onClick={handleToggleTruncate}
+              onClick={handleToggleCollapse}
             >
               <span>{messages.seeMore}</span>
               <IconCaretDownLine />
             </div>
           </div>
         )}
-        {!isTruncated && (
+        {!isCollapsed && (
           <div>
             <Transition
               items={null}
@@ -398,13 +400,15 @@ const ProfileWrapping = props => {
             >
               {item => style => renderExpandedContent(item, style)}
             </Transition>
-            <div
-              className={styles.truncateContainer}
-              onClick={handleToggleTruncate}
-            >
-              <span>{messages.seeLess}</span>
-              <IconCaretUpLine />
-            </div>
+            {isCollapsible && (
+              <div
+                className={styles.truncateContainer}
+                onClick={handleToggleCollapse}
+              >
+                <span>{messages.seeLess}</span>
+                <IconCaretUpLine />
+              </div>
+            )}
           </div>
         )}
         {isTippingEnabled &&
