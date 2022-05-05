@@ -106,6 +106,21 @@ const Followers = props => {
   )
 }
 
+const OpacityTransition = props => {
+  const { renderFunc, duration } = props
+  return (
+    <Transition
+      items={null}
+      from={{ opacity: 0 }}
+      enter={{ opacity: 1 }}
+      leave={{ opacity: 0 }}
+      config={{ duration }}
+    >
+      {item => style => renderFunc(item, style)}
+    </Transition>
+  )
+}
+
 const ProfileWrapping = props => {
   const isTippingEnabled = getFeatureEnabled(FeatureFlags.TIPPING_ENABLED)
   const accountUser = useSelector(getAccountUser)
@@ -371,15 +386,7 @@ const ProfileWrapping = props => {
         </Linkify>
         {isCollapsed && (
           <div>
-            <Transition
-              items={null}
-              from={{ opacity: 0 }}
-              enter={{ opacity: 1 }}
-              leave={{ opacity: 0 }}
-              config={{ duration: 300 }}
-            >
-              {item => style => renderCollapsedContent(item, style)}
-            </Transition>
+            <OpacityTransition renderFunc={renderCollapsedContent} />
             <div
               className={styles.truncateContainer}
               onClick={handleToggleCollapse}
@@ -391,15 +398,10 @@ const ProfileWrapping = props => {
         )}
         {!isCollapsed && (
           <div>
-            <Transition
-              items={null}
-              from={{ opacity: 0 }}
-              enter={{ opacity: 1 }}
-              leave={{ opacity: 0 }}
-              config={{ duration: 300 }}
-            >
-              {item => style => renderExpandedContent(item, style)}
-            </Transition>
+            <OpacityTransition
+              renderFunc={renderExpandedContent}
+              duration={isCollapsible ? 500 : 300}
+            />
             {isCollapsible && (
               <div
                 className={styles.truncateContainer}
@@ -414,9 +416,13 @@ const ProfileWrapping = props => {
         {isTippingEnabled &&
         accountUser &&
         accountUser.user_id !== props.userId ? (
-          <div className={styles.tipAudioButton}>
-            <TipAudioButton />
-          </div>
+          <OpacityTransition
+            renderFunc={(_, style) => (
+              <animated.div className={styles.tipAudioButton} style={style}>
+                <TipAudioButton />
+              </animated.div>
+            )}
+          />
         ) : null}
         <SupportingList />
         <TopSupporters />
