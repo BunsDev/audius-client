@@ -1,6 +1,5 @@
 /* globals web3, localStorage, fetch, Image */
-import { IdentityAPI } from '@audius/libs/dist/core'
-import * as DiscoveryAPI from '@audius/libs/src/services/discoveryProvider/requests'
+import { IdentityAPI, DiscoveryAPI } from '@audius/libs/dist/core'
 import { ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import {
   PublicKey,
@@ -1806,6 +1805,17 @@ class AudiusBackend {
     } catch (error) {
       console.error(error.message)
       return true
+    }
+  }
+
+  static async getUserEmail() {
+    await waitForLibsInit()
+    try {
+      const res = await audiusLibs.Account.getUserEmail()
+      return res
+    } catch (error) {
+      console.error(error.message)
+      return null
     }
   }
 

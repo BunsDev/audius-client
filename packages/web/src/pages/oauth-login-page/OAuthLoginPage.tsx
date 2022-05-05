@@ -7,7 +7,6 @@ import { useLocation } from 'react-router-dom'
 
 import { getAccountUser } from 'common/store/account/selectors'
 import Input from 'components/data-entry/Input'
-import { MetaMaskOption } from 'pages/sign-on/components/desktop/MetaMaskOption'
 import AudiusBackend from 'services/AudiusBackend'
 
 import styles from '../styles/OAuthLoginPage.module.css'
@@ -17,7 +16,6 @@ export const OAuthLoginPage = () => {
   const { scope, api_key, state, redirect } = queryString.parse(search)
   const account = useSelector(getAccountUser)
   const isLoggedIn = Boolean(account)
-  const hasMetaMask = !!(window as any).web3
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [submitError, setSubmitError] = useState<string | null>(null)
@@ -37,6 +35,13 @@ export const OAuthLoginPage = () => {
       signInResponse.user.name
     ) {
       // Success - perform Oauth authorization
+      let email: string | undefined | null
+      try {
+        email = await AudiusBackend.getUserEmail()
+      } catch (err) {
+        console.log(err)
+      }
+      console.log(email, 'Email retrieved')
     } else if (
       (!signInResponse.error &&
         signInResponse.user &&
@@ -49,13 +54,14 @@ export const OAuthLoginPage = () => {
     }
   }
 
-  const onSignInWithMetaMask = async () => {
+  const getEmail = async () => {
+    let email: string | undefined | null
     try {
-      window.localStorage.setItem('useMetaMask', JSON.stringify(true))
-      // window.location.reload()
+      email = await AudiusBackend.getUserEmail()
     } catch (err) {
-      console.error({ err })
+      console.log(err)
     }
+    console.log(email, 'Email retrieved')
   }
 
   return (
@@ -70,9 +76,9 @@ export const OAuthLoginPage = () => {
         </ul>
       </div>
       <div>
-        {!isLoggedIn ? (
+        {isLoggedIn ? (
           // TODO(nkang): Allow user to use different account
-          <Button text='Continue' />
+          <Button text='Continue' onClick={getEmail} />
         ) : (
           <form onSubmit={onFormSubmit}>
             <Input
@@ -98,9 +104,6 @@ export const OAuthLoginPage = () => {
             <Button text='Submit' buttonType='submit' />
           </form>
         )}
-        {hasMetaMask ? (
-          <MetaMaskOption text='Sign In With' onClick={onSignInWithMetaMask} />
-        ) : null}
       </div>
     </div>
   )
