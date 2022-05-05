@@ -157,9 +157,8 @@ export const TipAudioModal = () => {
                 : { duration: 300 }
             }
             additionalStyles={{ width: '100%' }}
-          >
-            <ModalContent />
-          </TransitionContainer>
+            renderFunc={() => <ModalContent />}
+          />
         )}
       </div>
     </ModalDrawer>

@@ -3,6 +3,7 @@ import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { IconTrending } from '@audius/stems'
 import cn from 'classnames'
 import Linkify from 'linkifyjs/react'
+import { animated, Transition } from 'react-spring/renderprops'
 
 import { ReactComponent as BadgeArtist } from 'assets/img/badgeArtist.svg'
 import { ReactComponent as IconCaretDownLine } from 'assets/img/iconCaretDownLine.svg'
@@ -139,7 +140,8 @@ const ProfileWrapping = props => {
         height / DESCRIPTION_LINE_HEIGHT > NUM_DESCRIPTION_LINES_TRUNCATED
       )
     }
-  }, [bioRef])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bioRef.current])
 
   const handleToggleTruncate = () => setIsTruncated(!isTruncated)
 
@@ -203,6 +205,78 @@ const ProfileWrapping = props => {
     goToRoute(UPLOAD_PAGE)
     record(make(Name.TRACK_UPLOAD_OPEN, { source: 'profile' }))
   }, [goToRoute, record])
+
+  const renderCollapsedContent = (_, style) =>
+    hasSocial ? (
+      <animated.div className={styles.socialsTruncated} style={style}>
+        {props.twitterHandle && (
+          <SocialLink
+            type={Type.TWITTER}
+            link={props.twitterHandle}
+            onClick={onClickTwitter}
+            iconOnly
+          />
+        )}
+        {props.instagramHandle && (
+          <SocialLink
+            type={Type.INSTAGRAM}
+            link={props.instagramHandle}
+            onClick={onClickInstagram}
+            iconOnly
+          />
+        )}
+        {props.tikTokHandle && (
+          <SocialLink
+            type={Type.TIKTOK}
+            link={props.tikTokHandle}
+            onClick={onClickTikTok}
+            iconOnly
+          />
+        )}
+      </animated.div>
+    ) : null
+
+  const renderExpandedContent = (_, style) => (
+    <animated.div className={styles.socials} style={style}>
+      {props.twitterHandle && (
+        <SocialLink
+          type={Type.TWITTER}
+          link={props.twitterHandle}
+          onClick={onClickTwitter}
+        />
+      )}
+      {props.instagramHandle && (
+        <SocialLink
+          type={Type.INSTAGRAM}
+          link={props.instagramHandle}
+          onClick={onClickInstagram}
+        />
+      )}
+      {props.tikTokHandle && (
+        <SocialLink
+          type={Type.TIKTOK}
+          link={props.tikTokHandle}
+          onClick={onClickTikTok}
+        />
+      )}
+      {props.website && (
+        <SocialLink
+          type={Type.WEBSITE}
+          link={props.website}
+          onClick={onClickWebsite}
+        />
+      )}
+      {props.donation && (
+        <SocialLink
+          type={Type.DONATION}
+          link={props.donation}
+          onClick={onClickDonation}
+        />
+      )}
+      <div className={styles.location}>{props.location}</div>
+      <div className={styles.joined}>Joined {props.created}</div>
+    </animated.div>
+  )
 
   let leftNav = null
   if (props.editMode) {
@@ -295,34 +369,15 @@ const ProfileWrapping = props => {
         </Linkify>
         {isTruncated && (
           <div>
-            {hasSocial && (
-              <div className={styles.socialsTruncated}>
-                {props.twitterHandle && (
-                  <SocialLink
-                    type={Type.TWITTER}
-                    link={props.twitterHandle}
-                    onClick={onClickTwitter}
-                    iconOnly
-                  />
-                )}
-                {props.instagramHandle && (
-                  <SocialLink
-                    type={Type.INSTAGRAM}
-                    link={props.instagramHandle}
-                    onClick={onClickInstagram}
-                    iconOnly
-                  />
-                )}
-                {props.tikTokHandle && (
-                  <SocialLink
-                    type={Type.TIKTOK}
-                    link={props.tikTokHandle}
-                    onClick={onClickTikTok}
-                    iconOnly
-                  />
-                )}
-              </div>
-            )}
+            <Transition
+              items={null}
+              from={{ opacity: 0 }}
+              enter={{ opacity: 1 }}
+              leave={{ opacity: 0 }}
+              config={{ duration: 300 }}
+            >
+              {item => style => renderCollapsedContent(item, style)}
+            </Transition>
             <div
               className={styles.truncateContainer}
               onClick={handleToggleTruncate}
@@ -333,44 +388,16 @@ const ProfileWrapping = props => {
           </div>
         )}
         {!isTruncated && (
-          <div className={styles.socials}>
-            {props.twitterHandle && (
-              <SocialLink
-                type={Type.TWITTER}
-                link={props.twitterHandle}
-                onClick={onClickTwitter}
-              />
-            )}
-            {props.instagramHandle && (
-              <SocialLink
-                type={Type.INSTAGRAM}
-                link={props.instagramHandle}
-                onClick={onClickInstagram}
-              />
-            )}
-            {props.tikTokHandle && (
-              <SocialLink
-                type={Type.TIKTOK}
-                link={props.tikTokHandle}
-                onClick={onClickTikTok}
-              />
-            )}
-            {props.website && (
-              <SocialLink
-                type={Type.WEBSITE}
-                link={props.website}
-                onClick={onClickWebsite}
-              />
-            )}
-            {props.donation && (
-              <SocialLink
-                type={Type.DONATION}
-                link={props.donation}
-                onClick={onClickDonation}
-              />
-            )}
-            <div className={styles.location}>{props.location}</div>
-            <div className={styles.joined}>Joined {props.created}</div>
+          <div>
+            <Transition
+              items={null}
+              from={{ opacity: 0 }}
+              enter={{ opacity: 1 }}
+              leave={{ opacity: 0 }}
+              config={{ duration: 300 }}
+            >
+              {item => style => renderExpandedContent(item, style)}
+            </Transition>
             <div
               className={styles.truncateContainer}
               onClick={handleToggleTruncate}
