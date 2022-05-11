@@ -10,7 +10,7 @@ import {
   Name,
   PlaybackSource
 } from 'common/models/Analytics'
-import { getUserId } from 'common/store/account/selectors'
+import { getAccountUser, getUserId } from 'common/store/account/selectors'
 import { getLineupHasTracks } from 'common/store/lineup/selectors'
 import { makeGetCurrent } from 'common/store/queue/selectors'
 import {
@@ -43,6 +43,7 @@ import { make } from 'store/analytics/actions'
 import { getLineupSelectorForRoute } from 'store/lineup/lineupForRoute'
 import {
   getAudio,
+  getCollectible,
   getPlaying,
   getCounter,
   getUid as getPlayingUid,
@@ -170,7 +171,7 @@ class PlayBar extends Component {
       pause()
       record(
         make(Name.PLAYBACK_PAUSE, {
-          id: track.track_id,
+          id: track ? track.track_id : null,
           source: PlaybackSource.PLAYBAR
         })
       )
@@ -281,12 +282,16 @@ class PlayBar extends Component {
   }
 
   playable = () =>
-    !!this.props.currentQueueItem.uid || this.props.lineupHasTracks
+    !!this.props.currentQueueItem.uid ||
+    this.props.lineupHasTracks ||
+    this.props.collectible
 
   render() {
     const {
       currentQueueItem: { uid, track, user },
       audio,
+      accountUser,
+      collectible,
       isPlaying,
       isBuffering,
       userId,
@@ -323,6 +328,23 @@ class PlayBar extends Component {
       reposted = track.has_current_user_reposted
       favorited = track.has_current_user_saved || false
       isTrackUnlisted = track.is_unlisted
+    } else if (collectible) {
+      // Special case for collectibles playlist
+      trackTitle = collectible.name
+      artistName = accountUser.name
+      artistHandle = accountUser.handle
+      artistUserId = accountUser.user_id
+      isVerified = accountUser.is_verified
+      profilePictureSizes = accountUser._profile_picture_sizes
+      isOwner = true
+      duration = audio.getDuration()
+
+      // console.log({
+      //   position: audio.getPosition(),
+      //   duration: audio.getDuration()
+      // })
+      reposted = true
+      favorited = true
     }
 
     let playButtonStatus
@@ -466,9 +488,11 @@ const makeMapStateToProps = () => {
   const getCurrentQueueItem = makeGetCurrent()
 
   const mapStateToProps = (state, props) => ({
+    accountUser: getAccountUser(state),
     currentQueueItem: getCurrentQueueItem(state),
     playCounter: getCounter(state),
     audio: getAudio(state),
+    collectible: getCollectible(state),
     isPlaying: getPlaying(state),
     isBuffering: getBuffering(state),
     playingUid: getPlayingUid(state),

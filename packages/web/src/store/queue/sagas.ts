@@ -155,6 +155,7 @@ function* handleQueueAutoplay({
  * 4. Resume whatever was playing on the player
  */
 export function* watchPlay() {
+  // TODO: Need to update this to handle the collectibles things
   yield takeLatest(play.type, function* (action: ReturnType<typeof play>) {
     // persist queue in mobile layer
     yield put(persist({}))

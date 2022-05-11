@@ -199,6 +199,8 @@ class AudioStream {
     forceStreamSrc: string | null = null
   ) => {
     if (forceStreamSrc) {
+      // TODO: Test to make sure that this doesn't break anything
+      this.stop()
       this.audio = new Audio()
       this.gainNode = null
       this.source = null
@@ -206,6 +208,7 @@ class AudioStream {
       this._initContext(/* shouldSkipAudioContext */ true)
       this.audio.setAttribute('preload', 'none')
       this.audio.setAttribute('src', forceStreamSrc)
+      this.audio.onloadedmetadata = () => (this.duration = this.audio.duration)
     } else {
       this._initContext()
       if (Hls.isSupported()) {

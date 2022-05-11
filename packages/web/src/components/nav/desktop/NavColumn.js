@@ -1,10 +1,10 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { Scrollbar } from '@audius/stems'
 import { ResizeObserver } from '@juggle/resize-observer'
 import cn from 'classnames'
 import { push as pushRoute } from 'connected-react-router'
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
 import { NavLink, useHistory, withRouter } from 'react-router-dom'
 import useMeasure from 'react-use-measure'
 
@@ -14,6 +14,7 @@ import { SquareSizes } from 'common/models/ImageSizes'
 import Status from 'common/models/Status'
 import { FeatureFlags } from 'common/services/remote-config'
 import {
+  getAccountCollectibles,
   getAccountStatus,
   getAccountUser,
   getPlaylistLibrary
@@ -31,6 +32,7 @@ import {
   getNotificationPanelIsOpen,
   getNotificationUnreadCount
 } from 'common/store/notifications/selectors'
+import { fetchProfile } from 'common/store/pages/profile/actions'
 import {
   addFolderToLibrary,
   constructPlaylistFolder
@@ -62,8 +64,10 @@ import { NO_VISUALIZER_ROUTES } from 'pages/visualizer/Visualizer'
 import { openVisualizer } from 'pages/visualizer/store/slice'
 import { make, useRecord } from 'store/analytics/actions'
 import { getIsDragging } from 'store/dragndrop/selectors'
+import { makeGetCurrent as makeGetCurrentPlayer } from 'store/player/selectors'
 import { update as updatePlaylistLibrary } from 'store/playlist-library/slice'
 import {
+  COLLECTIBLES_PLAYLIST_PAGE,
   DASHBOARD_PAGE,
   EXPLORE_PAGE,
   FEED_PAGE,
@@ -88,6 +92,7 @@ const messages = {
 
 const NavColumn = ({
   account,
+  accountCollectibles,
   showActionRequiresAccount,
   createPlaylist,
   library,
@@ -101,6 +106,7 @@ const NavColumn = ({
   hideCreatePlaylistModalFolderTab,
   updatePlaylistLibrary,
   currentQueueItem,
+  currentPlayerItem,
   dragging: { dragging, kind, isOwner: draggingIsOwner },
   saveTrack,
   saveCollection,
@@ -115,6 +121,7 @@ const NavColumn = ({
   showVisualizer,
   dominantColors
 }) => {
+  const dispatch = useDispatch()
   const record = useRecord()
   const { location } = useHistory()
   const { pathname } = location
@@ -128,6 +135,18 @@ const NavColumn = ({
   const handleChangeDragScrollingDirection = useCallback(newDirection => {
     setDragScrollingDirection(newDirection)
   }, [])
+
+  useEffect(() => {
+    if (account) dispatch(fetchProfile(account.handle, account.user_id))
+  }, [])
+
+  const audioCollectibles = useMemo(
+    () =>
+      accountCollectibles?.filter(c =>
+        ['mp3', 'wav', 'oga'].some(ext => c.animationUrl?.endsWith(ext))
+      ),
+    [accountCollectibles]
+  )
 
   const goToSignUp = useCallback(
     source => {
@@ -459,6 +478,18 @@ const NavColumn = ({
                     onClickNavLinkWithAccount={onClickNavLinkWithAccount}
                   />
                 </Droppable>
+                {audioCollectibles.length ? (
+                  <NavLink
+                    to={COLLECTIBLES_PLAYLIST_PAGE}
+                    exact
+                    activeClassName='active'
+                    className={cn(styles.link, {
+                      [styles.disabledLink]: dragging
+                    })}
+                  >
+                    Collectibles Playlist
+                  </NavLink>
+                ) : null}
               </div>
             </div>
           </DragAutoscroller>
@@ -489,6 +520,11 @@ const NavColumn = ({
           }
           coverArtColor={dominantColors ? dominantColors[0] : null}
           coverArtSizes={currentQueueItem.track?._cover_art_sizes ?? null}
+          artworkLink={
+            currentPlayerItem.collectible?.imageUrl ||
+            currentPlayerItem.collectible?.frameUrl ||
+            currentPlayerItem.collectible?.gifUrl
+          }
           draggableLink={getTrackPageLink()}
           onClick={onClickArtwork}
           onShowVisualizer={onShowVisualizer}
@@ -500,11 +536,15 @@ const NavColumn = ({
 
 const makeMapStateToProps = () => {
   const getCurrentQueueItem = makeGetCurrent()
+  const getCurrentPlayerItem = makeGetCurrentPlayer()
   const mapStateToProps = state => {
     const currentQueueItem = getCurrentQueueItem(state)
+    const currentPlayerItem = getCurrentPlayerItem(state)
     return {
       currentQueueItem,
+      currentPlayerItem,
       account: getAccountUser(state),
+      accountCollectibles: getAccountCollectibles(state),
       accountStatus: getAccountStatus(state),
       dragging: getIsDragging(state),
       notificationCount: getNotificationUnreadCount(state),
