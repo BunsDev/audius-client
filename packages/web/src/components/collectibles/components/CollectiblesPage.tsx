@@ -472,7 +472,7 @@ const CollectiblesPage: React.FC<{
 
       // If the URL matches a collectible ID and we haven't set a collectible in the
       // store yet, open up the modal
-      if (collectibleId && !collectible && !hasSetDeepLinkedCollectible) {
+      if (collectibleId && !hasSetDeepLinkedCollectible) {
         const collectibleFromUrl =
           getVisibleCollectibles().find(c => getHash(c.id) === collectibleId) ??
           null

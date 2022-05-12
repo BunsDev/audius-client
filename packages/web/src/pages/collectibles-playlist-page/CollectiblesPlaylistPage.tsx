@@ -8,8 +8,11 @@ import {
   IconPlay
 } from '@audius/stems'
 import { Table } from 'antd'
+import cn from 'classnames'
+import { push } from 'connected-react-router'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { Chain } from 'common/models/Chain'
 import { Collectible } from 'common/models/Collectible'
 import {
   getAccountCollectibles,
@@ -17,6 +20,7 @@ import {
 } from 'common/store/account/selectors'
 import { add, clear, pause, play } from 'common/store/queue/slice'
 import { Source } from 'common/store/queue/types'
+import { getHash } from 'components/collectibles/helpers'
 import Header from 'components/header/desktop/Header'
 import Page from 'components/page/Page'
 import TablePlayButton from 'components/tracks-table/TablePlayButton'
@@ -28,6 +32,11 @@ const messages = {
   headerTitle: 'Collectibles Playlist',
   pageTitle: 'Collectibles Playlist',
   pageDescription: 'A playlist of your collectibles'
+}
+
+const chainLabelMap: Record<Chain, string> = {
+  [Chain.Eth]: 'Ethereum',
+  [Chain.Sol]: 'Solana'
 }
 
 const getCurrent = makeGetCurrent()
@@ -58,22 +67,6 @@ export const CollectiblesPlaylistPage = () => {
   )
 
   const onClickRow = (collectible: Collectible, index: number) => {
-    // TODO: Add whatever the intended behavior is for clicking the row
-    console.log('Clicked on the collectible row')
-    console.log({ collectible, index })
-  }
-
-  const onClickTrackName = (collectible: Collectible) => {
-    // TODO: Should go to the NFT page
-    console.log('Clicked on the collectible name')
-    console.log({ collectible })
-  }
-
-  const handlePlayButtonClick = (
-    e: React.MouseEvent<MouseEvent>,
-    collectible: Collectible
-  ) => {
-    e.stopPropagation()
     if (playing && collectible.id === currentPlayerItem?.collectible?.id) {
       dispatch(pause({}))
     } else if (collectible.id === currentPlayerItem?.collectible?.id) {
@@ -94,6 +87,13 @@ export const CollectiblesPlaylistPage = () => {
       }
       dispatch(play({ collectible }))
     }
+  }
+
+  const onClickTrackName = (collectible: Collectible) => {
+    const url = `/${accountUser?.handle}/collectibles/${getHash(
+      collectible.id
+    )}`
+    dispatch(push(url))
   }
 
   const handlePlayAllClick = () => {
@@ -118,21 +118,6 @@ export const CollectiblesPlaylistPage = () => {
     }
   }
 
-  const trackNameCell = (val: string, record: Collectible) => {
-    return (
-      <div
-        // className={styles.textContainer}
-        onClick={e => {
-          e.stopPropagation()
-          onClickTrackName(record)
-        }}
-      >
-        {/* <div className={cn(styles.textCell, { [styles.trackName]: !deleted })}> */}
-        <div>{val}</div>
-      </div>
-    )
-  }
-
   const columns = [
     {
       title: '',
@@ -142,8 +127,6 @@ export const CollectiblesPlaylistPage = () => {
         <TablePlayButton
           paused={!playing}
           playing={record.id === currentPlayerItem?.collectible?.id}
-          onClick={e => handlePlayButtonClick(e, record)}
-          // className={styles.playButton}
         />
       )
     },
@@ -152,8 +135,28 @@ export const CollectiblesPlaylistPage = () => {
       dataIndex: 'name',
       key: 'name',
       className: 'colTrackName',
-      // sorter: (a, b) => alphaSortFn(a.name, b.name, a.key, b.key),
-      render: (val: string, record: Collectible) => trackNameCell(val, record)
+      render: (val: string, record: Collectible) => (
+        <div
+          className={cn(styles.collectibleName, {
+            [styles.active]: record.id === currentPlayerItem?.collectible?.id
+          })}
+          onClick={e => {
+            e.stopPropagation()
+            onClickTrackName(record)
+          }}
+        >
+          {val}
+        </div>
+      )
+    },
+    {
+      title: 'Chain',
+      dataIndex: 'chain',
+      key: 'chain',
+      className: 'colTestColumn',
+      render: (val: string, record: Collectible) => (
+        <div>{chainLabelMap[record.chain]}</div>
+      )
     }
   ]
 
@@ -166,8 +169,6 @@ export const CollectiblesPlaylistPage = () => {
       size={ButtonSize.SMALL}
       text={isPlayingACollectible && playing ? 'PAUSE' : 'PLAY'}
       leftIcon={isPlayingACollectible && playing ? <IconPause /> : <IconPlay />}
-      // TODO: Add function to handle play/pause of all collectibles
-      // Need to add them to the queue and update the queue to be able to handle collectibles
       onClick={handlePlayAllClick}
     />
   )
@@ -190,6 +191,12 @@ export const CollectiblesPlaylistPage = () => {
       header={header}
     >
       <Table
+        className={styles.collectiblesTable}
+        rowClassName={(record: Collectible, index: number) =>
+          record.id === currentPlayerItem?.collectible?.id
+            ? styles.activeRow
+            : ''
+        }
         key={playlistName}
         loading={tracksLoading}
         dataSource={audioCollectibles}

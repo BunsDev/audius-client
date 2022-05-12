@@ -18,7 +18,9 @@ const slice = createSlice({
   initialState,
   reducers: {
     setCollectible: (state, action: PayloadAction<CollectibleDetailsState>) => {
-      state = action.payload
+      const { collectible, ownerId } = action.payload
+      state.collectible = collectible ?? state.collectible
+      state.ownerId = ownerId ?? state.ownerId
     }
   }
 })
