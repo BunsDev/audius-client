@@ -143,24 +143,33 @@ export function* watchCollectiblePlay() {
     const { collectible, onEnd } = action.payload
     console.log({ collectible, onEnd })
     const audio: NonNullable<AudioState> = yield call(waitForValue, getAudio)
-    audio.load(
-      [],
-      () => {},
-      [],
-      [], // Gateways
-      {
-        id: collectible.id,
-        title: collectible.name ?? 'Collectible',
-        // TODO: Add account user name here
-        artist: 'YOUR NAME HERE',
-        artwork:
-          collectible.imageUrl ??
-          collectible.frameUrl ??
-          collectible.gifUrl ??
-          ''
-      },
-      collectible.animationUrl
-    )
+    const endChannel = eventChannel(emitter => {
+      audio.load(
+        [],
+        () => {
+          if (onEnd) {
+            emitter(onEnd({}))
+          }
+        },
+        [],
+        [], // Gateways
+        {
+          id: collectible.id,
+          title: collectible.name ?? 'Collectible',
+          // TODO: Add account user name here
+          artist: 'YOUR NAME HERE',
+          artwork:
+            collectible.imageUrl ??
+            collectible.frameUrl ??
+            collectible.gifUrl ??
+            ''
+        },
+        collectible.animationUrl
+      )
+      return () => {}
+    })
+    yield spawn(actionChannelDispatcher, endChannel)
+
     audio.play()
     yield put(playCollectibleSucceeded({ collectible }))
   })

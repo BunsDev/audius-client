@@ -1,3 +1,4 @@
+import { Collectible } from 'common/models/Collectible'
 import { ID, UID } from 'common/models/Identifiers'
 import { Track } from 'common/models/Track'
 import { User } from 'common/models/User'
@@ -25,6 +26,7 @@ export enum Source {
 export type Queueable = {
   id: ID
   uid: UID
+  collectible?: Collectible
   source: Source
 }
 

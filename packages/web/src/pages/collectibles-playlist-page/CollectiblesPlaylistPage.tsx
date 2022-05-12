@@ -15,12 +15,12 @@ import {
   getAccountCollectibles,
   getAccountUser
 } from 'common/store/account/selectors'
-// import { add } from 'common/store/queue/slice'
+import { add, clear, pause, play } from 'common/store/queue/slice'
+import { Source } from 'common/store/queue/types'
 import Header from 'components/header/desktop/Header'
 import Page from 'components/page/Page'
 import TablePlayButton from 'components/tracks-table/TablePlayButton'
 import { getPlaying, makeGetCurrent } from 'store/player/selectors'
-import { playCollectible } from 'store/player/slice'
 
 import styles from './CollectiblesPlaylistPage.module.css'
 
@@ -38,6 +38,8 @@ export const CollectiblesPlaylistPage = () => {
   const accountCollectibles = useSelector(getAccountCollectibles)
   const currentPlayerItem = useSelector(getCurrent)
   const playing = useSelector(getPlaying)
+  const playlistName = 'Collectibles Playlist'
+  const tracksLoading = false
 
   const audioCollectibles = useMemo(
     () =>
@@ -47,34 +49,73 @@ export const CollectiblesPlaylistPage = () => {
     [accountCollectibles]
   )
 
-  const isPlayingCollectible = useMemo(() => {
-    return (
-      playing &&
+  const isPlayingACollectible = useMemo(
+    () =>
       audioCollectibles.some(
         collectible => collectible.id === currentPlayerItem?.collectible?.id
-      )
-    )
-  }, [playing, audioCollectibles, currentPlayerItem])
-
-  const playlistName = 'Collectibles Playlist'
-  const tracksLoading = false
-  const trackCount = accountCollectibles.length
+      ),
+    [audioCollectibles, currentPlayerItem]
+  )
 
   const onClickRow = (collectible: Collectible, index: number) => {
+    // TODO: Add whatever the intended behavior is for clicking the row
+    console.log('Clicked on the collectible row')
     console.log({ collectible, index })
-    // TODO: Need to add the collectibles to the queue here and set the proper index so that next and prev will work
-    // dispatch(add({ entries: audioCollectibles, index }))
-    dispatch(
-      playCollectible({
-        collectible,
-        onEnd: () => {}
-      })
-    )
   }
 
   const onClickTrackName = (collectible: Collectible) => {
-    // Should go to the NFT page
+    // TODO: Should go to the NFT page
+    console.log('Clicked on the collectible name')
     console.log({ collectible })
+  }
+
+  const handlePlayButtonClick = (
+    e: React.MouseEvent<MouseEvent>,
+    collectible: Collectible
+  ) => {
+    e.stopPropagation()
+    if (playing && collectible.id === currentPlayerItem?.collectible?.id) {
+      dispatch(pause({}))
+    } else if (collectible.id === currentPlayerItem?.collectible?.id) {
+      dispatch(play({}))
+    } else {
+      if (!isPlayingACollectible) {
+        dispatch(clear({}))
+        dispatch(
+          add({
+            entries: audioCollectibles.map(collectible => ({
+              id: 0,
+              uid: collectible.id,
+              collectible,
+              source: Source.COLLECTIBLE_PLAYLIST_TRACKS
+            }))
+          })
+        )
+      }
+      dispatch(play({ collectible }))
+    }
+  }
+
+  const handlePlayAllClick = () => {
+    if (playing && isPlayingACollectible) {
+      dispatch(pause({}))
+    } else if (isPlayingACollectible) {
+      dispatch(play({}))
+    } else {
+      dispatch(clear({}))
+      dispatch(
+        add({
+          entries: audioCollectibles.map(collectible => ({
+            id: 0,
+            uid: collectible.id,
+            collectible,
+            source: Source.COLLECTIBLE_PLAYLIST_TRACKS
+          })),
+          index: 0
+        })
+      )
+      dispatch(play({ collectible: audioCollectibles[0] }))
+    }
   }
 
   const trackNameCell = (val: string, record: Collectible) => {
@@ -101,6 +142,7 @@ export const CollectiblesPlaylistPage = () => {
         <TablePlayButton
           paused={!playing}
           playing={record.id === currentPlayerItem?.collectible?.id}
+          onClick={e => handlePlayButtonClick(e, record)}
           // className={styles.playButton}
         />
       )
@@ -122,11 +164,11 @@ export const CollectiblesPlaylistPage = () => {
       iconClassName={styles.playAllButtonIcon}
       type={ButtonType.PRIMARY_ALT}
       size={ButtonSize.SMALL}
-      text={isPlayingCollectible ? 'PAUSE' : 'PLAY'}
-      leftIcon={isPlayingCollectible ? <IconPause /> : <IconPlay />}
+      text={isPlayingACollectible && playing ? 'PAUSE' : 'PLAY'}
+      leftIcon={isPlayingACollectible && playing ? <IconPause /> : <IconPlay />}
       // TODO: Add function to handle play/pause of all collectibles
       // Need to add them to the queue and update the queue to be able to handle collectibles
-      // onClick={onPlay}
+      onClick={handlePlayAllClick}
     />
   )
 
@@ -135,7 +177,7 @@ export const CollectiblesPlaylistPage = () => {
       primary={`${accountUser?.name}${accountUser ? "'s " : ''}${
         messages.headerTitle
       }`}
-      secondary={trackCount ? playAllButton : null}
+      secondary={audioCollectibles.length ? playAllButton : null}
       variant={'main'}
     />
   )

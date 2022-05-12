@@ -36,6 +36,10 @@ export const getSource = (state: CommonState) =>
   isQueueIndexValid(state) ? state.queue.order[state.queue.index].source : null
 export const getId = (state: CommonState) =>
   isQueueIndexValid(state) ? state.queue.order[state.queue.index].id : null
+export const getCollectible = (state: CommonState) => {
+  if (!isQueueIndexValid(state)) return null
+  return state.queue.order[state.queue.index].collectible ?? null
+}
 
 const getCurrentTrack = (state: AppState) =>
   getTrack(state, { id: getPlayerTrackId(state) })

@@ -436,14 +436,13 @@ const CollectiblesPage: React.FC<{
     return []
   }, [collectiblesMetadata, collectibleList, hasCollectibles])
 
-  const getAudioCollectibles = useCallback(() => {
-    const visibleCollectibles = getVisibleCollectibles()
-    return visibleCollectibles?.filter(c =>
-      ['mp3', 'wav', 'oga'].some(ext => c.animationUrl?.endsWith(ext))
-    )
-  }, [getVisibleCollectibles])
+  // const getAudioCollectibles = useCallback(() => {
+  //   const visibleCollectibles = getVisibleCollectibles()
+  //   return visibleCollectibles?.filter(c =>
+  //     ['mp3', 'wav', 'oga'].some(ext => c.animationUrl?.endsWith(ext))
+  //   )
+  // }, [getVisibleCollectibles])
 
-  console.log({ audioCollectibles: getAudioCollectibles() })
   const getHiddenCollectibles = useCallback(() => {
     if (collectibleList) {
       const visibleCollectibleKeySet = new Set(
