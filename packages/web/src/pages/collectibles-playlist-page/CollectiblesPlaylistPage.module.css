@@ -13,16 +13,8 @@
   text-decoration-color: var(--primary-light-2);
 }
 
-.playAllButton {
-  margin-left: 28px;
-}
-
-.playAllButton .playAllButtonIcon {
-  margin-right: 8px;
-  width: 12px !important;
-  height: 12px !important;
-}
-
-.playAllButton .playAllButtonText {
-  font-size: 11px;
+.playButtonFormatting {
+  position: absolute;
+  left: 16px;
+  top: 7px;
 }

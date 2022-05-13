@@ -141,7 +141,6 @@ export function* watchCollectiblePlay() {
     action: ReturnType<typeof playCollectible>
   ) {
     const { collectible, onEnd } = action.payload
-    console.log({ collectible, onEnd })
     const audio: NonNullable<AudioState> = yield call(waitForValue, getAudio)
     const endChannel = eventChannel(emitter => {
       audio.load(

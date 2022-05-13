@@ -57,6 +57,7 @@ export type CollectionPageProps = {
     status: string
     entries: CollectionTrack[]
   }
+  columns?: any
   userId: ID | null
   userPlaylists: any
   isQueued: () => boolean
@@ -99,6 +100,7 @@ const CollectionPage = ({
   playing,
   type,
   collection: { status, metadata, user },
+  columns,
   tracks,
   userId,
   userPlaylists,
@@ -141,7 +143,8 @@ const CollectionPage = ({
       : null
   const duration =
     tracks.entries?.reduce(
-      (duration: number, entry: CollectionTrack) => duration + entry.duration,
+      (duration: number, entry: CollectionTrack) =>
+        duration + entry.duration || 0,
       0
     ) ?? 0
 
@@ -151,12 +154,14 @@ const CollectionPage = ({
   const isOwner = userId === playlistOwnerId
   const isFollowing = user?.does_current_user_follow ?? false
   const isSaved =
-    metadata?.has_current_user_saved || playlistId in userPlaylists
+    metadata?.has_current_user_saved || playlistId in (userPlaylists ?? {})
 
   const variant = metadata?.variant ?? null
   const gradient =
     (metadata?.variant === Variant.SMART && metadata.gradient) ?? ''
   const icon = (metadata?.variant === Variant.SMART && metadata.icon) ?? null
+  const imageOverride =
+    (metadata?.variant === Variant.SMART && metadata.imageOverride) ?? ''
 
   const {
     trackCount,
@@ -215,6 +220,7 @@ const CollectionPage = ({
       variant={variant}
       gradient={gradient}
       icon={icon}
+      imageOverride={imageOverride}
     />
   )
 
@@ -237,6 +243,7 @@ const CollectionPage = ({
                 key={playlistName}
                 loading={tracksLoading}
                 loadingRowsCount={trackCount}
+                columns={columns}
                 userId={userId}
                 playing={playing}
                 playingIndex={playingIndex}
