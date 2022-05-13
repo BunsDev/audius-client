@@ -1,11 +1,11 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo } from 'react'
 
 import cn from 'classnames'
 import { isEmpty } from 'lodash'
 import { useDispatch } from 'react-redux'
 
 import { useModalState } from 'common/hooks/useModalState'
-import { Name } from 'common/models/Analytics'
+import { FavoriteSource, Name } from 'common/models/Analytics'
 import { ID } from 'common/models/Identifiers'
 import {
   PlaylistLibrary as PlaylistLibraryType,
@@ -14,6 +14,7 @@ import {
 import { SmartCollectionVariant } from 'common/models/SmartCollectionVariant'
 import { FeatureFlags } from 'common/services/remote-config'
 import {
+  getAccountCollectibles,
   getAccountNavigationPlaylists,
   getAccountUser,
   getPlaylistLibrary
@@ -28,10 +29,14 @@ import {
   isInsideFolder,
   reorderPlaylistLibrary
 } from 'common/store/playlist-library/helpers'
+import { saveSmartCollection } from 'common/store/social/collections/actions'
 import Droppable from 'components/dragndrop/Droppable'
 import { ToastContext } from 'components/toast/ToastContext'
 import { useFlag } from 'hooks/useRemoteConfig'
-import { SMART_COLLECTION_MAP } from 'pages/smart-collection/smartCollections'
+import {
+  COLLECTIBLES_PLAYLIST,
+  SMART_COLLECTION_MAP
+} from 'pages/smart-collection/smartCollections'
 import { make, useRecord } from 'store/analytics/actions'
 import { setFolderId as setEditFolderModalFolderId } from 'store/application/ui/editFolderModal/slice'
 import { open as openEditPlaylistModal } from 'store/application/ui/editPlaylistModal/slice'
@@ -57,6 +62,10 @@ type LibraryContentsLevelProps = {
     playlistId: SmartCollectionVariant,
     level: number
   ) => void
+  renderCollectiblesPlaylist: (
+    playlistId: SmartCollectionVariant.COLLECTIBLES_PLAYLIST,
+    level: number
+  ) => void
   renderFolder: (folder: PlaylistLibraryFolder, level: number) => void
 }
 
@@ -72,6 +81,7 @@ const LibraryContentsLevel = ({
   contents,
   renderPlaylist,
   renderExplorePlaylist,
+  renderCollectiblesPlaylist,
   renderFolder
 }: LibraryContentsLevelProps) => {
   return (
@@ -80,6 +90,9 @@ const LibraryContentsLevel = ({
         switch (content.type) {
           case 'explore_playlist': {
             return renderExplorePlaylist(content.playlist_id, level)
+          }
+          case 'collectibles_playlist': {
+            return renderCollectiblesPlaylist(content.playlist_id, level)
           }
           case 'playlist': {
             return renderPlaylist(content.playlist_id, level)
@@ -113,6 +126,33 @@ const PlaylistLibrary = ({
   const { toast } = useContext(ToastContext)
   const record = useRecord()
   const [, setIsEditFolderModalOpen] = useModalState('EditFolder')
+
+  const accountCollectibles = useSelector(getAccountCollectibles)
+  const audioCollectibles = useMemo(
+    () =>
+      accountCollectibles?.filter(c =>
+        ['mp3', 'wav', 'oga'].some(ext => c.animationUrl?.endsWith(ext))
+      ),
+    [accountCollectibles]
+  )
+
+  // Set collectibles playlist in library if it is not already set
+  useEffect(() => {
+    if (library) {
+      const isCollectiblesPlaylistInLibrary = !!findInPlaylistLibrary(
+        library,
+        SmartCollectionVariant.COLLECTIBLES_PLAYLIST
+      )
+      if (audioCollectibles.length && !isCollectiblesPlaylistInLibrary) {
+        dispatch(
+          saveSmartCollection(
+            COLLECTIBLES_PLAYLIST.playlist_name,
+            FavoriteSource.IMPLICIT
+          )
+        )
+      }
+    }
+  }, [audioCollectibles, library, dispatch])
 
   const handleClickEditFolder = useCallback(
     folderId => {
@@ -227,6 +267,37 @@ const PlaylistLibrary = ({
     )
   }
 
+  const renderCollectiblesPlaylist = (
+    playlistId: SmartCollectionVariant.COLLECTIBLES_PLAYLIST,
+    level = 0
+  ) => {
+    if (!audioCollectibles.length) return null
+    const playlist = SMART_COLLECTION_MAP[playlistId]
+    if (!playlist) return null
+    const name = playlist.playlist_name
+    const url = playlist.link
+    return (
+      <PlaylistNavLink
+        isInsideFolder={level > 0}
+        key={'collectibles playlist'}
+        playlistId={name as SmartCollectionVariant}
+        droppableKey={name as SmartCollectionVariant}
+        name={name}
+        to={url}
+        onReorder={onReorder}
+        isActive={() => url === getPathname()}
+        activeClassName='active'
+        onClick={onClickNavLinkWithAccount}
+        className={cn(navColumnStyles.link, {
+          [navColumnStyles.disabledLink]:
+            !account || (dragging && draggingKind !== 'library-playlist')
+        })}
+      >
+        {name}
+      </PlaylistNavLink>
+    )
+  }
+
   const onClickPlaylist = useCallback(
     (playlistId: ID, hasUpdate: boolean) => {
       onClickNavLinkWithAccount()
@@ -308,6 +379,7 @@ const PlaylistLibrary = ({
               contents={folder.contents}
               renderPlaylist={renderPlaylist}
               renderExplorePlaylist={renderExplorePlaylist}
+              renderCollectiblesPlaylist={renderCollectiblesPlaylist}
               renderFolder={renderFolder}
             />
           </div>
@@ -342,6 +414,7 @@ const PlaylistLibrary = ({
           contents={library.contents || []}
           renderPlaylist={renderPlaylist}
           renderExplorePlaylist={renderExplorePlaylist}
+          renderCollectiblesPlaylist={renderCollectiblesPlaylist}
           renderFolder={renderFolder}
         />
       ) : null}

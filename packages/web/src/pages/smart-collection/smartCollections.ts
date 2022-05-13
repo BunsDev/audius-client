@@ -12,7 +12,8 @@ import {
   EXPLORE_UNDER_THE_RADAR_PAGE,
   EXPLORE_MOST_LOVED_PAGE,
   EXPLORE_FEELING_LUCKY_PAGE,
-  EXPLORE_REMIXABLES_PAGE
+  EXPLORE_REMIXABLES_PAGE,
+  COLLECTIBLES_PLAYLIST_PAGE
 } from 'utils/route'
 
 export const HEAVY_ROTATION: SmartCollection = {
@@ -76,11 +77,19 @@ export const FEELING_LUCKY: SmartCollection = {
   link: EXPLORE_FEELING_LUCKY_PAGE
 }
 
+export const COLLECTIBLES_PLAYLIST: SmartCollection = {
+  variant: Variant.SMART,
+  playlist_name: 'Collectibles Playlist',
+  description: 'A collection of your Audio NFTs',
+  link: COLLECTIBLES_PLAYLIST_PAGE
+}
+
 export const SMART_COLLECTION_MAP = {
   [SmartCollectionVariant.HEAVY_ROTATION]: HEAVY_ROTATION,
   [SmartCollectionVariant.BEST_NEW_RELEASES]: BEST_NEW_RELEASES,
   [SmartCollectionVariant.UNDER_THE_RADAR]: UNDER_THE_RADAR,
   [SmartCollectionVariant.MOST_LOVED]: MOST_LOVED,
   [SmartCollectionVariant.FEELING_LUCKY]: FEELING_LUCKY,
-  [SmartCollectionVariant.REMIXABLES]: REMIXABLES
+  [SmartCollectionVariant.REMIXABLES]: REMIXABLES,
+  [SmartCollectionVariant.COLLECTIBLES_PLAYLIST]: COLLECTIBLES_PLAYLIST
 }

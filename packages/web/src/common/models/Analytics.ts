@@ -465,7 +465,11 @@ export enum FavoriteSource {
   FAVORITES_PAGE = 'favorites page',
   OVERFLOW = 'overflow',
   TRACK_LIST = 'track list',
-  SIGN_UP = 'sign up'
+  SIGN_UP = 'sign up',
+  // Favorite triggered by some implicit action, e.g.
+  // you had a smart collection and it was favorited so it
+  // shows in your left-nav.
+  IMPLICIT = 'implicit'
 }
 export enum FollowSource {
   PROFILE_PAGE = 'profile page',

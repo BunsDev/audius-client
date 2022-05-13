@@ -10,6 +10,11 @@ export type ExplorePlaylistIdentifier = {
   playlist_id: SmartCollectionVariant
 }
 
+export type CollectiblesPlaylistIdentifier = {
+  type: 'collectibles_playlist'
+  playlist_id: SmartCollectionVariant.COLLECTIBLES_PLAYLIST
+}
+
 // Never written to backends
 export type TempPlaylistIdentifier = {
   type: 'temp_playlist'
@@ -19,6 +24,7 @@ export type TempPlaylistIdentifier = {
 export type PlaylistLibraryIdentifier =
   | PlaylistIdentifier
   | ExplorePlaylistIdentifier
+  | CollectiblesPlaylistIdentifier
   | TempPlaylistIdentifier
 
 export type PlaylistLibraryFolder = {

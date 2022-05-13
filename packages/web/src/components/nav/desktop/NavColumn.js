@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { Scrollbar } from '@audius/stems'
 import { ResizeObserver } from '@juggle/resize-observer'
@@ -14,7 +14,6 @@ import { SquareSizes } from 'common/models/ImageSizes'
 import Status from 'common/models/Status'
 import { FeatureFlags } from 'common/services/remote-config'
 import {
-  getAccountCollectibles,
   getAccountStatus,
   getAccountUser,
   getPlaylistLibrary
@@ -67,7 +66,6 @@ import { getIsDragging } from 'store/dragndrop/selectors'
 import { makeGetCurrent as makeGetCurrentPlayer } from 'store/player/selectors'
 import { update as updatePlaylistLibrary } from 'store/playlist-library/slice'
 import {
-  COLLECTIBLES_PLAYLIST_PAGE,
   DASHBOARD_PAGE,
   EXPLORE_PAGE,
   FEED_PAGE,
@@ -139,14 +137,6 @@ const NavColumn = ({
   useEffect(() => {
     if (account) dispatch(fetchProfile(account.handle, account.user_id))
   }, [])
-
-  const audioCollectibles = useMemo(
-    () =>
-      accountCollectibles?.filter(c =>
-        ['mp3', 'wav', 'oga'].some(ext => c.animationUrl?.endsWith(ext))
-      ),
-    [accountCollectibles]
-  )
 
   const goToSignUp = useCallback(
     source => {
@@ -478,18 +468,6 @@ const NavColumn = ({
                     onClickNavLinkWithAccount={onClickNavLinkWithAccount}
                   />
                 </Droppable>
-                {audioCollectibles.length ? (
-                  <NavLink
-                    to={COLLECTIBLES_PLAYLIST_PAGE}
-                    exact
-                    activeClassName='active'
-                    className={cn(styles.link, {
-                      [styles.disabledLink]: dragging
-                    })}
-                  >
-                    Collectibles Playlist
-                  </NavLink>
-                ) : null}
               </div>
             </div>
           </DragAutoscroller>
@@ -544,7 +522,6 @@ const makeMapStateToProps = () => {
       currentQueueItem,
       currentPlayerItem,
       account: getAccountUser(state),
-      accountCollectibles: getAccountCollectibles(state),
       accountStatus: getAccountStatus(state),
       dragging: getIsDragging(state),
       notificationCount: getNotificationUnreadCount(state),
