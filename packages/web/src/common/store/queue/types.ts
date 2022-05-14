@@ -24,8 +24,9 @@ export enum Source {
 }
 
 export type Queueable = {
-  id: ID
+  id: ID | string
   uid: UID
+  artistId?: ID
   collectible?: Collectible
   source: Source
 }

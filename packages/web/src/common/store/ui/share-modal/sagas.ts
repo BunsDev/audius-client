@@ -56,6 +56,18 @@ function* handleRequestOpen(action: RequestOpenAction) {
       }
       break
     }
+    case 'collectiblesPlaylist': {
+      const { userId, source } = action.payload
+      const user = yield* select(getUser(userId))
+      if (!user) return
+      yield put(
+        open({
+          type: 'collectiblesPlaylist',
+          user,
+          source
+        })
+      )
+    }
   }
 
   yield put(setVisibility({ modal: 'Share', visible: true }))

@@ -1,26 +1,31 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 
 import cn from 'classnames'
 import { push } from 'connected-react-router'
 import { useDispatch, useSelector } from 'react-redux'
+import { matchPath } from 'react-router-dom'
 
+import { ShareSource } from 'common/models/Analytics'
 import { Chain } from 'common/models/Chain'
 import { Collectible } from 'common/models/Collectible'
+import { SmartCollectionVariant } from 'common/models/SmartCollectionVariant'
 import Status from 'common/models/Status'
-import {
-  getAccountCollectibles,
-  getAccountUser
-} from 'common/store/account/selectors'
+import { User } from 'common/models/User'
+import { getUser } from 'common/store/cache/users/selectors'
 import {
   CollectionTrack,
   TrackRecord
 } from 'common/store/pages/collection/types'
+import { fetchProfile } from 'common/store/pages/profile/actions'
 import { add, clear, pause, play } from 'common/store/queue/slice'
 import { Source } from 'common/store/queue/types'
-import { getHash } from 'components/collectibles/helpers'
+import { requestOpen as requestOpenShareModal } from 'common/store/ui/share-modal/slice'
 import TablePlayButton from 'components/tracks-table/TablePlayButton'
 import { COLLECTIBLES_PLAYLIST } from 'pages/smart-collection/smartCollections'
 import { getPlaying, makeGetCurrent } from 'store/player/selectors'
+import { getLocationPathname } from 'store/routing/selectors'
+import { AppState } from 'store/types'
+import { collectibleDetailsPage, COLLECTIBLES_PLAYLIST_PAGE } from 'utils/route'
 
 import { CollectionPageProps as DesktopCollectionPageProps } from '../collection-page/components/desktop/CollectionPage'
 import { CollectionPageProps as MobileCollectionPageProps } from '../collection-page/components/mobile/CollectionPage'
@@ -44,19 +49,49 @@ export const CollectiblesPlaylistPageProvider = ({
   children: Children
 }: CollectiblesPlaylistPageProviderProps) => {
   const dispatch = useDispatch()
-  const accountUser = useSelector(getAccountUser)
-  const accountCollectibles = useSelector(getAccountCollectibles)
   const currentPlayerItem = useSelector(getCurrent)
   const playing = useSelector(getPlaying)
-  const title = 'Collectibles Playlist'
+  const title = SmartCollectionVariant.COLLECTIBLES_PLAYLIST
 
+  // Getting user data
+  const pathname = useSelector(getLocationPathname)
+  const routeMatch = useMemo(
+    () =>
+      matchPath<{ handle: string }>(pathname, {
+        path: COLLECTIBLES_PLAYLIST_PAGE,
+        exact: true
+      }),
+    [pathname]
+  )
+
+  const user = useSelector<AppState, User | null>(state =>
+    getUser(state, { handle: routeMatch?.params.handle ?? null })
+  )
   const audioCollectibles = useMemo(
     () =>
-      accountCollectibles?.filter(c =>
+      [
+        ...(user?.collectibleList ?? []),
+        ...(user?.solanaCollectibleList ?? [])
+      ]?.filter(c =>
         ['mp3', 'wav', 'oga'].some(ext => c.animationUrl?.endsWith(ext))
       ),
-    [accountCollectibles]
+    [user]
   )
+  console.log({ user, audioCollectibles })
+
+  useEffect(() => {
+    dispatch(
+      fetchProfile(
+        routeMatch?.params.handle ?? null,
+        null,
+        false,
+        false,
+        false,
+        true
+      )
+    )
+  }, [dispatch, routeMatch])
+
   const tracksLoading = !audioCollectibles.length
 
   const isPlayingACollectible = useMemo(
@@ -70,6 +105,7 @@ export const CollectiblesPlaylistPageProvider = ({
   const entries = audioCollectibles.map(collectible => ({
     id: collectible.id,
     uid: collectible.id,
+    artistId: user?.user_id,
     collectible,
     source: Source.COLLECTIBLE_PLAYLIST_TRACKS
   }))
@@ -89,9 +125,7 @@ export const CollectiblesPlaylistPageProvider = ({
   }
 
   const onClickTrackName = (collectible: Collectible) => {
-    const url = `/${accountUser?.handle}/collectibles/${getHash(
-      collectible.id
-    )}`
+    const url = collectibleDetailsPage(user?.handle ?? '', collectible.id)
     dispatch(push(url))
   }
 
@@ -151,7 +185,9 @@ export const CollectiblesPlaylistPageProvider = ({
   )
 
   const isQueued = useCallback(() => {
-    return entries.some(entry => currentPlayerItem.collectible.id === entry.id)
+    return entries.some(
+      entry => currentPlayerItem?.collectible?.id === entry.id
+    )
   }, [entries, currentPlayerItem])
 
   const columns = [
@@ -192,12 +228,22 @@ export const CollectiblesPlaylistPageProvider = ({
       key: 'chain',
       className: 'colTestColumn',
       render: (val: string, record: Collectible) => (
-        <div>{chainLabelMap[record.collectible.chain]}</div>
+        <div>{chainLabelMap[record.chain]}</div>
       )
     }
   ]
 
-  const onShare = () => {}
+  const onShare = () => {
+    if (user) {
+      dispatch(
+        requestOpenShareModal({
+          type: 'collectiblesPlaylist',
+          userId: user?.user_id,
+          source: ShareSource.TILE
+        })
+      )
+    }
+  }
 
   const metadata = {
     ...COLLECTIBLES_PLAYLIST,

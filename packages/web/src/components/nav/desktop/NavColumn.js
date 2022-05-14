@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 
 import { Scrollbar } from '@audius/stems'
 import { ResizeObserver } from '@juggle/resize-observer'
 import cn from 'classnames'
 import { push as pushRoute } from 'connected-react-router'
-import { connect, useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 import { NavLink, useHistory, withRouter } from 'react-router-dom'
 import useMeasure from 'react-use-measure'
 
@@ -31,7 +31,6 @@ import {
   getNotificationPanelIsOpen,
   getNotificationUnreadCount
 } from 'common/store/notifications/selectors'
-import { fetchProfile } from 'common/store/pages/profile/actions'
 import {
   addFolderToLibrary,
   constructPlaylistFolder
@@ -90,7 +89,6 @@ const messages = {
 
 const NavColumn = ({
   account,
-  accountCollectibles,
   showActionRequiresAccount,
   createPlaylist,
   library,
@@ -119,7 +117,6 @@ const NavColumn = ({
   showVisualizer,
   dominantColors
 }) => {
-  const dispatch = useDispatch()
   const record = useRecord()
   const { location } = useHistory()
   const { pathname } = location
@@ -132,10 +129,6 @@ const NavColumn = ({
   )
   const handleChangeDragScrollingDirection = useCallback(newDirection => {
     setDragScrollingDirection(newDirection)
-  }, [])
-
-  useEffect(() => {
-    if (account) dispatch(fetchProfile(account.handle, account.user_id))
   }, [])
 
   const goToSignUp = useCallback(

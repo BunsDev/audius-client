@@ -45,8 +45,9 @@ const getCurrentTrack = (state: AppState) =>
   getTrack(state, { id: getPlayerTrackId(state) })
 const getCurrentUser = (state: AppState) => {
   const track = getCurrentTrack(state)
-  if (track) {
-    return getUser(state, { id: track.owner_id })
+  const queueable = state.queue.order[state.queue.index]
+  if (track || queueable?.artistId) {
+    return getUser(state, { id: track?.owner_id ?? queueable.artistId })
   }
   return null
 }

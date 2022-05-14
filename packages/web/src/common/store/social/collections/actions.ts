@@ -22,6 +22,7 @@ export const UNSAVE_COLLECTION_FAILED = 'SOCIAL/UNSAVE_COLLECTION_FAILED'
 export const UNSAVE_SMART_COLLECTION = 'SOCIAL/UNSAVE_SMART_COLLECTION'
 
 export const SHARE_COLLECTION = 'SOCIAL/SHARE_COLLECTION'
+export const SHARE_COLLECTIBLES_PLAYLIST = 'SOCIAL/SHARE_COLLECTIBLES_PLAYLIST'
 
 export const repostCollection = createCustomAction(
   REPOST_COLLECTION,
@@ -95,4 +96,9 @@ export const unsaveSmartCollection = createCustomAction(
 export const shareCollection = createCustomAction(
   SHARE_COLLECTION,
   (collectionId: ID, source: ShareSource) => ({ collectionId, source })
+)
+
+export const shareCollectiblesPlaylist = createCustomAction(
+  SHARE_COLLECTIBLES_PLAYLIST,
+  (handle: string, source: ShareSource) => ({ handle, source })
 )

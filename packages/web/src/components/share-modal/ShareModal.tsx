@@ -6,7 +6,10 @@ import { useModalState } from 'common/hooks/useModalState'
 import { Name } from 'common/models/Analytics'
 import { FeatureFlags } from 'common/services/remote-config'
 import { getAccountUser } from 'common/store/account/selectors'
-import { shareCollection } from 'common/store/social/collections/actions'
+import {
+  shareCollectiblesPlaylist,
+  shareCollection
+} from 'common/store/social/collections/actions'
 import { shareTrack } from 'common/store/social/tracks/actions'
 import { shareUser } from 'common/store/social/users/actions'
 import { getShareState } from 'common/store/ui/share-modal/selectors'
@@ -76,6 +79,9 @@ export const ShareModal = () => {
         break
       case 'playlist':
         dispatch(shareCollection(content.playlist.playlist_id, source))
+        break
+      case 'collectiblesPlaylist':
+        dispatch(shareCollectiblesPlaylist(content.user.handle, source))
         break
     }
     toast(messages.toast(content.type), SHARE_TOAST_TIMEOUT_MILLIS)

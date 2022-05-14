@@ -10,7 +10,7 @@ import {
   Name,
   PlaybackSource
 } from 'common/models/Analytics'
-import { getAccountUser, getUserId } from 'common/store/account/selectors'
+import { getUserId } from 'common/store/account/selectors'
 import { getLineupHasTracks } from 'common/store/lineup/selectors'
 import { makeGetCurrent } from 'common/store/queue/selectors'
 import {
@@ -51,7 +51,7 @@ import {
 } from 'store/player/selectors'
 import { seek, reset } from 'store/player/slice'
 import { setupHotkeys } from 'utils/hotkeyUtil'
-import { profilePage } from 'utils/route'
+import { collectibleDetailsPage, profilePage } from 'utils/route'
 import { isMatrix, shouldShowDark } from 'utils/theme/theme'
 
 import styles from './PlayBar.module.css'
@@ -137,11 +137,14 @@ class PlayBar extends Component {
   goToTrackPage = () => {
     const {
       currentQueueItem: { track, user },
+      collectible,
       goToRoute
     } = this.props
 
     if (track && user) {
       goToRoute(track.permalink)
+    } else if (collectible && user) {
+      goToRoute(collectibleDetailsPage(user.handle, collectible.id))
     }
   }
 
@@ -152,8 +155,7 @@ class PlayBar extends Component {
     } = this.props
 
     if (user) {
-      const handle = user.handle
-      goToRoute(profilePage(handle))
+      goToRoute(profilePage(user.handle))
     }
   }
 
@@ -290,7 +292,6 @@ class PlayBar extends Component {
     const {
       currentQueueItem: { uid, track, user },
       audio,
-      accountUser,
       collectible,
       isPlaying,
       isBuffering,
@@ -328,21 +329,17 @@ class PlayBar extends Component {
       reposted = track.has_current_user_reposted
       favorited = track.has_current_user_saved || false
       isTrackUnlisted = track.is_unlisted
-    } else if (collectible) {
+    } else if (collectible && user) {
       // Special case for collectibles playlist
       trackTitle = collectible.name
-      artistName = accountUser.name
-      artistHandle = accountUser.handle
-      artistUserId = accountUser.user_id
-      isVerified = accountUser.is_verified
-      profilePictureSizes = accountUser._profile_picture_sizes
+      artistName = user.name
+      artistHandle = user.handle
+      artistUserId = user.user_id
+      isVerified = user.is_verified
+      profilePictureSizes = user._profile_picture_sizes
       isOwner = true
       duration = audio.getDuration()
 
-      // console.log({
-      //   position: audio.getPosition(),
-      //   duration: audio.getDuration()
-      // })
       reposted = true
       favorited = true
     }
@@ -387,7 +384,7 @@ class PlayBar extends Component {
               <Scrubber
                 mediaKey={`${uid}${mediaKey}`}
                 isPlaying={isPlaying && !isBuffering}
-                isDisabled={!uid}
+                isDisabled={!uid && !collectible}
                 includeTimestamps
                 elapsedSeconds={audio?.getPosition()}
                 totalSeconds={duration}
@@ -488,7 +485,6 @@ const makeMapStateToProps = () => {
   const getCurrentQueueItem = makeGetCurrent()
 
   const mapStateToProps = (state, props) => ({
-    accountUser: getAccountUser(state),
     currentQueueItem: getCurrentQueueItem(state),
     playCounter: getCounter(state),
     audio: getAudio(state),

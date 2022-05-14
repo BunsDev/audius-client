@@ -19,6 +19,7 @@ import PropTypes from 'prop-types'
 import { ReactComponent as IconFilter } from 'assets/img/iconFilter.svg'
 import { Variant } from 'common/models/Collection'
 import { SquareSizes } from 'common/models/ImageSizes'
+import { SmartCollectionVariant } from 'common/models/SmartCollectionVariant'
 import { squashNewLines } from 'common/utils/formatUtil'
 import { formatSecondsAsText, formatDate } from 'common/utils/timeUtil'
 import ArtistPopover from 'components/artist/ArtistPopover'
@@ -226,6 +227,18 @@ const SmartCollectionButtons = props => {
   return (
     <>
       <PlayButton playing={props.playing} onPlay={props.onPlay} />
+      {/* Collectibles Playlist share button */}
+      {props.playlistId === SmartCollectionVariant.COLLECTIBLES_PLAYLIST ? (
+        <Button
+          className={cn(styles.buttonSpacing, styles.buttonFormatting)}
+          textClassName={styles.buttonTextFormatting}
+          type={ButtonType.COMMON}
+          text={messages.shareButton}
+          leftIcon={<IconShare />}
+          onClick={props.onShare}
+          widthToHideText={BUTTON_COLLAPSE_WIDTHS.second}
+        />
+      ) : null}
       {props.onSave ? (
         <Tooltip
           disabled={props.isOwner || props.saves === 0}

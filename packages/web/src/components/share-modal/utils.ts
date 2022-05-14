@@ -4,7 +4,8 @@ import {
   fullAlbumPage,
   fullPlaylistPage,
   fullProfilePage,
-  fullTrackPage
+  fullTrackPage,
+  fullCollectiblesPlaylistPage
 } from 'utils/route'
 
 import { messages } from './messages'
@@ -53,6 +54,15 @@ export const getTwitterShareText = (content: ShareModalContent) => {
       twitterText = messages.playlistShareText(playlist_name, handle)
       link = fullPlaylistPage(handle, playlist_name, playlist_id)
       analyticsEvent = { kind: 'playlist', id: playlist_id, url: link }
+      break
+    }
+    case 'collectiblesPlaylist': {
+      const {
+        user: { handle, user_id }
+      } = content
+      twitterText = messages.collectiblesPlaylistText(handle)
+      link = fullCollectiblesPlaylistPage(handle)
+      analyticsEvent = { kind: 'collectiblesPlaylist', id: user_id, url: link }
       break
     }
   }

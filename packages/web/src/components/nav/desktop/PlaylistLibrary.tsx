@@ -21,6 +21,7 @@ import {
 } from 'common/store/account/selectors'
 import { addTrackToPlaylist } from 'common/store/cache/collections/actions'
 import { getPlaylistUpdates } from 'common/store/notifications/selectors'
+import { fetchProfile } from 'common/store/pages/profile/actions'
 import {
   addPlaylistToFolder,
   containsTempPlaylist,
@@ -43,7 +44,11 @@ import { open as openEditPlaylistModal } from 'store/application/ui/editPlaylist
 import { getIsDragging } from 'store/dragndrop/selectors'
 import { update } from 'store/playlist-library/slice'
 import { useSelector } from 'utils/reducer'
-import { getPathname, playlistPage } from 'utils/route'
+import {
+  collectiblesPlaylistPage,
+  getPathname,
+  playlistPage
+} from 'utils/route'
 
 import navColumnStyles from './NavColumn.module.css'
 import { PlaylistFolderNavItem } from './PlaylistFolderNavItem'
@@ -58,12 +63,8 @@ type LibraryContentsLevelProps = {
   level?: number
   contents: PlaylistLibraryType['contents']
   renderPlaylist: (playlistId: number, level: number) => void
-  renderExplorePlaylist: (
+  renderCollectionPlaylist: (
     playlistId: SmartCollectionVariant,
-    level: number
-  ) => void
-  renderCollectiblesPlaylist: (
-    playlistId: SmartCollectionVariant.COLLECTIBLES_PLAYLIST,
     level: number
   ) => void
   renderFolder: (folder: PlaylistLibraryFolder, level: number) => void
@@ -80,8 +81,7 @@ const LibraryContentsLevel = ({
   level = 0,
   contents,
   renderPlaylist,
-  renderExplorePlaylist,
-  renderCollectiblesPlaylist,
+  renderCollectionPlaylist,
   renderFolder
 }: LibraryContentsLevelProps) => {
   return (
@@ -89,10 +89,7 @@ const LibraryContentsLevel = ({
       {contents.map(content => {
         switch (content.type) {
           case 'explore_playlist': {
-            return renderExplorePlaylist(content.playlist_id, level)
-          }
-          case 'collectibles_playlist': {
-            return renderCollectiblesPlaylist(content.playlist_id, level)
+            return renderCollectionPlaylist(content.playlist_id, level)
           }
           case 'playlist': {
             return renderPlaylist(content.playlist_id, level)
@@ -126,6 +123,14 @@ const PlaylistLibrary = ({
   const { toast } = useContext(ToastContext)
   const record = useRecord()
   const [, setIsEditFolderModalOpen] = useModalState('EditFolder')
+
+  useEffect(() => {
+    if (account) {
+      dispatch(
+        fetchProfile(account.handle, account.user_id, false, false, false, true)
+      )
+    }
+  }, [])
 
   const accountCollectibles = useSelector(getAccountCollectibles)
   const audioCollectibles = useMemo(
@@ -237,49 +242,25 @@ const PlaylistLibrary = ({
     [dispatch, library, record]
   )
 
-  const renderExplorePlaylist = (
+  const renderCollectionPlaylist = (
     playlistId: SmartCollectionVariant,
     level = 0
   ) => {
+    const isCollectiblesPlaylist =
+      playlistId === SmartCollectionVariant.COLLECTIBLES_PLAYLIST
+    if (isCollectiblesPlaylist && !audioCollectibles.length) return null
     const playlist = SMART_COLLECTION_MAP[playlistId]
     if (!playlist) return null
+
     const name = playlist.playlist_name
-    const url = playlist.link
+    const url = isCollectiblesPlaylist
+      ? collectiblesPlaylistPage(account?.handle ?? '')
+      : playlist.link
+
     return (
       <PlaylistNavLink
         isInsideFolder={level > 0}
         key={playlist.link}
-        playlistId={name as SmartCollectionVariant}
-        droppableKey={name as SmartCollectionVariant}
-        name={name}
-        to={url}
-        onReorder={onReorder}
-        isActive={() => url === getPathname()}
-        activeClassName='active'
-        onClick={onClickNavLinkWithAccount}
-        className={cn(navColumnStyles.link, {
-          [navColumnStyles.disabledLink]:
-            !account || (dragging && draggingKind !== 'library-playlist')
-        })}
-      >
-        {name}
-      </PlaylistNavLink>
-    )
-  }
-
-  const renderCollectiblesPlaylist = (
-    playlistId: SmartCollectionVariant.COLLECTIBLES_PLAYLIST,
-    level = 0
-  ) => {
-    if (!audioCollectibles.length) return null
-    const playlist = SMART_COLLECTION_MAP[playlistId]
-    if (!playlist) return null
-    const name = playlist.playlist_name
-    const url = playlist.link
-    return (
-      <PlaylistNavLink
-        isInsideFolder={level > 0}
-        key={'collectibles playlist'}
         playlistId={name as SmartCollectionVariant}
         droppableKey={name as SmartCollectionVariant}
         name={name}
@@ -378,8 +359,7 @@ const PlaylistLibrary = ({
               level={level + 1}
               contents={folder.contents}
               renderPlaylist={renderPlaylist}
-              renderExplorePlaylist={renderExplorePlaylist}
-              renderCollectiblesPlaylist={renderCollectiblesPlaylist}
+              renderCollectionPlaylist={renderCollectionPlaylist}
               renderFolder={renderFolder}
             />
           </div>
@@ -413,8 +393,7 @@ const PlaylistLibrary = ({
         <LibraryContentsLevel
           contents={library.contents || []}
           renderPlaylist={renderPlaylist}
-          renderExplorePlaylist={renderExplorePlaylist}
-          renderCollectiblesPlaylist={renderCollectiblesPlaylist}
+          renderCollectionPlaylist={renderCollectionPlaylist}
           renderFolder={renderFolder}
         />
       ) : null}

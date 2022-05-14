@@ -492,7 +492,7 @@ type Share = {
 
 export type ShareToTwitter = {
   eventName: Name.SHARE_TO_TWITTER
-  kind: 'profile' | 'album' | 'playlist' | 'track'
+  kind: 'profile' | 'album' | 'playlist' | 'track' | 'collectiblesPlaylist'
   source: ShareSource
   id: number
   url: string

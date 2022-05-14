@@ -18,7 +18,7 @@ import {
 
 export const HEAVY_ROTATION: SmartCollection = {
   variant: Variant.SMART,
-  playlist_name: 'Heavy Rotation',
+  playlist_name: SmartCollectionVariant.HEAVY_ROTATION,
   description: 'Your top tracks, in one place',
   gradient: 'linear-gradient(316deg, #C751C0 0%, #4158D0 100%)',
   shadow: 'rgba(196,81,193,0.35)',
@@ -28,7 +28,7 @@ export const HEAVY_ROTATION: SmartCollection = {
 
 export const BEST_NEW_RELEASES: SmartCollection = {
   variant: Variant.SMART,
-  playlist_name: 'Best New Releases',
+  playlist_name: SmartCollectionVariant.BEST_NEW_RELEASES,
   description: 'From the artists you follow',
   gradient: 'linear-gradient(135deg, #FF3C6C 0%, #A04B8E 100%)',
   shadow: 'rgba(160,74,141,0.35)',
@@ -38,7 +38,7 @@ export const BEST_NEW_RELEASES: SmartCollection = {
 
 export const UNDER_THE_RADAR: SmartCollection = {
   variant: Variant.SMART,
-  playlist_name: 'Under The Radar',
+  playlist_name: SmartCollectionVariant.UNDER_THE_RADAR,
   description: 'Tracks you might have missed from the artists you follow',
   gradient: 'linear-gradient(135deg, #FFA63B 0%, #FF2525 100%)',
   shadow: 'rgba(255,47,39,0.35)',
@@ -48,7 +48,7 @@ export const UNDER_THE_RADAR: SmartCollection = {
 
 export const MOST_LOVED: SmartCollection = {
   variant: Variant.SMART,
-  playlist_name: 'Most Loved',
+  playlist_name: SmartCollectionVariant.MOST_LOVED,
   description: 'Tracks favorited by the people you follow',
   gradient: 'linear-gradient(135deg, #896BFF 0%, #0060FF 100%)',
   shadow: 'rgba(3,96,255,0.35)',
@@ -58,7 +58,7 @@ export const MOST_LOVED: SmartCollection = {
 
 export const REMIXABLES: SmartCollection = {
   variant: Variant.SMART,
-  playlist_name: 'Remixables',
+  playlist_name: SmartCollectionVariant.REMIXABLES,
   description:
     'Popular tracks with remixes & stems you can use in your own tracks.',
   gradient: 'linear-gradient(137.65deg, #FF00F5 -5.01%, #00D1FF 110.47%)',
@@ -69,7 +69,7 @@ export const REMIXABLES: SmartCollection = {
 
 export const FEELING_LUCKY: SmartCollection = {
   variant: Variant.SMART,
-  playlist_name: 'Feeling Lucky?',
+  playlist_name: SmartCollectionVariant.FEELING_LUCKY,
   description: 'A purely random collection of tracks from Audius',
   gradient: 'linear-gradient(135deg, #19CCA2 0%, #61FA66 100%)',
   shadow: 'rgba(95,249,103,0.35)',
@@ -79,7 +79,7 @@ export const FEELING_LUCKY: SmartCollection = {
 
 export const COLLECTIBLES_PLAYLIST: SmartCollection = {
   variant: Variant.SMART,
-  playlist_name: 'Collectibles Playlist',
+  playlist_name: SmartCollectionVariant.COLLECTIBLES_PLAYLIST,
   description: 'A collection of your Audio NFTs',
   link: COLLECTIBLES_PLAYLIST_PAGE
 }
