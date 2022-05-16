@@ -27,7 +27,7 @@ import { waitForBackendSetup } from 'store/backend/sagas'
 import * as confirmerActions from 'store/confirmer/actions'
 import { confirmTransaction } from 'store/confirmer/sagas'
 import { update as updatePlaylistLibrary } from 'store/playlist-library/slice'
-import { albumPage, collectiblesPlaylistPage, playlistPage } from 'utils/route'
+import { albumPage, audioNftPlaylistPage, playlistPage } from 'utils/route'
 import { share } from 'utils/share'
 
 import watchCollectionErrors from './errorSagas'
@@ -510,18 +510,18 @@ export function* watchShareCollection() {
   })
 }
 
-export function* watchShareCollectiblesPlaylist() {
-  yield takeEvery(socialActions.SHARE_COLLECTIBLES_PLAYLIST, function* (
-    action: ReturnType<typeof socialActions.shareCollectiblesPlaylist>
+export function* watchShareAudioNftPlaylist() {
+  yield takeEvery(socialActions.SHARE_AUDIO_NFT_PLAYLIST, function* (
+    action: ReturnType<typeof socialActions.shareAudioNftPlaylist>
   ) {
     const { handle } = action
     const user: User = yield select(getUserByHandle, { handle })
 
-    const link = collectiblesPlaylistPage(handle)
-    share(link, formatShareText('Collectibles Playlist', user?.name ?? handle))
+    const link = audioNftPlaylistPage(handle)
+    share(link, formatShareText('Audio NFT Playlist', user?.name ?? handle))
 
     const event = make(Name.SHARE, {
-      kind: 'collectiblesPlaylist',
+      kind: 'audioNftPlaylist',
       source: action.source,
       url: link
     })
@@ -539,7 +539,7 @@ const sagas = () => {
     watchUnsaveSmartCollection,
     watchCollectionErrors,
     watchShareCollection,
-    watchShareCollectiblesPlaylist
+    watchShareAudioNftPlaylist
   ]
 }
 

@@ -5,5 +5,5 @@ export enum SmartCollectionVariant {
   MOST_LOVED = 'Most Loved',
   FEELING_LUCKY = 'Feeling Lucky?',
   REMIXABLES = 'Remixables',
-  COLLECTIBLES_PLAYLIST = 'Audio NFTs'
+  AUDIO_NFT_PLAYLIST = 'Audio NFTs'
 }

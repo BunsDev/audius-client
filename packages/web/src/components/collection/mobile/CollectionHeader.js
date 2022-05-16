@@ -24,7 +24,6 @@ import { isDarkMode } from 'utils/theme/theme'
 import styles from './CollectionHeader.module.css'
 
 const messages = {
-  nftPlaylist: 'NFT Playlist',
   privatePlaylist: 'Private Playlist',
   publishing: 'Publishing...',
   play: 'PLAY',
@@ -245,7 +244,9 @@ const CollectionHeader = ({
               onClickOverflow={onClickOverflow}
               showFavorite={!!onSave}
               showRepost={variant !== Variant.SMART}
-              showShare={variant !== Variant.SMART || type === 'NFT Playlist'}
+              showShare={
+                variant !== Variant.SMART || type === 'Audio NFT Playlist'
+              }
               showOverflow={variant !== Variant.SMART}
               darkMode={isDarkMode()}
             />

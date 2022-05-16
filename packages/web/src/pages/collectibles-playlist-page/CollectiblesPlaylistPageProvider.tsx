@@ -21,11 +21,11 @@ import { add, clear, pause, play } from 'common/store/queue/slice'
 import { Source } from 'common/store/queue/types'
 import { requestOpen as requestOpenShareModal } from 'common/store/ui/share-modal/slice'
 import TablePlayButton from 'components/tracks-table/TablePlayButton'
-import { COLLECTIBLES_PLAYLIST } from 'pages/smart-collection/smartCollections'
+import { AUDIO_NFT_PLAYLIST } from 'pages/smart-collection/smartCollections'
 import { getPlaying, makeGetCurrent } from 'store/player/selectors'
 import { getLocationPathname } from 'store/routing/selectors'
 import { AppState } from 'store/types'
-import { collectibleDetailsPage, COLLECTIBLES_PLAYLIST_PAGE } from 'utils/route'
+import { collectibleDetailsPage, AUDIO_NFT_PLAYLIST_PAGE } from 'utils/route'
 
 import { CollectionPageProps as DesktopCollectionPageProps } from '../collection-page/components/desktop/CollectionPage'
 import { CollectionPageProps as MobileCollectionPageProps } from '../collection-page/components/mobile/CollectionPage'
@@ -57,7 +57,7 @@ export const CollectiblesPlaylistPageProvider = ({
   const routeMatch = useMemo(
     () =>
       matchPath<{ handle: string }>(pathname, {
-        path: COLLECTIBLES_PLAYLIST_PAGE,
+        path: AUDIO_NFT_PLAYLIST_PAGE,
         exact: true
       }),
     [pathname]
@@ -76,7 +76,7 @@ export const CollectiblesPlaylistPageProvider = ({
       ),
     [user]
   )
-  const title = `${user?.name}'s ${SmartCollectionVariant.COLLECTIBLES_PLAYLIST}`
+  const title = `${user?.name} ${SmartCollectionVariant.AUDIO_NFT_PLAYLIST}`
 
   useEffect(() => {
     dispatch(
@@ -238,7 +238,7 @@ export const CollectiblesPlaylistPageProvider = ({
     if (user) {
       dispatch(
         requestOpenShareModal({
-          type: 'collectiblesPlaylist',
+          type: 'audioNftPlaylist',
           userId: user?.user_id,
           source: ShareSource.TILE
         })
@@ -247,9 +247,9 @@ export const CollectiblesPlaylistPageProvider = ({
   }
 
   const metadata = {
-    ...COLLECTIBLES_PLAYLIST,
+    ...AUDIO_NFT_PLAYLIST,
     playlist_name: title,
-    description: COLLECTIBLES_PLAYLIST.makeDescription?.(user?.name) ?? '',
+    description: AUDIO_NFT_PLAYLIST.makeDescription?.(user?.name) ?? '',
     playlist_contents: {
       track_ids: entries.map(entry => ({ track: entry.id }))
     },

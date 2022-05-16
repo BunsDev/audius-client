@@ -330,7 +330,7 @@ class PlayBar extends Component {
       favorited = track.has_current_user_saved || false
       isTrackUnlisted = track.is_unlisted
     } else if (collectible && user) {
-      // Special case for collectibles playlist
+      // Special case for audio nft playlist
       trackTitle = collectible.name
       artistName = user.name
       artistHandle = user.handle

@@ -7,7 +7,7 @@ import { Name } from 'common/models/Analytics'
 import { FeatureFlags } from 'common/services/remote-config'
 import { getAccountUser } from 'common/store/account/selectors'
 import {
-  shareCollectiblesPlaylist,
+  shareAudioNftPlaylist,
   shareCollection
 } from 'common/store/social/collections/actions'
 import { shareTrack } from 'common/store/social/tracks/actions'
@@ -41,6 +41,8 @@ export const ShareModal = () => {
     FeatureFlags.SHARE_SOUND_TO_TIKTOK
   )
 
+  console.log({ content })
+
   const isOwner =
     content?.type === 'track' && account?.user_id === content.artist.user_id
 
@@ -50,11 +52,17 @@ export const ShareModal = () => {
 
   const handleShareToTwitter = useCallback(() => {
     if (!source || !content) return
-    const { twitterText, link, analyticsEvent } = getTwitterShareText(content)
+    const isPlaylistOwner =
+      content.type === 'audioNftPlaylist' &&
+      account?.user_id === content.user.user_id
+    const { twitterText, link, analyticsEvent } = getTwitterShareText(
+      content,
+      isPlaylistOwner
+    )
     openTwitterLink(link, twitterText)
     record(make(Name.SHARE_TO_TWITTER, { source, ...analyticsEvent }))
     handleClose()
-  }, [content, source, handleClose, record])
+  }, [source, content, account, record, handleClose])
 
   const handleShareToTikTok = useCallback(() => {
     if (content?.type === 'track') {
@@ -80,8 +88,8 @@ export const ShareModal = () => {
       case 'playlist':
         dispatch(shareCollection(content.playlist.playlist_id, source))
         break
-      case 'collectiblesPlaylist':
-        dispatch(shareCollectiblesPlaylist(content.user.handle, source))
+      case 'audioNftPlaylist':
+        dispatch(shareAudioNftPlaylist(content.user.handle, source))
         break
     }
     toast(messages.toast(content.type), SHARE_TOAST_TIMEOUT_MILLIS)

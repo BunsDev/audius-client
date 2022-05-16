@@ -5,14 +5,17 @@ import {
   fullPlaylistPage,
   fullProfilePage,
   fullTrackPage,
-  fullCollectiblesPlaylistPage
+  fullAudioNftPlaylistPage
 } from 'utils/route'
 
 import { messages } from './messages'
 
 type ShareToTwitterEvent = Omit<ShareToTwitter, 'eventName' | 'source'>
 
-export const getTwitterShareText = (content: ShareModalContent) => {
+export const getTwitterShareText = (
+  content: ShareModalContent,
+  isPlaylistOwner = false
+) => {
   let twitterText = ''
   let link = ''
   let analyticsEvent: ShareToTwitterEvent
@@ -56,13 +59,15 @@ export const getTwitterShareText = (content: ShareModalContent) => {
       analyticsEvent = { kind: 'playlist', id: playlist_id, url: link }
       break
     }
-    case 'collectiblesPlaylist': {
+    case 'audioNftPlaylist': {
       const {
-        user: { handle, user_id }
+        user: { handle, name, user_id }
       } = content
-      twitterText = messages.collectiblesPlaylistText(handle)
-      link = fullCollectiblesPlaylistPage(handle)
-      analyticsEvent = { kind: 'collectiblesPlaylist', id: user_id, url: link }
+      twitterText = messages.audioNftPlaylistShareText(
+        isPlaylistOwner ? 'my' : name
+      )
+      link = fullAudioNftPlaylistPage(handle)
+      analyticsEvent = { kind: 'audioNftPlaylist', id: user_id, url: link }
       break
     }
   }

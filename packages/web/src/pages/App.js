@@ -148,7 +148,7 @@ import {
   DEACTIVATE_PAGE,
   SUPPORTING_USERS_ROUTE,
   TOP_SUPPORTERS_USERS_ROUTE,
-  COLLECTIBLES_PLAYLIST_PAGE
+  AUDIO_NFT_PLAYLIST_PAGE
 } from 'utils/route'
 import { getTheme as getSystemTheme } from 'utils/theme/theme'
 
@@ -603,7 +603,7 @@ class App extends Component {
               <Route exact path={EXPLORE_PAGE} render={() => <ExplorePage />} />
               <Route
                 exact
-                path={COLLECTIBLES_PLAYLIST_PAGE}
+                path={AUDIO_NFT_PLAYLIST_PAGE}
                 render={() => <CollectiblesPlaylistPage />}
               />
               <Route

@@ -68,8 +68,8 @@ export type SmartCollection = {
   description?: string
   makeDescription?: (...args: any) => string
   // Where this type of playlist is given a different classification
-  // e.g. "NFT Playlist" instead of just "Playlist"
-  typeTitle?: 'Playlist' | 'NFT Playlist'
+  // e.g. "Audio NFT Playlist" instead of just "Playlist"
+  typeTitle?: 'Playlist' | 'Audio NFT Playlist'
   gradient?: string
   imageOverride?: string
   shadow?: string

@@ -22,7 +22,7 @@ export const UNSAVE_COLLECTION_FAILED = 'SOCIAL/UNSAVE_COLLECTION_FAILED'
 export const UNSAVE_SMART_COLLECTION = 'SOCIAL/UNSAVE_SMART_COLLECTION'
 
 export const SHARE_COLLECTION = 'SOCIAL/SHARE_COLLECTION'
-export const SHARE_COLLECTIBLES_PLAYLIST = 'SOCIAL/SHARE_COLLECTIBLES_PLAYLIST'
+export const SHARE_AUDIO_NFT_PLAYLIST = 'SOCIAL/SHARE_AUDIO_NFT_PLAYLIST'
 
 export const repostCollection = createCustomAction(
   REPOST_COLLECTION,
@@ -98,7 +98,7 @@ export const shareCollection = createCustomAction(
   (collectionId: ID, source: ShareSource) => ({ collectionId, source })
 )
 
-export const shareCollectiblesPlaylist = createCustomAction(
-  SHARE_COLLECTIBLES_PLAYLIST,
+export const shareAudioNftPlaylist = createCustomAction(
+  SHARE_AUDIO_NFT_PLAYLIST,
   (handle: string, source: ShareSource) => ({ handle, source })
 )

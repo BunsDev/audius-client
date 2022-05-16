@@ -5,7 +5,7 @@ const shareTypeMap: Record<ShareType, string> = {
   profile: 'Profile',
   album: 'Album',
   playlist: 'Playlist',
-  collectiblesPlaylist: 'Collectibles Playlist'
+  audioNftPlaylist: 'Audio NFT Playlist'
 }
 
 export const messages = {
@@ -22,7 +22,7 @@ export const messages = {
     `Check out ${albumName} by ${handle} @AudiusProject #Audius`,
   playlistShareText: (playlistName: string, handle: string) =>
     `Check out ${playlistName} by ${handle} @AudiusProject #Audius`,
-  // TODO: Need to confirm copy here
-  collectiblesPlaylistText: (handle: string) =>
-    `Check out ${handle}'s audio NFT playlist @AudiusProject #Audius`
+  // TODO: See if you can display my when the account user is the user
+  audioNftPlaylistShareText: (name: string) =>
+    `Check out ${name} Audio NFTs in a playlist @AudiusProject #Audius`
 }
