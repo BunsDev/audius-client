@@ -126,10 +126,12 @@ const CollectionPage = ({
     metadata && metadata?.variant !== Variant.SMART
       ? metadata._cover_art_sizes
       : null
-  const duration = tracks.entries?.reduce(
-    (duration, entry) => duration + entry.duration,
-    0
-  )
+  const duration =
+    tracks.entries?.reduce(
+      (duration: number, entry: CollectionTrack) =>
+        duration + entry.duration || 0,
+      0
+    ) ?? 0
 
   const playlistOwnerName = user?.name ?? ''
   const playlistOwnerHandle = user?.handle ?? ''
@@ -137,7 +139,7 @@ const CollectionPage = ({
   const isOwner = userId === playlistOwnerId
 
   const isSaved =
-    metadata?.has_current_user_saved || playlistId in userPlaylists
+    metadata?.has_current_user_saved || playlistId in (userPlaylists ?? {})
   const isPublishing =
     metadata && metadata?.variant !== Variant.SMART
       ? metadata._is_publishing
@@ -146,8 +148,12 @@ const CollectionPage = ({
   const variant = metadata?.variant ?? null
   const gradient =
     metadata && metadata.variant === Variant.SMART ? metadata.gradient : ''
+  const imageOverride =
+    metadata && metadata.variant === Variant.SMART ? metadata.imageOverride : ''
   const icon =
     metadata && metadata.variant === Variant.SMART ? metadata.icon : null
+  const typeTitle =
+    metadata?.variant === Variant.SMART ? metadata?.typeTitle ?? type : type
 
   const {
     isEmpty,
@@ -177,12 +183,12 @@ const CollectionPage = ({
     isReposted: entry.has_current_user_reposted,
     isActive: playingUid === entry.uid,
     isPlaying: queuedAndPlaying && playingUid === entry.uid,
-    artistName: entry.user.name,
-    artistHandle: entry.user.handle,
+    artistName: entry?.user?.name,
+    artistHandle: entry?.user?.handle,
     trackTitle: entry.title,
     trackId: entry.track_id,
     uid: entry.uid,
-    isDeleted: entry.is_delete || !!entry.user.is_deactivated
+    isDeleted: entry.is_delete || !!entry?.user?.is_deactivated
   }))
 
   return (
@@ -202,7 +208,7 @@ const CollectionPage = ({
               userId={user?.user_id ?? 0}
               loading={collectionLoading}
               tracksLoading={tracksLoading}
-              type={type}
+              type={typeTitle}
               title={playlistName}
               artistName={playlistOwnerName}
               artistHandle={playlistOwnerHandle}
@@ -232,6 +238,7 @@ const CollectionPage = ({
               // Smart collection
               variant={variant}
               gradient={gradient}
+              imageOverride={imageOverride}
               icon={icon}
             />
           </div>

@@ -102,10 +102,12 @@ export const CollectiblesPlaylistPageProvider = ({
   )
 
   const entries = audioCollectibles.map(collectible => ({
+    track_id: collectible.id,
     id: collectible.id,
     uid: collectible.id,
     artistId: user?.user_id,
     collectible,
+    title: collectible.name,
     source: Source.COLLECTIBLE_PLAYLIST_TRACKS
   }))
 
