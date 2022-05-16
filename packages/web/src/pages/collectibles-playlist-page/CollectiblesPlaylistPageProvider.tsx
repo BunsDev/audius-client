@@ -25,7 +25,11 @@ import { AUDIO_NFT_PLAYLIST } from 'pages/smart-collection/smartCollections'
 import { getPlaying, makeGetCurrent } from 'store/player/selectors'
 import { getLocationPathname } from 'store/routing/selectors'
 import { AppState } from 'store/types'
-import { collectibleDetailsPage, AUDIO_NFT_PLAYLIST_PAGE } from 'utils/route'
+import {
+  AUDIO_NFT_PLAYLIST_PAGE,
+  collectibleDetailsPage,
+  profilePage
+} from 'utils/route'
 
 import { CollectionPageProps as DesktopCollectionPageProps } from '../collection-page/components/desktop/CollectionPage'
 import { CollectionPageProps as MobileCollectionPageProps } from '../collection-page/components/mobile/CollectionPage'
@@ -128,6 +132,10 @@ export const CollectiblesPlaylistPageProvider = ({
   const onClickTrackName = (collectible: Collectible) => {
     const url = collectibleDetailsPage(user?.handle ?? '', collectible.id)
     dispatch(push(url))
+  }
+
+  const onHeroTrackClickArtistName = () => {
+    if (user) dispatch(push(profilePage(user?.handle)))
   }
 
   const handlePlayAllClick = () => {
@@ -280,8 +288,9 @@ export const CollectiblesPlaylistPageProvider = ({
 
     onPlay: handlePlayAllClick,
     onHeroTrackShare: onShare,
-    onClickRow: onClickRow,
-    onClickTrackName: onClickTrackName
+    onClickRow,
+    onClickTrackName,
+    onHeroTrackClickArtistName
   }
 
   return <Children {...childProps} />
