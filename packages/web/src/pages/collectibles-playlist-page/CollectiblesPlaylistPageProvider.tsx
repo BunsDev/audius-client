@@ -77,7 +77,6 @@ export const CollectiblesPlaylistPageProvider = ({
       ),
     [user]
   )
-  console.log({ user, audioCollectibles })
 
   useEffect(() => {
     dispatch(
@@ -250,7 +249,8 @@ export const CollectiblesPlaylistPageProvider = ({
     playlist_contents: {
       track_ids: entries.map(entry => ({ track: entry.id }))
     },
-    imageOverride: audioCollectibles?.[0]?.imageUrl
+    imageOverride: audioCollectibles?.[0]?.imageUrl,
+    typeTitle: 'NFT Playlist'
   }
   const childProps = {
     title,

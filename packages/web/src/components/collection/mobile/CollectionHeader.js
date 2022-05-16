@@ -24,6 +24,7 @@ import { isDarkMode } from 'utils/theme/theme'
 import styles from './CollectionHeader.module.css'
 
 const messages = {
+  nftPlaylist: 'NFT Playlist',
   privatePlaylist: 'Private Playlist',
   publishing: 'Publishing...',
   play: 'PLAY',

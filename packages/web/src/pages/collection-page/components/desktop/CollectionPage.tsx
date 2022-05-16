@@ -162,6 +162,8 @@ const CollectionPage = ({
   const icon = (metadata?.variant === Variant.SMART && metadata.icon) ?? null
   const imageOverride =
     (metadata?.variant === Variant.SMART && metadata.imageOverride) ?? ''
+  const typeTitle =
+    metadata?.variant === Variant.SMART ? metadata?.typeTitle ?? type : type
 
   const {
     trackCount,
@@ -183,7 +185,7 @@ const CollectionPage = ({
       userId={playlistOwnerId}
       loading={collectionLoading}
       tracksLoading={tracksLoading}
-      type={type}
+      type={typeTitle}
       title={playlistName}
       artistName={playlistOwnerName}
       artistHandle={playlistOwnerHandle}
