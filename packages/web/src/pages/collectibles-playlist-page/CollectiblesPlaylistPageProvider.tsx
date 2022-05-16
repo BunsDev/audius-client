@@ -254,7 +254,7 @@ export const CollectiblesPlaylistPageProvider = ({
       track_ids: entries.map(entry => ({ track: entry.id }))
     },
     imageOverride: audioCollectibles?.[0]?.imageUrl,
-    typeTitle: 'NFT Playlist'
+    typeTitle: 'Audio NFT Playlist'
   }
 
   const childProps = {

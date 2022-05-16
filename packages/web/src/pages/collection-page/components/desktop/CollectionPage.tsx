@@ -10,6 +10,7 @@ import {
   CollectionsPageType
 } from 'common/store/pages/collection/types'
 import CollectionHeader from 'components/collection/desktop/CollectionHeader'
+import LoadingSpinner from 'components/loading-spinner/LoadingSpinner'
 import Page from 'components/page/Page'
 import TracksTable from 'components/tracks-table/TracksTable'
 import { computeCollectionMetadataProps } from 'pages/collection-page/store/utils'
@@ -240,7 +241,9 @@ const CollectionPage = ({
           <EmptyPage isOwner={isOwner} />
         ) : (
           <div className={styles.tableWrapper}>
-            {collectionLoading ? null : (
+            {collectionLoading ? (
+              <LoadingSpinner className={styles.spinner} />
+            ) : (
               <TracksTable
                 key={playlistName}
                 loading={tracksLoading}
