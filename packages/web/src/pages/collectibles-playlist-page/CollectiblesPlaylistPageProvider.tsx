@@ -249,6 +249,7 @@ export const CollectiblesPlaylistPageProvider = ({
   const metadata = {
     ...COLLECTIBLES_PLAYLIST,
     playlist_name: title,
+    description: COLLECTIBLES_PLAYLIST.makeDescription?.(user?.name) ?? '',
     playlist_contents: {
       track_ids: entries.map(entry => ({ track: entry.id }))
     },

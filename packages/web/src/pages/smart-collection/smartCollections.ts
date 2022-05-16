@@ -80,7 +80,7 @@ export const FEELING_LUCKY: SmartCollection = {
 export const COLLECTIBLES_PLAYLIST: SmartCollection = {
   variant: Variant.SMART,
   playlist_name: SmartCollectionVariant.COLLECTIBLES_PLAYLIST,
-  description: 'A collection of your Audio NFTs',
+  makeDescription: (name: string) => `A collection of ${name}'s Audio NFTs`,
   link: COLLECTIBLES_PLAYLIST_PAGE
 }
 
