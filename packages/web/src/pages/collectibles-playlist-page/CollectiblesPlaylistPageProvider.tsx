@@ -51,7 +51,6 @@ export const CollectiblesPlaylistPageProvider = ({
   const dispatch = useDispatch()
   const currentPlayerItem = useSelector(getCurrent)
   const playing = useSelector(getPlaying)
-  const title = SmartCollectionVariant.COLLECTIBLES_PLAYLIST
 
   // Getting user data
   const pathname = useSelector(getLocationPathname)
@@ -77,6 +76,7 @@ export const CollectiblesPlaylistPageProvider = ({
       ),
     [user]
   )
+  const title = `${user?.name}'s ${SmartCollectionVariant.COLLECTIBLES_PLAYLIST}`
 
   useEffect(() => {
     dispatch(
@@ -246,12 +246,14 @@ export const CollectiblesPlaylistPageProvider = ({
 
   const metadata = {
     ...COLLECTIBLES_PLAYLIST,
+    playlist_name: title,
     playlist_contents: {
       track_ids: entries.map(entry => ({ track: entry.id }))
     },
     imageOverride: audioCollectibles?.[0]?.imageUrl,
     typeTitle: 'NFT Playlist'
   }
+
   const childProps = {
     title,
     description: '',
@@ -262,7 +264,7 @@ export const CollectiblesPlaylistPageProvider = ({
     collection: {
       status: tracksLoading ? Status.LOADING : Status.SUCCESS,
       metadata,
-      user: null
+      user
     },
     tracks: {
       status: tracksLoading ? Status.LOADING : Status.SUCCESS,
