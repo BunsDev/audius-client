@@ -41,8 +41,6 @@ export const ShareModal = () => {
     FeatureFlags.SHARE_SOUND_TO_TIKTOK
   )
 
-  console.log({ content })
-
   const isOwner =
     content?.type === 'track' && account?.user_id === content.artist.user_id
 

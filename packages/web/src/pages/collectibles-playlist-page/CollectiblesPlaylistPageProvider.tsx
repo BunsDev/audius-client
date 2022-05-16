@@ -242,7 +242,7 @@ export const CollectiblesPlaylistPageProvider = ({
     }
   ]
 
-  const onShare = () => {
+  const onHeroTrackShare = () => {
     if (user) {
       dispatch(
         requestOpenShareModal({
@@ -287,7 +287,7 @@ export const CollectiblesPlaylistPageProvider = ({
     isQueued: isQueued,
 
     onPlay: handlePlayAllClick,
-    onHeroTrackShare: onShare,
+    onHeroTrackShare,
     onClickRow,
     onClickTrackName,
     onHeroTrackClickArtistName
