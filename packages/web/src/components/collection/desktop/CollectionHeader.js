@@ -19,7 +19,6 @@ import PropTypes from 'prop-types'
 import { ReactComponent as IconFilter } from 'assets/img/iconFilter.svg'
 import { Variant } from 'common/models/Collection'
 import { SquareSizes } from 'common/models/ImageSizes'
-import { SmartCollectionVariant } from 'common/models/SmartCollectionVariant'
 import { squashNewLines } from 'common/utils/formatUtil'
 import { formatSecondsAsText, formatDate } from 'common/utils/timeUtil'
 import ArtistPopover from 'components/artist/ArtistPopover'
@@ -228,7 +227,7 @@ const SmartCollectionButtons = props => {
     <>
       <PlayButton playing={props.playing} onPlay={props.onPlay} />
       {/* Collectibles Playlist share button */}
-      {props.playlistId === SmartCollectionVariant.COLLECTIBLES_PLAYLIST ? (
+      {props.type === 'NFT Playlist' ? (
         <Button
           className={cn(styles.buttonSpacing, styles.buttonFormatting)}
           textClassName={styles.buttonTextFormatting}
