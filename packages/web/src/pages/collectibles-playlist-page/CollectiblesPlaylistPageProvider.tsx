@@ -271,9 +271,9 @@ export const CollectiblesPlaylistPageProvider = ({
     },
     imageOverride:
       audioCollectibles?.[0]?.imageUrl ??
-      audioCollectibles?.[0].frameUrl ??
-      audioCollectibles?.[0].gifUrl
-    // typeTitle: 'Audio NFT Playlist'
+      audioCollectibles?.[0]?.frameUrl ??
+      audioCollectibles?.[0]?.gifUrl,
+    typeTitle: 'Audio NFT Playlist'
   }
 
   const childProps = {
