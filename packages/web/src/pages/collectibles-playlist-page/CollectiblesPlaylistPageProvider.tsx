@@ -70,16 +70,24 @@ export const CollectiblesPlaylistPageProvider = ({
   const user = useSelector<AppState, User | null>(state =>
     getUser(state, { handle: routeMatch?.params.handle ?? null })
   )
+  const collectibleIds = Object.keys(user?.collectibles ?? {})
+  const order = user?.collectibles?.order ?? []
   const audioCollectibles = useMemo(
     () =>
-      [
-        ...(user?.collectibleList ?? []),
-        ...(user?.solanaCollectibleList ?? [])
-      ]?.filter(c =>
-        ['mp3', 'wav', 'oga'].some(ext => c.animationUrl?.endsWith(ext))
-      ),
-    [user]
+      [...(user?.collectibleList ?? []), ...(user?.solanaCollectibleList ?? [])]
+        // Filter out hidden collectibles
+        ?.filter(c =>
+          collectibleIds.length ? collectibleIds.includes(c.id) : true
+        )
+        // Sort by user collectibles order
+        .sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id))
+        // Filter to audio nfts
+        .filter(c =>
+          ['mp3', 'wav', 'oga'].some(ext => c.animationUrl?.endsWith(ext))
+        ),
+    [collectibleIds, order, user]
   )
+  console.log({ audioCollectibles })
   const title = `${user?.name} ${SmartCollectionVariant.AUDIO_NFT_PLAYLIST}`
 
   useEffect(() => {
@@ -261,8 +269,11 @@ export const CollectiblesPlaylistPageProvider = ({
     playlist_contents: {
       track_ids: entries.map(entry => ({ track: entry.id }))
     },
-    imageOverride: audioCollectibles?.[0]?.imageUrl,
-    typeTitle: 'Audio NFT Playlist'
+    imageOverride:
+      audioCollectibles?.[0]?.imageUrl ??
+      audioCollectibles?.[0].frameUrl ??
+      audioCollectibles?.[0].gifUrl
+    // typeTitle: 'Audio NFT Playlist'
   }
 
   const childProps = {
