@@ -241,7 +241,7 @@ const CollectionPage = ({
           <EmptyPage isOwner={isOwner} />
         ) : (
           <div className={styles.tableWrapper}>
-            {collectionLoading ? (
+            {collectionLoading && typeTitle === 'Audio NFT Playlist' ? (
               <LoadingSpinner className={styles.spinner} />
             ) : (
               <TracksTable
