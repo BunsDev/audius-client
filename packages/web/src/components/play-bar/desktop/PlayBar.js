@@ -10,7 +10,7 @@ import {
   Name,
   PlaybackSource
 } from 'common/models/Analytics'
-import { getUserId } from 'common/store/account/selectors'
+import { getAccountUser, getUserId } from 'common/store/account/selectors'
 import { getLineupHasTracks } from 'common/store/lineup/selectors'
 import { makeGetCurrent } from 'common/store/queue/selectors'
 import {
@@ -337,11 +337,11 @@ class PlayBar extends Component {
       artistUserId = user.user_id
       isVerified = user.is_verified
       profilePictureSizes = user._profile_picture_sizes
-      isOwner = true
+      isOwner = this.props.accountUser.user_id === user.user_id
       duration = audio.getDuration()
 
-      reposted = true
-      favorited = true
+      reposted = false
+      favorited = false
     }
 
     let playButtonStatus
@@ -485,6 +485,7 @@ const makeMapStateToProps = () => {
   const getCurrentQueueItem = makeGetCurrent()
 
   const mapStateToProps = (state, props) => ({
+    accountUser: getAccountUser(state),
     currentQueueItem: getCurrentQueueItem(state),
     playCounter: getCounter(state),
     audio: getAudio(state),

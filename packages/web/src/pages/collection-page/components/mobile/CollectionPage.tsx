@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react'
 
 import { Collection, SmartCollection, Variant } from 'common/models/Collection'
 import { ID } from 'common/models/Identifiers'
+import { SmartCollectionVariant } from 'common/models/SmartCollectionVariant'
 import Status from 'common/models/Status'
 import { User } from 'common/models/User'
 import {
@@ -167,8 +168,18 @@ const CollectionPage = ({
     isReposted
   } = computeCollectionMetadataProps(metadata)
 
-  const togglePlay = (uid: string, trackId: ID) =>
-    onClickRow({ uid, track_id: trackId })
+  const togglePlay = (uid: string, trackId: ID) => {
+    if (playlistId === SmartCollectionVariant.AUDIO_NFT_PLAYLIST) {
+      const { collectible } = tracks.entries.find(track => track.uid === uid)
+      onClickRow({
+        ...collectible,
+        uid: collectible.id,
+        track_id: collectible.id
+      })
+    } else {
+      onClickRow({ uid, track_id: trackId })
+    }
+  }
   const onSave = (isSaved: boolean, trackId: number) => {
     if (!isOwner) {
       onClickSave({ has_current_user_saved: isSaved, track_id: trackId })

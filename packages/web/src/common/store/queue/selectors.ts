@@ -54,12 +54,13 @@ const getCurrentUser = (state: AppState) => {
 
 export const makeGetCurrent = () => {
   return createSelector(
-    [getPlayerUid, getSource, getCurrentTrack, getCurrentUser],
-    (uid, source, track, user) => ({
+    [getPlayerUid, getSource, getCurrentTrack, getCurrentUser, getCollectible],
+    (uid, source, track, user, collectible) => ({
       uid,
       source,
       track,
-      user
+      user,
+      collectible
     })
   )
 }

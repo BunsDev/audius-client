@@ -89,16 +89,11 @@ export const CollectiblesPlaylistPageProvider = ({
   const title = `${user?.name} ${SmartCollectionVariant.AUDIO_NFT_PLAYLIST}`
 
   useEffect(() => {
-    dispatch(
-      fetchProfile(
-        routeMatch?.params.handle ?? null,
-        null,
-        false,
-        false,
-        false,
-        true
+    if (routeMatch?.params.handle) {
+      dispatch(
+        fetchProfile(routeMatch.params.handle, null, false, false, false, true)
       )
-    )
+    }
   }, [dispatch, routeMatch])
 
   const tracksLoading = !audioCollectibles.length
@@ -172,6 +167,10 @@ export const CollectiblesPlaylistPageProvider = ({
 
   const getPlayingUid = useCallback(() => {
     return currentPlayerItem.uid
+      ? currentPlayerItem.uid
+      : currentPlayerItem.collectible
+      ? currentPlayerItem.collectible.id
+      : null
   }, [currentPlayerItem])
 
   const formatMetadata = useCallback(
