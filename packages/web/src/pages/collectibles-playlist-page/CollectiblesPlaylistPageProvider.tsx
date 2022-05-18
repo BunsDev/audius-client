@@ -87,7 +87,6 @@ export const CollectiblesPlaylistPageProvider = ({
         ),
     [collectibleIds, order, user]
   )
-  console.log({ audioCollectibles })
   const title = `${user?.name} ${SmartCollectionVariant.AUDIO_NFT_PLAYLIST}`
 
   useEffect(() => {
@@ -280,7 +279,7 @@ export const CollectiblesPlaylistPageProvider = ({
     title,
     description: '',
     canonicalUrl: '',
-    playlistId: title,
+    playlistId: SmartCollectionVariant.AUDIO_NFT_PLAYLIST,
     playing,
     type: 'playlist',
     collection: {
