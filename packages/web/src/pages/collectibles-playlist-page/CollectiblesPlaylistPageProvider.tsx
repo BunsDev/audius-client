@@ -5,6 +5,7 @@ import { push } from 'connected-react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { matchPath } from 'react-router-dom'
 
+import { useModalState } from 'common/hooks/useModalState'
 import { ShareSource } from 'common/models/Analytics'
 import { Chain } from 'common/models/Chain'
 import { Collectible } from 'common/models/Collectible'
@@ -19,17 +20,15 @@ import {
 import { fetchProfile } from 'common/store/pages/profile/actions'
 import { add, clear, pause, play } from 'common/store/queue/slice'
 import { Source } from 'common/store/queue/types'
+import { setCollectible } from 'common/store/ui/collectible-details/slice'
 import { requestOpen as requestOpenShareModal } from 'common/store/ui/share-modal/slice'
+import { getHash } from 'components/collectibles/helpers'
 import TablePlayButton from 'components/tracks-table/TablePlayButton'
 import { AUDIO_NFT_PLAYLIST } from 'pages/smart-collection/smartCollections'
 import { getPlaying, makeGetCurrent } from 'store/player/selectors'
 import { getLocationPathname } from 'store/routing/selectors'
 import { AppState } from 'store/types'
-import {
-  AUDIO_NFT_PLAYLIST_PAGE,
-  collectibleDetailsPage,
-  profilePage
-} from 'utils/route'
+import { AUDIO_NFT_PLAYLIST_PAGE, profilePage } from 'utils/route'
 
 import { CollectionPageProps as DesktopCollectionPageProps } from '../collection-page/components/desktop/CollectionPage'
 import { CollectionPageProps as MobileCollectionPageProps } from '../collection-page/components/mobile/CollectionPage'
@@ -136,9 +135,18 @@ export const CollectiblesPlaylistPageProvider = ({
     }
   }
 
+  const [, setIsDetailsModalOpen] = useModalState('CollectibleDetails')
+
   const onClickTrackName = (collectible: Collectible) => {
-    const url = collectibleDetailsPage(user?.handle ?? '', collectible.id)
-    dispatch(push(url))
+    dispatch(
+      setCollectible({
+        collectible: collectible,
+        ownerHandle: user?.handle,
+        embedCollectibleHash: getHash(collectible.id),
+        isUserOnTheirProfile: false
+      })
+    )
+    setIsDetailsModalOpen(true)
   }
 
   const onHeroTrackClickArtistName = () => {
